@@ -1,7 +1,14 @@
+package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.RobotLog;
+
+
 
 public class chewy_HardwareMap
 {
@@ -16,10 +23,10 @@ public class chewy_HardwareMap
     public DcMotor  frontRightDrive        = null;
     public DcMotor  backLeftDrive          = null;
     public DcMotor  backRightDrive         = null;
-    public DcMotor  LiftMotorLeft          = null;
-    public DcMotor  LiftMotorRight         = null;
-    public DcMotor  IntakeLeft             = null;
-    public DcMotor  IntakeRight            = null;
+//    public DcMotor  LiftMotorLeft          = null;
+//    public DcMotor  LiftMotorRight         = null;
+//    public DcMotor  IntakeLeft             = null;
+//    public DcMotor  IntakeRight            = null;
 
 
     /* Public Servos */
@@ -48,8 +55,8 @@ public class chewy_HardwareMap
         frontRightDrive = hwMap.get(DcMotor.class, "frontRightDrive");
         backLeftDrive = hwMap.get(DcMotor.class, "backLeftDrive");
         backRightDrive = hwMap.get(DcMotor.class, "backRightDrive");
-        LiftMotorLeft = hwMap.get(DcMotor.class, "LiftMotorLeft");
-        LiftMotorRight = hwMap.get(DcMotor.class, "LiftMotorRight");
+//        LiftMotorLeft = hwMap.get(DcMotor.class, "LiftMotorLeft");
+//        LiftMotorRight = hwMap.get(DcMotor.class, "LiftMotorRight");
 
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to FORWARD if using AndyMark motors
@@ -69,13 +76,13 @@ public class chewy_HardwareMap
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-        LiftMotorLeft.setPower(0);
-        LiftMotorRight.setPower(0);
+//        LiftMotorLeft.setPower(0);
+//        LiftMotorRight.setPower(0);
 
 
         //resets motor encoders to zero
-        LiftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LiftMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        LiftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        LiftMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Set all motors to run without encoders.
@@ -84,8 +91,8 @@ public class chewy_HardwareMap
 //        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LiftMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LiftMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        LiftMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        LiftMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
     // Odometery Section
@@ -97,8 +104,9 @@ public class chewy_HardwareMap
     // String verticalLeftEncoderName = "vle", verticalRightEncoderName = "vre", horizontalEncoderName = "he";
     //String rfName = "frontRightDrive", rbName = "backRightDrive", lfName = "frontLeftDrive", lbName = "backLeftDrive";
     //  String verticalLeftEncoderName = "frontRightDrive", verticalRightEncoderName = backRightDrive, horizontalEncoderName = "IntakeRight";
-    OdometryGlobalCoordinatePosition globalPositionUpdate;
+    //OdometryGlobalCoordinatePosition globalPositionUpdate;
     Thread positionThread = null;
 
 }
+
 

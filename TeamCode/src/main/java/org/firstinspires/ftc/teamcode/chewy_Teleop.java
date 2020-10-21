@@ -1,9 +1,10 @@
-
-
+package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -26,11 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp(name="chewy_Teleop", group="Pushbot")
 
 public class chewy_Teleop extends OpMode {
-
-    /* Declare OpMode members. */
-    robot                   chewy_HardwareMap();
-
-    chewy_HardwareMap = new chewy_HardwareMap(); // use the class created to define a Pushbot's hardware
+    chewy_HardwareMap robot = new chewy_HardwareMap();
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -64,6 +61,10 @@ public class chewy_Teleop extends OpMode {
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
 
+    double maxVel = 0.5;
+    double dropServoPos = 1.1;
+    double openServoPos = 0.5;
+    double twistServoPos = 0.5;
 
     @Override
     public void loop() {
@@ -86,29 +87,22 @@ public class chewy_Teleop extends OpMode {
         y_prime = -x_axis * Math.sin(theta) + y_axis * Math.cos(theta);
 
         telemetry.addData("Gamepad2.leftstick_x", gamepad2.left_stick_x);
-        telemetry.addData("clawPosition", String.format ("%.01f", clawPosition));
         telemetry.addData("Theta (in radians)", theta);
         telemetry.addData("x_axis", x_axis);
         telemetry.addData("y_axis", y_axis);
         telemetry.addData("x_prime", x_prime);
         telemetry.addData("y_prime", y_prime);
         telemetry.addData("Gyro Heading", gyroHeading);
-        telemetry.addData("Arm Position", robot.armPosInput.getVoltage());
-        telemetry.addData("Arm Tilt Encoder",robot.LiftMotorLeft.getCurrentPosition());
-        telemetry.addData("Arm Tilt Encoder",robot.LiftMotorRight.getCurrentPosition());
-        telemetry.addData("Claw Position",openServoPos);
-
-
 
 
         telemetry.update();
 
         // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
         // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-        frontRight  = y_prime - (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
-        backRight   = y_prime - (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
-        frontLeft   = y_prime + (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
-        backLeft    = y_prime + (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
+        frontRight = y_prime - (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
+        backRight = y_prime - (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
+        frontLeft = y_prime + (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
+        backLeft = y_prime + (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
 
         if (gamepad1.left_trigger > .05)
             maxVel = 0.5;
@@ -130,16 +124,9 @@ public class chewy_Teleop extends OpMode {
         robot.backLeftDrive.setPower(backLeft);
         robot.backRightDrive.setPower(backRight);
 
-
-
-
-        /************* Read game pad 2 *************/
+    }
     @Override
     public void stop() {
     }
 
 }
-
-
-
-
