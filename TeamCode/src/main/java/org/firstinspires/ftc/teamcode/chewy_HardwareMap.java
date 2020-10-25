@@ -23,10 +23,7 @@ public class chewy_HardwareMap
     public DcMotor  frontRightDrive        = null;
     public DcMotor  backLeftDrive          = null;
     public DcMotor  backRightDrive         = null;
-//    public DcMotor  LiftMotorLeft          = null;
-//    public DcMotor  LiftMotorRight         = null;
-//    public DcMotor  IntakeLeft             = null;
-//    public DcMotor  IntakeRight            = null;
+    public DcMotor  intake                 = null;
 
 
     /* Public Servos */
@@ -51,18 +48,17 @@ public class chewy_HardwareMap
         imu = new WGWIMU2018(wgwIMU2018);
 
         // Define and Initialize Motors
-        frontLeftDrive = hwMap.get(DcMotor.class, "frontLeftDrive");
+        frontLeftDrive  = hwMap.get(DcMotor.class, "frontLeftDrive");
         frontRightDrive = hwMap.get(DcMotor.class, "frontRightDrive");
-        backLeftDrive = hwMap.get(DcMotor.class, "backLeftDrive");
-        backRightDrive = hwMap.get(DcMotor.class, "backRightDrive");
-//        LiftMotorLeft = hwMap.get(DcMotor.class, "LiftMotorLeft");
-//        LiftMotorRight = hwMap.get(DcMotor.class, "LiftMotorRight");
+        backLeftDrive   = hwMap.get(DcMotor.class, "backLeftDrive");
+        backRightDrive  = hwMap.get(DcMotor.class, "backRightDrive");
+        intake          = hwMap.get(DcMotor.class, "intake");
 
 
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to FORWARD if using AndyMark motors
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to REVERSE if using AndyMark motors
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD); //  Set to FORWARD if using AndyMark motors
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);//  Set to FORWARD if using AndyMark motors
+        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);   // Set to FORWARD if using AndyMark motors
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);  // Set to FORWARD if using AndyMark motors
 
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -76,13 +72,10 @@ public class chewy_HardwareMap
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-//        LiftMotorLeft.setPower(0);
-//        LiftMotorRight.setPower(0);
+        intake.setPower(0);
 
 
         //resets motor encoders to zero
-//        LiftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        LiftMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Set all motors to run without encoders.
@@ -97,8 +90,8 @@ public class chewy_HardwareMap
     }
     // Odometery Section
     public DcMotor verticalLeft     = null,
-            verticalRight    = null,
-            horizontal       = null;
+                   verticalRight    = null,
+                   horizontal       = null;
     final double COUNTS_PER_INCH = 1714;
 
     // String verticalLeftEncoderName = "vle", verticalRightEncoderName = "vre", horizontalEncoderName = "he";

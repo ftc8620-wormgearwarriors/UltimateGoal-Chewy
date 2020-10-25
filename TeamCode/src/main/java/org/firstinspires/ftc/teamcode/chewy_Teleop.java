@@ -73,6 +73,7 @@ public class chewy_Teleop extends OpMode {
         double backLeft;
         double frontRight;
         double backRight;
+        double intake;
         double max;
         double x_axis = -gamepad1.left_stick_x * maxVel;
         double y_axis = -gamepad1.left_stick_y * maxVel;
@@ -110,6 +111,8 @@ public class chewy_Teleop extends OpMode {
             maxVel = 1.0;
         else if (gamepad1.left_bumper)
             maxVel = 0.25;
+
+
         // Normalize the values so neither exceed +/- 1.0
         max = Math.max(Math.max(Math.abs(frontLeft), Math.abs(backLeft)), Math.max(Math.abs(frontRight), Math.abs(backRight)));
         if (max > 1) {
@@ -125,6 +128,9 @@ public class chewy_Teleop extends OpMode {
         robot.backRightDrive.setPower(backRight);
 
     }
+
+
+
     @Override
     public void stop() {
     }
