@@ -61,11 +61,9 @@ public class chewy_Teleop extends OpMode {
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
 
-    double maxVel = 0.5;
-    double dropServoPos = 1.1;
-    double openServoPos = 0.5;
-    double twistServoPos = 0.5;
-
+        double maxVel = 0.5;
+        double dropServoPos = 1.1;
+        double openServoPos = 0.5;
     @Override
     public void loop() {
         double markerServoPos = .72;
@@ -113,6 +111,7 @@ public class chewy_Teleop extends OpMode {
             maxVel = 0.25;
 
 
+
         // Normalize the values so neither exceed +/- 1.0
         max = Math.max(Math.max(Math.abs(frontLeft), Math.abs(backLeft)), Math.max(Math.abs(frontRight), Math.abs(backRight)));
         if (max > 1) {
@@ -122,14 +121,35 @@ public class chewy_Teleop extends OpMode {
             backRight /= max;
         }
 
+
         robot.frontLeftDrive.setPower(frontLeft);
         robot.frontRightDrive.setPower(frontRight);
         robot.backLeftDrive.setPower(backLeft);
         robot.backRightDrive.setPower(backRight);
 
+
+        if (gamepad2.x)
+        {
+            robot.intake.setPower(0);
+        }
+
+        if (gamepad2.y)
+        {
+            robot.intake.setPower(1);
+        }
+
+        if (gamepad2.b)
+        {
+            robot.intake.setPower(.5);
+        }
+
+        if (gamepad2.left_bumper)
+        {
+            robot.shooterRight.setPower(1);
+            robot.shooterLeft.setPower(1);
+        }
+
     }
-
-
 
     @Override
     public void stop() {

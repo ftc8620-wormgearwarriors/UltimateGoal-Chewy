@@ -19,10 +19,13 @@ public class chewy_HardwareMap
 
 
     /* Public Motors */
+
     public DcMotor  frontLeftDrive         = null;
     public DcMotor  frontRightDrive        = null;
     public DcMotor  backLeftDrive          = null;
     public DcMotor  backRightDrive         = null;
+    public DcMotor  shooterLeft            = null;
+    public DcMotor  shooterRight           = null;
     public DcMotor  intake                 = null;
 
 
@@ -48,11 +51,14 @@ public class chewy_HardwareMap
         imu = new WGWIMU2018(wgwIMU2018);
 
         // Define and Initialize Motors
+
         frontLeftDrive  = hwMap.get(DcMotor.class, "frontLeftDrive");
         frontRightDrive = hwMap.get(DcMotor.class, "frontRightDrive");
         backLeftDrive   = hwMap.get(DcMotor.class, "backLeftDrive");
         backRightDrive  = hwMap.get(DcMotor.class, "backRightDrive");
-        intake          = hwMap.get(DcMotor.class, "intake");
+        shooterLeft     = hwMap.get(DcMotor.class, "intakeLeft");
+        shooterRight    = hwMap.get(DcMotor.class, "intakeRight");
+        intake          = hwMap.get(DcMotor.class, "shooter");
 
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
@@ -72,7 +78,10 @@ public class chewy_HardwareMap
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
+        shooterLeft.setPower(0);
+        shooterRight.setPower(0);
         intake.setPower(0);
+
 
 
         //resets motor encoders to zero
@@ -80,12 +89,13 @@ public class chewy_HardwareMap
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-//        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        LiftMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        LiftMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
 
     }
     // Odometery Section
