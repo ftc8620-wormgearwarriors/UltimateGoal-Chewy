@@ -127,27 +127,37 @@ public class chewy_Teleop extends OpMode {
         robot.backLeftDrive.setPower(backLeft);
         robot.backRightDrive.setPower(backRight);
 
-
+        // stop intake
         if (gamepad2.x)
         {
             robot.intake.setPower(0);
         }
 
+        //intake full power
         if (gamepad2.y)
         {
-            robot.intake.setPower(1);
+            robot.intake.setPower(-1);
         }
 
+        // intake half power
         if (gamepad2.b)
         {
-            robot.intake.setPower(.5);
+            robot.intake.setPower(-.5);
         }
 
+        // Button to start the shooter
         if (gamepad2.left_bumper)
         {
             robot.shooterRight.setPower(1);
-            robot.shooterLeft.setPower(1);
+            robot.shooterLeft.setPower(-1);
         }
+        // Button to stop the shooter.
+        if (gamepad2.right_bumper) {
+
+            robot.shooterRight.setPower(0);
+            robot.shooterLeft.setPower(0);
+        }
+
 
     }
 

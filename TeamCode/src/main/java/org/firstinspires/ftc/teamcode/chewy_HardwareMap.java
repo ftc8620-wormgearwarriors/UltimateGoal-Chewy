@@ -56,9 +56,9 @@ public class chewy_HardwareMap
         frontRightDrive = hwMap.get(DcMotor.class, "frontRightDrive");
         backLeftDrive   = hwMap.get(DcMotor.class, "backLeftDrive");
         backRightDrive  = hwMap.get(DcMotor.class, "backRightDrive");
-        shooterLeft     = hwMap.get(DcMotor.class, "intakeLeft");
-        shooterRight    = hwMap.get(DcMotor.class, "intakeRight");
-        intake          = hwMap.get(DcMotor.class, "shooter");
+        shooterLeft     = hwMap.get(DcMotor.class, "shooterLeft");
+        shooterRight    = hwMap.get(DcMotor.class, "shooterRight");
+        intake          = hwMap.get(DcMotor.class, "intake");
 
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
