@@ -153,7 +153,7 @@ public class chewy_Teleop extends OpMode {
         if (gamepad2.left_bumper)
         {
             robot.shooterRight.setPower(1);
-            robot.shooterLeft.setPower(-1);
+            robot.shooterLeft.setPower(-0.7);
         }
         // Button to stop the shooter.
         if (gamepad2.right_bumper) {

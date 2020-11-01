@@ -15,6 +15,26 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         //Initialize hardware map values.
         Init();
         initOdometryHardware(0, 111, 90);
+        VuforiaInint();
+
+        //Identify number of rings
+
+
+
+        //Drive to launch line
+
+
+
+
+        //Shoot powershot targets
+
+
+
+
+        //Park on launch line
+
+
+
 
 
     }
