@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -28,8 +30,9 @@ public class chewy_HardwareMap
     public DcMotor  shooterRight           = null;
     public DcMotor  intake                 = null;
 
-
     /* Public Servos */
+    public CRServo firstTransfer           = null;
+    public CRServo secondTransfer          = null;
 
     //public sensors
 
@@ -59,6 +62,10 @@ public class chewy_HardwareMap
         shooterLeft     = hwMap.get(DcMotor.class, "shooterLeft");
         shooterRight    = hwMap.get(DcMotor.class, "shooterRight");
         intake          = hwMap.get(DcMotor.class, "intake");
+
+        // Define and Initialize Servos
+        firstTransfer   = hwMap.get(CRServo.class, "firstTransfer");
+        secondTransfer  = hwMap.get(CRServo.class, "secondTransfer");
 
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
