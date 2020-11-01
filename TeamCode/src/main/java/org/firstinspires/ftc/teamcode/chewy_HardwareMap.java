@@ -31,8 +31,8 @@ public class chewy_HardwareMap
     public DcMotor  intake                 = null;
 
     /* Public Servos */
-    public CRServo firstTransfer           = null;
-    public CRServo secondTransfer          = null;
+    //public CRServo firstTransfer           = null;
+    //public CRServo secondTransfer          = null;
 
     //public sensors
 
@@ -64,8 +64,8 @@ public class chewy_HardwareMap
         intake          = hwMap.get(DcMotor.class, "intake");
 
         // Define and Initialize Servos
-        firstTransfer   = hwMap.get(CRServo.class, "firstTransfer");
-        secondTransfer  = hwMap.get(CRServo.class, "secondTransfer");
+        //firstTransfer   = hwMap.get(CRServo.class, "firstTransfer");
+        //secondTransfer  = hwMap.get(CRServo.class, "secondTransfer");
 
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
@@ -114,7 +114,7 @@ public class chewy_HardwareMap
     // String verticalLeftEncoderName = "vle", verticalRightEncoderName = "vre", horizontalEncoderName = "he";
     //String rfName = "frontRightDrive", rbName = "backRightDrive", lfName = "frontLeftDrive", lbName = "backLeftDrive";
     //  String verticalLeftEncoderName = "frontRightDrive", verticalRightEncoderName = backRightDrive, horizontalEncoderName = "IntakeRight";
-    //OdometryGlobalCoordinatePosition globalPositionUpdate;
+    OdometryGlobalCoordinatePosition globalPositionUpdate;
     Thread positionThread = null;
 
 }

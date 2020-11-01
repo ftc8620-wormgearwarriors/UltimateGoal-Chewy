@@ -131,22 +131,22 @@ public class chewy_Teleop extends OpMode {
         if (gamepad2.x)
         {
             robot.intake.setPower(0);
-            robot.firstTransfer.setPower(1);
-            robot.firstTransfer.setPower(1);
+            //robot.firstTransfer.setPower(1);
+            //robot.firstTransfer.setPower(1);
         }
-
         //intake full power
         if (gamepad2.y)
         {
             robot.intake.setPower(-1);
         }
 
+
         // intake half power
         if (gamepad2.b)
         {
             robot.intake.setPower(-.5);
-            robot.firstTransfer.setPower(1);
-            robot.firstTransfer.setPower(1);
+            //robot.firstTransfer.setPower(1);
+            //robot.firstTransfer.setPower(1);
         }
 
         // Button to start the shooter
