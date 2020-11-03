@@ -11,7 +11,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         //Initialize hardware map values.
         Init();
         initOdometryHardware(0, 111, 90);
