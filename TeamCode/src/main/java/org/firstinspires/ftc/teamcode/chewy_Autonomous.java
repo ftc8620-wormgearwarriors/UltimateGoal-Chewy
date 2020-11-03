@@ -11,10 +11,10 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         //Initialize hardware map values.
         Init();
-        initOdometryHardware(0, 111, 90);
+        initOdometryHardware(24,  9 , 0);
         VuforiaInint();
 
         //Identify number of rings
@@ -22,9 +22,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
         //Drive to launch line
-
-
-
+        goToPostion(30,70,0.5,0,1,false);
 
         //Shoot powershot targets
 
@@ -32,6 +30,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
         //Park on launch line
+        goToPostion(30,84,0.5,0,1,false);
 
 
 

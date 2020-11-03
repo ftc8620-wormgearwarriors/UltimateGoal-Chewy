@@ -37,7 +37,16 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
 
-public abstract class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
+public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
+
+
+    @Override
+    // need this to extend LinearOpMode
+    public void runOpMode() {
+
+
+    }
+
 
     chewy_HardwareMap robot = new chewy_HardwareMap();
 
@@ -187,32 +196,32 @@ public abstract class chewy_AutonomousMethods extends LinearOpMode {    // IMPOR
 //        // pointing to the LEFT side of the Robot.
 //        // The two examples below assume that the camera is facing forward out the front of the robot.
 //
-//        // We need to rotate the camera around its long axis to bring the correct camera forward.
- //             if (CAMERA_CHOICE == BACK) {
-//                phoneYRotate = -90;
- //                } else {
- //              phoneYRotate = 90;
-  //              }
-
-          // Rotate the phone vertical about the X axis if it's in portrait mode
- //             if (PHONE_IS_PORTRAIT) {
-   //              phoneXRotate = 90 ;
-     //            }
-
-        // Next, translate the camera lens to where it is on the robot.
-        // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
- //       final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-   //     final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-     //   final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
-
-       // OpenGLMatrix robotFromCamera = OpenGLMatrix
-         //       .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-           //     .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
-
+//        // We need to rotate the camera around it's long axis to bring the correct camera forward.
+//        if (CAMERA_CHOICE == BACK) {
+//            phoneYRotate = -90;
+//        } else {
+//            phoneYRotate = 90;
+//        }
+//
+//        // Rotate the phone vertical about the X axis if it's in portrait mode
+//        if (PHONE_IS_PORTRAIT) {
+//            phoneXRotate = 90 ;
+//        }
+//
+//        // Next, translate the camera lens to where it is on the robot.
+//        // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
+//        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+//        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+//        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+//
+//        OpenGLMatrix robotFromCamera = OpenGLMatrix
+//                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+//                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+//
 //        /**  Let all the trackable listeners know where the phone is.  */
-  //      for (VuforiaTrackable trackable : allTrackables) {
-  //          ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
-  //      }
+//        for (VuforiaTrackable trackable : allTrackables) {
+//            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+//        }
 //
 //        // WARNING:
 //        // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
