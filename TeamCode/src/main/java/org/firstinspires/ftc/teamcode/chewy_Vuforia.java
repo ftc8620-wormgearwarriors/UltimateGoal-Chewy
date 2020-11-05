@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
         @Override
-        public void runOpMode() throws InterruptedException {
+        public void runOpMode() {
             //Initialize hardware map values.
             Init();
             initOdometryHardware(0, 111, 90);
-            VuforiaInint();
+            VuforiaInit();
 
 
         }

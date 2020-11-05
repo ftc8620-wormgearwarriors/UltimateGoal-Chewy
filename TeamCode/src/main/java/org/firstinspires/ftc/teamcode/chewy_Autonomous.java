@@ -15,7 +15,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         //Initialize hardware map values.
         Init();
         initOdometryHardware(24,  9 , 0);
-        VuforiaInint();
+        VuforiaInit();
 
         //Identify number of rings
 
