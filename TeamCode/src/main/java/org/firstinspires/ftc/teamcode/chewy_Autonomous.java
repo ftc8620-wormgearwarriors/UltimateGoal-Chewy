@@ -13,19 +13,20 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
     @Override
     public void runOpMode() {
         //Initialize hardware map values.
-        Init();
-        initOdometryHardware(24,  9 , 0);
+        //Init();
+        //initOdometryHardware(24,  9 , 0);
         initVuforia();
         initTfod();
 
+        waitForStart();
 
-        //Identify number of rings
 
+        //capture image and convert to bitmap
         captureFrameToFile();
 
 
         //Drive to launch line
-        goToPostion(30,70,0.5,0,1,false);
+        //goToPostion(30,70,0.5,0,1,false);
 
         //Shoot powershot targets
 
@@ -33,11 +34,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
         //Park on launch line
-        goToPostion(30,84,0.5,0,1,false);
-
-
-
-
+        //goToPostion(30,84,0.5,0,1,false);
 
     }
 }
