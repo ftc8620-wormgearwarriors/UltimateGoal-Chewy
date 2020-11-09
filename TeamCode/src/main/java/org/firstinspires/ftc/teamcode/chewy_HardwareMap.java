@@ -34,8 +34,8 @@ public class chewy_HardwareMap
     public Servo  intake           = null;
     public Servo  firstTransfer    = null;
     public Servo  secondTransfer   = null;
-
-
+    public Servo  wobbleGrabberArm = null;
+    public Servo  wobbleGrabberClaw= null;
 
     //public CRServo firstTransfer           = null;
     //public CRServo secondTransfer          = null;
@@ -74,7 +74,8 @@ public class chewy_HardwareMap
         intake = hwMap.get(Servo.class, "intake");
         firstTransfer   = hwMap.get(Servo.class, "firstTransfer");
         secondTransfer  = hwMap.get(Servo.class, "secondTransfer");
-
+        wobbleGrabberArm = hwMap.get(Servo.class, "intake");
+        wobbleGrabberClaw  = hwMap.get(Servo.class, "secondTransfer");
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
         frontRightDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -98,7 +99,8 @@ public class chewy_HardwareMap
         intake.setPosition(0);
         firstTransfer.setPosition(0);
         secondTransfer.setPosition(0);
-
+        wobbleGrabberArm.setPosition(0);
+        wobbleGrabberClaw.setPosition(0);
 
 
 
