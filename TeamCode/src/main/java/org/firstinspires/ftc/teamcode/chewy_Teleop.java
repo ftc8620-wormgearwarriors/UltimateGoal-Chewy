@@ -71,7 +71,9 @@ public class chewy_Teleop extends OpMode {
         double backLeft;
         double frontRight;
         double backRight;
-        double intake;
+        double intakeBottom;
+        double intakeMiddle;
+        double intakeTop;
         double max;
         double x_axis = -gamepad1.left_stick_x * maxVel;
         double y_axis = -gamepad1.left_stick_y * maxVel;
@@ -127,27 +129,53 @@ public class chewy_Teleop extends OpMode {
         robot.backLeftDrive.setPower(backLeft);
         robot.backRightDrive.setPower(backRight);
 
+
+
         // stop intake
         if (gamepad2.x)
         {
-            robot.intake.setPower(0);
-            //robot.firstTransfer.setPower(1);
-            //robot.firstTransfer.setPower(1);
+            robot.intake.setPosition(0);
         }
+
+        // stop firstTransfer
+        if (gamepad2.dpad_down)
+        {
+            robot.firstTransfer.setPosition(0);
+        }
+
+        // stop secondTransfer
+        if (gamepad2.dpad_right)
+        {
+            robot.secondTransfer.setPosition(0);
+        }
+
         //intake full power
         if (gamepad2.y)
         {
-            robot.intake.setPower(-1);
+            robot.intake.setPosition(-1);
         }
 
-
-        // intake half power
+        //firstTransfer full power
         if (gamepad2.b)
         {
-            robot.intake.setPower(-.5);
-            //robot.firstTransfer.setPower(1);
-            //robot.firstTransfer.setPower(1);
+            robot.firstTransfer.setPosition(-1);
         }
+
+        //secondTransfer full power
+        if (gamepad2.a)
+        {
+            robot.secondTransfer.setPosition(-1);
+        }
+
+        // intake half power
+
+//        if (gamepad2.b)
+//        {
+//            robot.intake.setPosition(-.5);
+//            robot.firstTransfer.setPosition(1);
+//            robot.secondTransfer.setPosition(1);
+//        }
+
 
         // Button to start the shooter
         if (gamepad2.left_bumper)
