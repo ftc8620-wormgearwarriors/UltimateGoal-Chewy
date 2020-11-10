@@ -183,11 +183,24 @@ public class chewy_Teleop extends OpMode {
             robot.shooterRight.setPower(1);
             robot.shooterLeft.setPower(-0.7);
         }
+
         // Button to stop the shooter.
         if (gamepad2.right_bumper) {
 
             robot.shooterRight.setPower(0);
             robot.shooterLeft.setPower(0);
+        }
+        if (gamepad2.right_bumper) {
+
+            robot.wobbleGrabberArm.setPosition(1);
+            robot.wobbleGrabberArm.setPosition(1);
+            // Find positions for wobble grabber arm and find a button
+        }
+        if (gamepad2.right_bumper) {
+
+            robot.wobbleGrabberClaw.setPosition(1);
+            robot.wobbleGrabberClaw.setPosition(1);
+            // Find positions for wobble grabber claw and find a button
         }
 
 
