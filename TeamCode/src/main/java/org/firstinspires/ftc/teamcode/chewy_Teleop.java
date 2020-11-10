@@ -71,9 +71,6 @@ public class chewy_Teleop extends OpMode {
         double backLeft;
         double frontRight;
         double backRight;
-        double intakeBottom;
-        double intakeMiddle;
-        double intakeTop;
         double max;
         double x_axis = -gamepad1.left_stick_x * maxVel;
         double y_axis = -gamepad1.left_stick_y * maxVel;
@@ -134,7 +131,7 @@ public class chewy_Teleop extends OpMode {
         // stop intake
         if (gamepad2.x)
         {
-            robot.intake.setPosition(0);
+            robot.intake.setPower(0);
         }
 
         // stop firstTransfer
@@ -152,7 +149,7 @@ public class chewy_Teleop extends OpMode {
         //intake full power
         if (gamepad2.y)
         {
-            robot.intake.setPosition(-1);
+            robot.intake.setPower(-1);
         }
 
         //firstTransfer full power

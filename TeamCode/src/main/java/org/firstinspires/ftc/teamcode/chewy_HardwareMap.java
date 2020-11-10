@@ -28,10 +28,10 @@ public class chewy_HardwareMap
     public DcMotor  backRightDrive         = null;
     public DcMotor  shooterLeft            = null;
     public DcMotor  shooterRight           = null;
+    public DcMotor  intake                 = null;
 
 
     /* Public Servos */
-    public Servo  intake           = null;
     public Servo  firstTransfer    = null;
     public Servo  secondTransfer   = null;
     public Servo  wobbleGrabberArm = null;
@@ -67,11 +67,11 @@ public class chewy_HardwareMap
         backRightDrive  = hwMap.get(DcMotor.class, "backRightDrive");
         shooterLeft     = hwMap.get(DcMotor.class, "shooterLeft");
         shooterRight    = hwMap.get(DcMotor.class, "shooterRight");
+        intake          = hwMap.get(DcMotor.class, "intake");
 
 
         // Define and Initialize Servos
 
-        intake = hwMap.get(Servo.class, "intake");
         firstTransfer   = hwMap.get(Servo.class, "firstTransfer");
         secondTransfer  = hwMap.get(Servo.class, "secondTransfer");
         wobbleGrabberArm = hwMap.get(Servo.class, "intake");
@@ -96,7 +96,7 @@ public class chewy_HardwareMap
         backRightDrive.setPower(0);
         shooterLeft.setPower(0);
         shooterRight.setPower(0);
-        intake.setPosition(0);
+        intake.setPower(0);
         firstTransfer.setPosition(0);
         secondTransfer.setPosition(0);
         wobbleGrabberArm.setPosition(0);
