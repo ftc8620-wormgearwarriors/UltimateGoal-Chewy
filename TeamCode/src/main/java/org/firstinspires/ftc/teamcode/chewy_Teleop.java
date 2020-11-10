@@ -137,13 +137,13 @@ public class chewy_Teleop extends OpMode {
         // stop firstTransfer
         if (gamepad2.dpad_down)
         {
-            robot.firstTransfer.setPosition(0);
+            robot.firstTransfer.setPower(0.5);
         }
 
         // stop secondTransfer
         if (gamepad2.dpad_right)
         {
-            robot.secondTransfer.setPosition(0);
+            robot.secondTransfer.setPower(0.5);
         }
 
         //intake full power
@@ -155,13 +155,13 @@ public class chewy_Teleop extends OpMode {
         //firstTransfer full power
         if (gamepad2.b)
         {
-            robot.firstTransfer.setPosition(-1);
+            robot.firstTransfer.setPower(1);
         }
 
         //secondTransfer full power
         if (gamepad2.a)
         {
-            robot.secondTransfer.setPosition(-1);
+            robot.secondTransfer.setPower(1);
         }
 
         // intake half power
@@ -190,12 +190,11 @@ public class chewy_Teleop extends OpMode {
         if (gamepad2.right_bumper) {
 
             robot.wobbleGrabberArm.setPosition(1);
-            robot.wobbleGrabberArm.setPosition(1);
             // Find positions for wobble grabber arm and find a button
+
         }
         if (gamepad2.right_bumper) {
 
-            robot.wobbleGrabberClaw.setPosition(1);
             robot.wobbleGrabberClaw.setPosition(1);
             // Find positions for wobble grabber claw and find a button
         }
@@ -206,5 +205,5 @@ public class chewy_Teleop extends OpMode {
     @Override
     public void stop() {
     }
-
+//e
 }
