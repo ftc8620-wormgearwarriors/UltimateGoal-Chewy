@@ -132,36 +132,43 @@ public class chewy_Teleop extends OpMode {
         if (gamepad2.x)
         {
             robot.intake.setPower(0);
+            robot.intakeRoller.setPosition(0);
+            robot.firstTransfer.setPosition(0);
+            robot.secondTransfer.setPosition(0);
         }
 
         // stop firstTransfer
         if (gamepad2.dpad_down)
         {
-            robot.firstTransfer.setPower(0.5);
+            robot.firstTransfer.setPosition(0.5);
         }
 
         // stop secondTransfer
         if (gamepad2.dpad_right)
         {
-            robot.secondTransfer.setPower(0.5);
+            robot.secondTransfer.setPosition(0.5);
         }
 
         //intake full power
         if (gamepad2.y)
         {
             robot.intake.setPower(-1);
+            robot.intakeRoller.setPosition(1);
+            robot.firstTransfer.setPosition(1);
+            robot.secondTransfer.setPosition(1);
+
         }
 
         //firstTransfer full power
         if (gamepad2.b)
         {
-            robot.firstTransfer.setPower(1);
+            robot.firstTransfer.setPosition(1);
         }
 
         //secondTransfer full power
         if (gamepad2.a)
         {
-            robot.secondTransfer.setPower(1);
+            robot.secondTransfer.setPosition(1);
         }
 
         // intake half power
@@ -187,17 +194,11 @@ public class chewy_Teleop extends OpMode {
             robot.shooterRight.setPower(0);
             robot.shooterLeft.setPower(0);
         }
-        if (gamepad2.right_bumper) {
 
-            robot.wobbleGrabberArm.setPosition(1);
-            // Find positions for wobble grabber arm and find a button
-
-        }
-        if (gamepad2.right_bumper) {
-
-            robot.wobbleGrabberClaw.setPosition(1);
-            // Find positions for wobble grabber claw and find a button
-        }
+        //shrinking the range of the joystick to work with that of the servo
+        double wobbleGrabberClaw = (gamepad2.left_stick_x / 4.0) + 0.5;
+        robot.wobbleGrabberArm.setPosition(wobbleGrabberClaw);
+        RobotLog.d("8620WGW: %.4f", wobbleGrabberClaw);
 
 
     }

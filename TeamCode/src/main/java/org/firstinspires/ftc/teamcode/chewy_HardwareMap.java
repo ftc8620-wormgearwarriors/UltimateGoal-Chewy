@@ -33,9 +33,9 @@ public class chewy_HardwareMap
 
     /* Public Servos */
 
-    public Servo intakeRoller            = null;
-    public CRServo firstTransfer           = null;
-    public CRServo secondTransfer          = null;
+    public Servo intakeRoller              = null;
+    public Servo firstTransfer             = null;
+    public Servo secondTransfer            = null;
     public Servo  wobbleGrabberArm         = null;
     public Servo  wobbleGrabberClaw        = null;
 
@@ -73,10 +73,10 @@ public class chewy_HardwareMap
         // Define and Initialize Servos
 
         intakeRoller   = hwMap.get(Servo.class, "intakeRoller");
-        firstTransfer   = hwMap.get(CRServo.class, "firstTransfer");
-        secondTransfer  = hwMap.get(CRServo.class, "secondTransfer");
-        wobbleGrabberArm = hwMap.get(Servo.class, "intake");
-        wobbleGrabberClaw  = hwMap.get(Servo.class, "secondTransfer");
+        firstTransfer   = hwMap.get(Servo.class, "firstTransfer");
+        secondTransfer  = hwMap.get(Servo.class, "secondTransfer");
+        wobbleGrabberArm = hwMap.get(Servo.class, "wobbleGrabberArm");
+        wobbleGrabberClaw  = hwMap.get(Servo.class, "wobbleGrabberClaw");
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
         frontRightDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -98,9 +98,9 @@ public class chewy_HardwareMap
         shooterLeft.setPower(0);
         shooterRight.setPower(0);
         intake.setPower(0);
-        intakeRoller.setPosition(0);
-        firstTransfer.setPower(0.5);
-        secondTransfer.setPower(0.5);
+        intakeRoller.setPosition(0.5);
+        firstTransfer.setPosition(0.5);
+        secondTransfer.setPosition(0.5);
         wobbleGrabberArm.setPosition(0);
         wobbleGrabberClaw.setPosition(0);
 
