@@ -1,4 +1,4 @@
-//package org.firstinspires.ftc.teamcode.Robot.Drivetrain.Odometry;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -35,11 +35,11 @@ public class chewy_OdometryCalibration extends LinearOpMode {
 
     //Hardware Map Names for drive motors and odometry wheels. THIS WILL CHANGE ON EACH ROBOT, YOU NEED TO UPDATE THESE VALUES ACCORDINGLY
     String rfName = "frontRightDrive", rbName = "backRightDrive", lfName = "frontLeftDrive", lbName = "backLeftDrive";
-    String verticalLeftEncoderName = rfName, verticalRightEncoderName = rbName, horizontalEncoderName = "IntakeRight";
+    String verticalLeftEncoderName = lbName, verticalRightEncoderName = rbName, horizontalEncoderName = lfName;
     final double PIVOT_SPEED = 0.5;
 
     //The amount of encoder ticks for each inch the robot moves. THIS WILL CHANGE FOR EACH ROBOT AND NEEDS TO BE UPDATED HERE
-    final double COUNTS_PER_INCH = 1714;
+    final double COUNTS_PER_INCH = 1293.7705323898;
 
     ElapsedTime timer = new ElapsedTime();
 
@@ -92,6 +92,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
 //        right_back.setPower(0.0);
 
         //Begin calibration (if robot is unable to pivot at these speeds, please adjust the constant at the top of the code
+        /*
         while(getZAngle() < 90 && opModeIsActive()){
             right_front.setPower(-PIVOT_SPEED);
             right_back.setPower(-PIVOT_SPEED);
@@ -114,6 +115,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
             telemetry.addData("IMU Angle", getZAngle());
             telemetry.update();
         }
+         */
         //Record IMU and encoder values to calculate the constants for the global position algorithm
         double angle = getZAngle();
 
