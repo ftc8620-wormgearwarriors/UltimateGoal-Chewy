@@ -60,10 +60,17 @@ public class chewy_Teleop extends OpMode {
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
+    double wobbleGrabberUpDownPos = 0.5;
+    double wobbleGrabberOpenClosePos = 0.5;
+    double wobbleGrabberUpDownMinPos = 0.2;
+    double wobbleGrabberUpDownMaxPos = 1.0;
+    double wobbleGrabberOpenCloseMinPos = 0.0;
+    double wobbleGrabberOpenCloseMaxPos = 1.0;
 
-        double maxVel = 0.5;
-        double dropServoPos = 1.1;
-        double openServoPos = 0.5;
+    double maxVel = 0.5;
+    double dropServoPos = 1.1;
+    double openServoPos = 0.5;
+
     @Override
     public void loop() {
         double markerServoPos = .72;
@@ -91,6 +98,9 @@ public class chewy_Teleop extends OpMode {
         telemetry.addData("x_prime", x_prime);
         telemetry.addData("y_prime", y_prime);
         telemetry.addData("Gyro Heading", gyroHeading);
+        telemetry.addData("wobbleGrabberUpDown", String.format ("%.01f", wobbleGrabberUpDownPos));
+        telemetry.addData("wobbleGrabberOpenClose", String.format ("%.01f", wobbleGrabberOpenClosePos));
+
 
 
         telemetry.update();
@@ -129,7 +139,7 @@ public class chewy_Teleop extends OpMode {
 
 
         // stop intake
-        if (gamepad2.x)
+        if (gamepad2.x && !gamepad2.dpad_up)
         {
             robot.intake.setPower(0);
             robot.intakeRoller.setPosition(0);
@@ -138,7 +148,7 @@ public class chewy_Teleop extends OpMode {
         }
 
         // stop firstTransfer
-        if (gamepad2.dpad_down)
+        if (gamepad2.dpad_left)
         {
             robot.firstTransfer.setPosition(0.5);
         }
@@ -195,10 +205,37 @@ public class chewy_Teleop extends OpMode {
             robot.shooterLeft.setPower(0);
         }
 
-        //shrinking the range of the joystick to work with that of the servo
-        double wobbleGrabberClaw = (gamepad2.left_stick_x / 4.0) + 0.5;
-        robot.wobbleGrabberArm.setPosition(wobbleGrabberClaw);
-        RobotLog.d("8620WGW: %.4f", wobbleGrabberClaw);
+//        //shrinking the range of the joystick to work with that of the servo
+//        double wobbleGrabberClaw = (gamepad2.left_stick_x / 4.0) + 0.5;
+//        robot.wobbleGrabberArm.setPosition(wobbleGrabberClaw);
+//        RobotLog.d("8620WGW: %.4f", wobbleGrabberClaw);
+
+        if (gamepad2.dpad_down && gamepad2.x) {
+            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+                wobbleGrabberUpDownPos -= 0.05;
+
+            }
+        }
+        if (gamepad2.dpad_up && gamepad2.x) {
+            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+                wobbleGrabberUpDownPos += 0.05;
+            }
+        }
+        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+
+        if (gamepad2.dpad_down && !gamepad2.x) {
+            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+                wobbleGrabberOpenClosePos -= 0.05;
+
+            }
+        }
+        if (gamepad2.dpad_up && !gamepad2.x) {
+            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+                wobbleGrabberOpenClosePos += 0.05;
+            }
+        }
+        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
+
 
 
     }
@@ -206,5 +243,4 @@ public class chewy_Teleop extends OpMode {
     @Override
     public void stop() {
     }
-//e
 }
