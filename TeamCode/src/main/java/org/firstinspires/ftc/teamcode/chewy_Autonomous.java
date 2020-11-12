@@ -22,6 +22,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
         //capture image and convert to bitmap
+
         captureFrameToFile();
 
 
