@@ -62,8 +62,8 @@ public class chewy_Teleop extends OpMode {
      */
     double wobbleGrabberUpDownPos = 0.5;
     double wobbleGrabberOpenClosePos = 0.5;
-    double wobbleGrabberUpDownMinPos = 0.2;
-    double wobbleGrabberUpDownMaxPos = 0.8;
+    double wobbleGrabberUpDownMinPos = 0.1;
+    double wobbleGrabberUpDownMaxPos = 0.9;
     double wobbleGrabberOpenCloseMinPos = 0.0;
     double wobbleGrabberOpenCloseMaxPos = 1.0;
 
@@ -125,13 +125,13 @@ public class chewy_Teleop extends OpMode {
 
         if (gamepad1.dpad_down) {
             if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.01;
+                wobbleGrabberUpDownPos -= 0.001;
 
             }
         }
         if (gamepad1.dpad_up) {
             if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.01;
+                wobbleGrabberUpDownPos += 0.001;
             }
         }
         robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
