@@ -35,7 +35,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
 
     //Hardware Map Names for drive motors and odometry wheels. THIS WILL CHANGE ON EACH ROBOT, YOU NEED TO UPDATE THESE VALUES ACCORDINGLY
     String rfName = "frontRightDrive", rbName = "backRightDrive", lfName = "frontLeftDrive", lbName = "backLeftDrive";
-    String verticalLeftEncoderName = lbName, verticalRightEncoderName = rbName, horizontalEncoderName = lfName;
+    String verticalLeftEncoderName = lfName, verticalRightEncoderName = rfName, horizontalEncoderName = lbName;
     final double PIVOT_SPEED = 0.5;
 
     //The amount of encoder ticks for each inch the robot moves. THIS WILL CHANGE FOR EACH ROBOT AND NEEDS TO BE UPDATED HERE
@@ -92,7 +92,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
 //        right_back.setPower(0.0);
 
         //Begin calibration (if robot is unable to pivot at these speeds, please adjust the constant at the top of the code
-        /*
+
         while(getZAngle() < 90 && opModeIsActive()){
             right_front.setPower(-PIVOT_SPEED);
             right_back.setPower(-PIVOT_SPEED);
@@ -115,7 +115,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
             telemetry.addData("IMU Angle", getZAngle());
             telemetry.update();
         }
-         */
+
         //Record IMU and encoder values to calculate the constants for the global position algorithm
         double angle = getZAngle();
 
@@ -144,7 +144,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
 
             //Display raw values
             telemetry.addData("IMU Angle", getZAngle());
-            telemetry.addData("Vertical Left Position", -verticalLeft.getCurrentPosition());
+            telemetry.addData("Vertical Left Position", verticalLeft.getCurrentPosition());
             telemetry.addData("Vertical Right Position", verticalRight.getCurrentPosition());
             telemetry.addData("Horizontal Position", horizontal.getCurrentPosition());
             telemetry.addData("Vertical Encoder Offset", verticalEncoderTickOffsetPerDegree);
@@ -189,7 +189,7 @@ public class chewy_OdometryCalibration extends LinearOpMode {
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         right_front.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_back.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //verticalRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //horizontal.setDirection(DcMotorSimple.Direction.REVERSE);
