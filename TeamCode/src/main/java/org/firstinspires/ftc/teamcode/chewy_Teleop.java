@@ -63,7 +63,7 @@ public class chewy_Teleop extends OpMode {
     double wobbleGrabberUpDownPos = 0.5;
     double wobbleGrabberOpenClosePos = 0.5;
     double wobbleGrabberUpDownMinPos = 0.2;
-    double wobbleGrabberUpDownMaxPos = 1.0;
+    double wobbleGrabberUpDownMaxPos = 0.8;
     double wobbleGrabberOpenCloseMinPos = 0.0;
     double wobbleGrabberOpenCloseMaxPos = 1.0;
 
@@ -118,6 +118,36 @@ public class chewy_Teleop extends OpMode {
             maxVel = 1.0;
         else if (gamepad1.left_bumper)
             maxVel = 0.25;
+
+        if (gamepad1.y)  {
+            robot.imu.resetHeading();
+        }
+
+        if (gamepad1.dpad_down) {
+            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+                wobbleGrabberUpDownPos -= 0.01;
+
+            }
+        }
+        if (gamepad1.dpad_up) {
+            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+                wobbleGrabberUpDownPos += 0.01;
+            }
+        }
+        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+
+        if (gamepad1.dpad_right) {
+            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+                wobbleGrabberOpenClosePos -= 0.05;
+
+            }
+        }
+        if (gamepad1.dpad_left) {
+            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+                wobbleGrabberOpenClosePos += 0.05;
+            }
+        }
+        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
 
 
 
@@ -210,31 +240,6 @@ public class chewy_Teleop extends OpMode {
 //        robot.wobbleGrabberArm.setPosition(wobbleGrabberClaw);
 //        RobotLog.d("8620WGW: %.4f", wobbleGrabberClaw);
 
-        if (gamepad2.dpad_down && gamepad2.x) {
-            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.05;
-
-            }
-        }
-        if (gamepad2.dpad_up && gamepad2.x) {
-            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.05;
-            }
-        }
-        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
-
-        if (gamepad2.dpad_down && !gamepad2.x) {
-            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
-                wobbleGrabberOpenClosePos -= 0.05;
-
-            }
-        }
-        if (gamepad2.dpad_up && !gamepad2.x) {
-            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
-                wobbleGrabberOpenClosePos += 0.05;
-            }
-        }
-        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
 
 
 
