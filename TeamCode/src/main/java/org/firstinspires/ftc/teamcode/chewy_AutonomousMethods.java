@@ -566,9 +566,9 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
     //Odometry Section
     public void initOdometryHardware(double x, double y, double heading) {
 
-        robot.verticalLeft = hardwareMap.dcMotor.get("frontRightDrive");
-        robot.verticalRight = hardwareMap.dcMotor.get("backRightDrive");
-        robot.horizontal = hardwareMap.dcMotor.get("IntakeRight");
+//        robot.verticalLeft = hardwareMap.dcMotor.get("frontRightDrive");
+//        robot.verticalRight = hardwareMap.dcMotor.get("backRightDrive");
+//        robot.horizontal = hardwareMap.dcMotor.get("IntakeRight");
 
 
         robot.verticalLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -587,6 +587,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.globalPositionUpdate = new OdometryGlobalCoordinatePosition(robot.verticalLeft, robot.verticalRight, robot.horizontal, robot.COUNTS_PER_INCH, x * robot.COUNTS_PER_INCH, y * robot.COUNTS_PER_INCH, heading, 75); //(135,111) orientation 90
         robot.positionThread = new Thread(robot.globalPositionUpdate);
         robot.positionThread.start();
+        robot.globalPositionUpdate.reverseLeftEncoder();
         robot.globalPositionUpdate.reverseRightEncoder();
         //robot.globalPositionUpdate.reverseNormalEncoder();
 
@@ -768,6 +769,33 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
             }
         }
         return error;
+    }
+
+    //shoot first disk
+    public void firstDiskAuto() {
+        robot.shooterRight.setPower(.5);
+        robot.shooterLeft.setPower(-0.5);
+        sleep (2000);
+        robot.secondTransfer.setPosition(1);
+        sleep (4000);
+    }
+
+    //shoot second disk
+    public void secondDiskAuto(){
+        robot.shooterRight.setPower(.5);
+        robot.shooterLeft.setPower(-0.5);
+        robot.secondTransfer.setPosition(1);
+        robot.firstTransfer.setPosition(1);
+        sleep (4000);
+    }
+    //shoot third disk
+    public void thirdDiskAuto(){
+        robot.shooterRight.setPower(.5);
+        robot.shooterLeft.setPower(-0.5);
+        robot.secondTransfer.setPosition(1);
+        robot.firstTransfer.setPosition(1);
+        robot.intake.setPower(1);
+        sleep (4000);
     }
 }
 
