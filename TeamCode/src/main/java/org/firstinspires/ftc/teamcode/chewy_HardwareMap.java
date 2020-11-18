@@ -41,6 +41,7 @@ public class chewy_HardwareMap
     public Servo  wobbleGrabberOpenClose   = null;
 
 
+
     //public sensors
 
     /* local OpMode members. */
@@ -59,6 +60,7 @@ public class chewy_HardwareMap
 
         wgwIMU2018 = hwMap.get(BNO055IMU.class, "imu");
         imu = new WGWIMU2018(wgwIMU2018);
+        imu.resetHeading();
 
         // Define and Initialize Motors
 
@@ -83,6 +85,7 @@ public class chewy_HardwareMap
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -119,6 +122,10 @@ public class chewy_HardwareMap
         backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        verticalLeft = hwMap.dcMotor.get("backLeftDrive");
+        verticalRight = hwMap.dcMotor.get("backRightDrive");
+        horizontal = hwMap.dcMotor.get("frontLeftDrive");
+
 
 
     }
@@ -126,7 +133,7 @@ public class chewy_HardwareMap
     public DcMotor verticalLeft     = null,
                    verticalRight    = null,
                    horizontal       = null;
-    final double COUNTS_PER_INCH = 1714;
+    final double COUNTS_PER_INCH = 1303.79729381;
 
     // String verticalLeftEncoderName = "vle", verticalRightEncoderName = "vre", horizontalEncoderName = "he";
     //String rfName = "frontRightDrive", rbName = "backRightDrive", lfName = "frontLeftDrive", lbName = "backLeftDrive";
