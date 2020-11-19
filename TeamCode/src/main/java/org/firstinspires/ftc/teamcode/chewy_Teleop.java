@@ -62,14 +62,12 @@ public class chewy_Teleop extends OpMode {
      */
     double wobbleGrabberUpDownPos = 0.5;
     double wobbleGrabberOpenClosePos = 0.5;
-    double wobbleGrabberUpDownMinPos = 0.1;
-    double wobbleGrabberUpDownMaxPos = 0.9;
+    double wobbleGrabberUpDownMinPos = 0.0;
+    double wobbleGrabberUpDownMaxPos = 1.2;
     double wobbleGrabberOpenCloseMinPos = 0.0;
     double wobbleGrabberOpenCloseMaxPos = 1.0;
 
     double maxVel = 0.5;
-    double dropServoPos = 1.1;
-    double openServoPos = 0.5;
 
     @Override
     public void loop() {
@@ -125,13 +123,13 @@ public class chewy_Teleop extends OpMode {
 
         if (gamepad1.dpad_down) {
             if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.001;
+                wobbleGrabberUpDownPos -= 0.01;
 
             }
         }
         if (gamepad1.dpad_up) {
             if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.001;
+                wobbleGrabberUpDownPos += 0.01;
             }
         }
         robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
@@ -202,9 +200,29 @@ public class chewy_Teleop extends OpMode {
             robot.intake.setPower(1);
         }
 
-        //intake reverse
+        //reverse all
         if (gamepad2.dpad_up)
         {
+            robot.intake.setPower(-1);
+            robot.intakeRoller.setPosition(0);
+            robot.firstTransfer.setPosition(0);
+            robot.secondTransfer.setPosition(0);
+        }
+
+
+        // stop reverse secondTransfer
+        if (gamepad2.dpad_left)
+        {
+            robot.secondTransfer.setPosition(0.5);
+            robot.firstTransfer.setPosition(0);
+            robot.intake.setPower(-1);
+        }
+
+        // stop reverse firstTransfer
+        if (gamepad2.dpad_right)
+        {
+            robot.secondTransfer.setPosition(0.5);
+            robot.firstTransfer.setPosition(0.5);
             robot.intake.setPower(-1);
         }
 
