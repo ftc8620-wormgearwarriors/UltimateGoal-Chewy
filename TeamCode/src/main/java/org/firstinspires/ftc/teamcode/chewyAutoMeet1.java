@@ -32,17 +32,18 @@ public class chewyAutoMeet1 extends chewy_AutonomousMethods {
 //        }
 
         //drive to launch line
-        goToPostion(52 * robot.COUNTS_PER_INCH,67 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(17 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(44 * robot.COUNTS_PER_INCH,72 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(44 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+
 
         //shoot powershot targets
         firstDiskAuto();
-        goToPostion(56 * robot.COUNTS_PER_INCH,67 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
         secondDiskAuto();
-        goToPostion(62 * robot.COUNTS_PER_INCH,67 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
         thirdDiskAuto();
 
         //park on launch line
-        goToPostion(62 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
