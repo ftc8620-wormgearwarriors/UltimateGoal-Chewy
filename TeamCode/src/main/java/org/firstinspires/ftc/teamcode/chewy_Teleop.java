@@ -105,10 +105,10 @@ public class chewy_Teleop extends OpMode {
 
         // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
         // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-        frontRight = y_prime - (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
-        backRight = y_prime - (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
-        frontLeft = y_prime + (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
-        backLeft = y_prime + (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
+        frontRight = y_prime - (gamepad1.right_stick_x  * maxVel) + x_prime;
+        backRight = y_prime - (gamepad1.right_stick_x  * maxVel) - x_prime;
+        frontLeft = y_prime + (gamepad1.right_stick_x  * maxVel) - x_prime;
+        backLeft = y_prime + (gamepad1.right_stick_x  * maxVel) + x_prime;
 
         if (gamepad1.left_trigger > .05)
             maxVel = 0.5;
@@ -200,8 +200,8 @@ public class chewy_Teleop extends OpMode {
             robot.intake.setPower(1);
         }
 
-        //reverse all
-        if (gamepad2.dpad_up)
+        //reverse second transfer
+        if (gamepad2.dpad_left)
         {
             robot.intake.setPower(-1);
             robot.intakeRoller.setPosition(0);
@@ -210,8 +210,8 @@ public class chewy_Teleop extends OpMode {
         }
 
 
-        // stop reverse secondTransfer
-        if (gamepad2.dpad_left)
+        // stop reverse all
+        if (gamepad2.dpad_up)
         {
             robot.secondTransfer.setPosition(0.5);
             robot.firstTransfer.setPosition(0);
@@ -229,8 +229,8 @@ public class chewy_Teleop extends OpMode {
         // Button to start the shooter
         if (gamepad2.left_bumper)
         {
-            robot.shooterRight.setPower(.5);
-            robot.shooterLeft.setPower(-0.5);
+            robot.shooterRight.setPower(.6);
+            robot.shooterLeft.setPower(-0.6);
         }
 
         // Button to stop the shooter.
@@ -240,11 +240,11 @@ public class chewy_Teleop extends OpMode {
             robot.shooterLeft.setPower(0);
         }
 
-        //shooter half speed
+        //shooter slow speed
         if (gamepad2.dpad_down) {
 
             robot.shooterRight.setPower(0.5);
-            robot.shooterLeft.setPower(-0.35);
+            robot.shooterLeft.setPower(-0.55);
         }
     }
 

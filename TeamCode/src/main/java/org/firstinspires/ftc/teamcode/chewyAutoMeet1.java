@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * Created by Sarthak on 10/4/2019.
  */
-@Autonomous(name = "chewyAutoForce")
+@Autonomous(name = "MeetOneChewyAuto")
 public class chewyAutoMeet1 extends chewy_AutonomousMethods {
 
 
