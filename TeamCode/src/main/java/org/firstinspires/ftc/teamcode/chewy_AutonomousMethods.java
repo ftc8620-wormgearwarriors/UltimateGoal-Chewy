@@ -777,7 +777,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.shooterLeft.setPower(-0.5);
         sleep (2000);
         robot.secondTransfer.setPosition(1);
-        sleep (4000);
+        sleep (1000);
     }
 
     //shoot second disk
@@ -786,7 +786,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.shooterLeft.setPower(-0.5);
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
-        sleep (4000);
+        sleep (2000);
     }
     //shoot third disk
     public void thirdDiskAuto(){
@@ -795,7 +795,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
         robot.intake.setPower(1);
-        sleep (4000);
+        sleep (6000);
     }
 }
 
