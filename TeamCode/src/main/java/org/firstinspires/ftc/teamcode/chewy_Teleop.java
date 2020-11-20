@@ -121,17 +121,33 @@ public class chewy_Teleop extends OpMode {
             robot.imu.resetHeading();
         }
 
-        if (gamepad1.dpad_down) {
-            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.01;
+//        if (gamepad1.dpad_down) {
+//            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+//                wobbleGrabberUpDownPos -= 0.01;
+//
+//            }
+//        }
+//        if (gamepad1.dpad_up) {
+//            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+//                wobbleGrabberUpDownPos += 0.01;
+//            }
+//        }
+//        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
 
-            }
+
+        if (gamepad1.dpad_down) {
+
+                wobbleGrabberUpDownPos = 0;
+
+
         }
-        if (gamepad1.dpad_up) {
-            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.01;
-            }
+        else if (gamepad1.dpad_up) {
+
+                wobbleGrabberUpDownPos = 1;
+
         }
+        else
+            wobbleGrabberUpDownPos = 0.5;
         robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
 
         if (gamepad1.dpad_right) {

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.RobotLog;
 
-@Autonomous(name = "chewy_Autonomous")
+@Autonomous(name = "chewy_Camera_Autonomous")
 public class chewy_Autonomous extends chewy_AutonomousMethods {
 
 
