@@ -1,18 +1,28 @@
 package org.firstinspires.ftc.teamcode;
+import android.graphics.Bitmap;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.RobotLog;
+import com.qualcomm.robotcore.util.ThreadPool;
+import com.vuforia.Frame;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 @Autonomous(name = "chewy_Camera_Autonomous")
 public class chewy_Autonomous extends chewy_AutonomousMethods {
@@ -47,6 +57,8 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
             tfod.activate();
         }
 
+        telemetry.addData("tfod", "activated");
+
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
@@ -55,32 +67,13 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         waitForStart();
 
         //use camera to identify # of rings
+        int numTries = 100;
+        int numRings = numberOfRings(numTries);
+        telemetry.addData("# Rings Detected", numRings);
+        telemetry.update();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+        sleep(3000);
 
-                if (tfod != null) {
-
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                        // step through the list of recognitions and display boundary info.
-                        int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-                        }
-                        telemetry.update();
-                    }
-                }
-            }
-        }
 
         //Drive to launch line
         //goToPostion(30,70,0.5,0,1,false);
@@ -93,6 +86,49 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         //Park on launch line
         //goToPostion(30,84,0.5,0,1,false);
 
+    }
+
+    int numberOfRings(int numTries){
+        int returnRings = 0;
+
+        // try writing image to file
+        captureFrameToFile();
+        telemetry.addData("folder",captureDirectory);
+        telemetry.update();
+        sleep(5000);
+
+        if (tfod != null) {
+            for (int i = 0; i < numTries; i++) {
+
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData(String.format("# objects detected (%d)", i), updatedRecognitions.size());
+                    telemetry.update();
+                    sleep(200);
+
+                    // step through the list of recognitions and display boundary info.
+                    int j = 0;
+                    for (Recognition recognition : updatedRecognitions) {
+
+                        //telemetry.addData(String.format("label (%d)", j), recognition.getLabel());
+                        //telemetry.update();
+
+                        if (recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) {
+                            returnRings = 1;
+                            return returnRings;
+                        }
+                        if (recognition.getLabel().equals(LABEL_FIRST_ELEMENT)) {
+                            returnRings = 4;
+                            return returnRings;
+                        }
+
+                    }
+                }
+            }
+        }
+        return returnRings;
     }
 
 
@@ -122,7 +158,43 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
+    //use vuforia to capture an image that determines the number of donuts
+    void captureFrameToFile() {
+        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
+        {
+            @Override public void accept(Frame frame)
+            {
+                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
+                saveBitmap(bitmap);
+                if (bitmap != null) {
+                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        try {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                        } finally {
+                            outputStream.close();
+                            telemetry.log().add("captured %s", file.getName());
+                        }
+                    } catch (IOException e) {
+                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
+                    }
+                }
+            }
+        }));
+    }
 
-
+    private void saveBitmap(Bitmap bitmap) {
+        File file = new File(captureDirectory, String.format(Locale.getDefault(), "webcam-frame-%d.jpg", captureCounter++));
+        try {
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                telemetry.log().add("captured %s", file.getName());
+            }
+        } catch (IOException e) {
+            RobotLog.ee(TAG, e, "exception in saveBitmap()");
+            //error("exception saving %s", file.getName());
+        }
+    }
 
 }

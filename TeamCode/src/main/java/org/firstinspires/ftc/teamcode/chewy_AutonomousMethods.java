@@ -477,35 +477,6 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         return currentPositionAverage();
     }
 
-    void captureFrameToFile() {
-        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
-        {
-            @Override public void accept(Frame frame)
-            {
-                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
-                if (bitmap != null) {
-                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        try {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        } finally {
-                            outputStream.close();
-                            telemetry.log().add("captured %s", file.getName());
-                        }
-                    } catch (IOException e) {
-                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
-                    }
-                }
-            }
-        }));
-    }
-
-    //use vuforia to capture an image that determines the number of donuts
-
-
-
-
 
     //Odometry Section
     public void initOdometryHardware(double x, double y, double heading) {
