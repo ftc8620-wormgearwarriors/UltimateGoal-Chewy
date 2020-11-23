@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-@Autonomous(name = "chewy_Camera_Autonomous")
+@Autonomous(name = "chewy_Autonomous")
 public class chewy_Autonomous extends chewy_AutonomousMethods {
 
     private VuforiaLocalizer vuforia = null;
@@ -39,9 +39,10 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
     @Override
     public void runOpMode() {
         //Initialize hardware map values.
-        //Init();
-        //initOdometryHardware(24,  9 , 0);
 
+        //initializing odometry hardware
+        Init();
+        initOdometryHardware(40,  9 , 0);
 
         //initializing camera
         initVuforia();
@@ -67,24 +68,26 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         waitForStart();
 
         //use camera to identify # of rings
-        int numTries = 100;
+        int numTries = 1;
         int numRings = numberOfRings(numTries);
         telemetry.addData("# Rings Detected", numRings);
         telemetry.update();
 
         sleep(3000);
 
+        goToPostion(52 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
 
-        //Drive to launch line
-        //goToPostion(30,70,0.5,0,1,false);
+//        //shoot powershot targets
+//        firstDiskAuto();
+//        secondDiskAuto();
+//        thirdDiskAuto();
+//
+//        //park on launch line
+//        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
 
-        //Shoot powershot targets
+        //Stop the thread
+        robot.globalPositionUpdate.stop();
 
-
-
-
-        //Park on launch line
-        //goToPostion(30,84,0.5,0,1,false);
 
     }
 
@@ -95,7 +98,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         captureFrameToFile();
         telemetry.addData("folder",captureDirectory);
         telemetry.update();
-        sleep(5000);
+        sleep(1000);
 
         if (tfod != null) {
             for (int i = 0; i < numTries; i++) {
