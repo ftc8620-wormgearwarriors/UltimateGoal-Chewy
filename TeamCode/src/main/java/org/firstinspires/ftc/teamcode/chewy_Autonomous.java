@@ -73,21 +73,39 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         telemetry.addData("# Rings Detected", numRings);
         telemetry.update();
 
-        sleep(3000);
+        sleep(1000);
 
         //driving to intermediate pos before first drop zone
-        goToPostion(52 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.6,0,3 * robot.COUNTS_PER_INCH,false);
 
-        //drive and turn to drop wobble goal
-        goToPostion(24 * robot.COUNTS_PER_INCH,90 * robot.COUNTS_PER_INCH,0.5,90,3 * robot.COUNTS_PER_INCH,false);
+        //drive and turn to drop wobble goal based on # of rings
+        if (numRings == 4 ) {
+            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.7,90,3 * robot.COUNTS_PER_INCH,false);
+        } else if (numRings == 1) {
+            goToPostion(44 * robot.COUNTS_PER_INCH,110 * robot.COUNTS_PER_INCH,0.7,90,3 * robot.COUNTS_PER_INCH,false);
+        } else {
+            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.7,90,3 * robot.COUNTS_PER_INCH,false);
+        }
+
+        //open hand and move elbow to drop wobble goal
+        robot.wobbleGrabberOpenClose.setPosition(0.7);
+        sleep(1000);
+
+        //Drive to lanch line
+        goToPostion(44 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.7,0,3 * robot.COUNTS_PER_INCH,false);
+
+
+        //pause for pretend shooting time
+        // TODO: fix the drive speed, right now we don't have enough time to both drive and shoot
+        sleep(1000);
 
 //        //shoot powershot targets
 //        firstDiskAuto();
 //        secondDiskAuto();
 //        thirdDiskAuto();
-//
-//        //park on launch line
-//        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+
+        //park on launch line
+        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.7,0,3 * robot.COUNTS_PER_INCH,false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
