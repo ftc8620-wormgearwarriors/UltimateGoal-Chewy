@@ -75,7 +75,11 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
         sleep(3000);
 
+        //driving to intermediate pos before first drop zone
         goToPostion(52 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+
+        //drive and turn to drop wobble goal
+        goToPostion(24 * robot.COUNTS_PER_INCH,90 * robot.COUNTS_PER_INCH,0.5,90,3 * robot.COUNTS_PER_INCH,false);
 
 //        //shoot powershot targets
 //        firstDiskAuto();
