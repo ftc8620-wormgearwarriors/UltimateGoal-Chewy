@@ -73,44 +73,59 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         telemetry.addData("# Rings Detected", numRings);
         telemetry.update();
 
-        sleep(1000);
-
         //driving to intermediate pos before first drop zone
-        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.6,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //drive and turn to drop wobble goal based on # of rings
         if (numRings == 4 ) {
-            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.7,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         } else if (numRings == 1) {
-            goToPostion(44 * robot.COUNTS_PER_INCH,110 * robot.COUNTS_PER_INCH,0.7,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(44 * robot.COUNTS_PER_INCH,110 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         } else {
-            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.7,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         }
 
         //open hand and move elbow to drop wobble goal
         robot.wobbleGrabberOpenClose.setPosition(0.7);
-        sleep(1000);
+        sleep(2000);
 
         //Drive to lanch line
-        goToPostion(44 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.7,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(44 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+
+        //shoot powershot targets
+        rapidFireDisks();
+
+        //drive back to get wobble goal
+        if ((numRings == 4) || (numRings == 1)) {
+            //going to mid pos before other wobble to avoid knocking over rings
+            goToPostion(20 * robot.COUNTS_PER_INCH,62 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(20 * robot.COUNTS_PER_INCH,42 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        } else {
+            //skip past mid pos because of no rings
+            goToPostion(20 * robot.COUNTS_PER_INCH,42 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        }
+        sleep(2000);
+        robot.wobbleGrabberOpenClose.setPosition(0.4);
 
 
-        //pause for pretend shooting time
-        // TODO: fix the drive speed, right now we don't have enough time to both drive and shoot
-        sleep(1000);
+        //drive back to wobble drop zone
+        if (numRings == 4 ) {
+            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else if (numRings == 1) {
+            goToPostion(44 * robot.COUNTS_PER_INCH,110 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else {
+            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        }
 
-//        //shoot powershot targets
-//        firstDiskAuto();
-//        secondDiskAuto();
-//        thirdDiskAuto();
+        //open hand and move elbow to drop wobble goal
+        robot.wobbleGrabberOpenClose.setPosition(0.7);
+        sleep(2000);
 
         //park on launch line
-        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.7,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
-
-
     }
 
     int numberOfRings(int numTries){

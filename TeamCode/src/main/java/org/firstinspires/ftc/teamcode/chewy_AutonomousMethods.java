@@ -694,7 +694,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.intake.setPower(1);
 
         //waiting for all of the disks to shoot
-        sleep (5000);
+        sleep (6000);
 
         //turn all off
         robot.secondTransfer.setPosition(0.5);
