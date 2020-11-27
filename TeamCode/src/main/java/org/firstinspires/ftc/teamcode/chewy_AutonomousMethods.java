@@ -685,7 +685,25 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         }
         return error;
     }
+    //rapid fire all disks
+    public void rapidFireDisks() {
+        robot.shooterRight.setPower(.5);
+        robot.shooterLeft.setPower(-0.5);
+        robot.secondTransfer.setPosition(1);
+        robot.firstTransfer.setPosition(1);
+        robot.intake.setPower(1);
 
+        //waiting for all of the disks to shoot
+        sleep (5000);
+
+        //turn all off
+        robot.secondTransfer.setPosition(0.5);
+        robot.firstTransfer.setPosition(0.5);
+        robot.intake.setPower(0);
+        robot.shooterRight.setPower(0);
+        robot.shooterLeft.setPower(0);
+
+    }
     //shoot first disk
     public void firstDiskAuto() {
         robot.shooterRight.setPower(.5);
