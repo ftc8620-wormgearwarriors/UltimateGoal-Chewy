@@ -685,6 +685,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         }
         return error;
     }
+
     //rapid fire all disks
     public void rapidFireDisks() {
         robot.shooterRight.setPower(.5);
@@ -704,6 +705,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.shooterLeft.setPower(0);
 
     }
+
     //shoot first disk
     public void firstDiskAuto() {
         robot.shooterRight.setPower(.5);
@@ -721,14 +723,34 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.firstTransfer.setPosition(1);
         sleep (2000);
     }
+
     //shoot third disk
     public void thirdDiskAuto(){
-        robot.shooterRight.setPower(.5);
+        robot.shooterRight.setPower(0.5);
         robot.shooterLeft.setPower(-0.5);
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
         robot.intake.setPower(1);
         sleep (8000);
     }
+
+    //drop wobble goal
+    public void dropWobbleGoal(){
+        robot.wobbleGrabberUpDown.setPosition(0.425);
+        sleep(1500);
+        robot.wobbleGrabberOpenClose.setPosition(0.4);
+    }
+
+    //pick up wobble goal
+    public void pickUpWobbleGoal(){
+        robot.wobbleGrabberUpDown.setPosition(0.375);
+        sleep(500);
+        robot.wobbleGrabberOpenClose.setPosition(0.4);
+        sleep(500);
+        robot.wobbleGrabberOpenClose.setPosition(0.35);
+        sleep(500);
+        robot.wobbleGrabberUpDown.setPosition(0.5);
+    }
+
 }
 

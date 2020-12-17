@@ -86,11 +86,10 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         }
 
         //open hand and move elbow to drop wobble goal
-        robot.wobbleGrabberOpenClose.setPosition(0.7);
-        sleep(2000);
+        dropWobbleGoal();
 
         //Drive to lanch line
-        goToPostion(44 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(38 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //shoot powershot targets
         rapidFireDisks();
@@ -105,8 +104,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
             goToPostion(20 * robot.COUNTS_PER_INCH,42 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
         }
         sleep(2000);
-        robot.wobbleGrabberOpenClose.setPosition(0.4);
-
+        pickUpWobbleGoal();
 
         //drive back to wobble drop zone
         if (numRings == 4 ) {
@@ -118,8 +116,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         }
 
         //open hand and move elbow to drop wobble goal
-        robot.wobbleGrabberOpenClose.setPosition(0.7);
-        sleep(2000);
+        dropWobbleGoal();
 
         //park on launch line
         goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);

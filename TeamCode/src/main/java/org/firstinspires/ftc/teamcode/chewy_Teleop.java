@@ -62,8 +62,8 @@ public class chewy_Teleop extends OpMode {
      */
     double wobbleGrabberUpDownPos = 0.5;
     double wobbleGrabberOpenClosePos = 0.5;
-    double wobbleGrabberUpDownMinPos = 0.0;
-    double wobbleGrabberUpDownMaxPos = 1.2;
+    double wobbleGrabberUpDownMinPos = 0.35;
+    double wobbleGrabberUpDownMaxPos = 0.55;
     double wobbleGrabberOpenCloseMinPos = 0.0;
     double wobbleGrabberOpenCloseMaxPos = 1.0;
 
@@ -96,8 +96,8 @@ public class chewy_Teleop extends OpMode {
         telemetry.addData("x_prime", x_prime);
         telemetry.addData("y_prime", y_prime);
         telemetry.addData("Gyro Heading", gyroHeading);
-        telemetry.addData("wobbleGrabberUpDown", String.format ("%.01f", wobbleGrabberUpDownPos));
-        telemetry.addData("wobbleGrabberOpenClose", String.format ("%.01f", wobbleGrabberOpenClosePos));
+        telemetry.addData("wobbleGrabberUpDown", String.format ("%.05f", wobbleGrabberUpDownPos));
+        telemetry.addData("wobbleGrabberOpenClose", String.format ("%.05f", wobbleGrabberOpenClosePos));
 
 
 
@@ -121,33 +121,17 @@ public class chewy_Teleop extends OpMode {
             robot.imu.resetHeading();
         }
 
-//        if (gamepad1.dpad_down) {
-//            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-//                wobbleGrabberUpDownPos -= 0.01;
-//
-//            }
-//        }
-//        if (gamepad1.dpad_up) {
-//            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-//                wobbleGrabberUpDownPos += 0.01;
-//            }
-//        }
-//        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
-
-
         if (gamepad1.dpad_down) {
+            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+                wobbleGrabberUpDownPos -= 0.001;
 
-                wobbleGrabberUpDownPos = 0;
-
-
+            }
         }
-        else if (gamepad1.dpad_up) {
-
-                wobbleGrabberUpDownPos = 1;
-
+        if (gamepad1.dpad_up) {
+            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+                wobbleGrabberUpDownPos += 0.001;
+            }
         }
-        else
-            wobbleGrabberUpDownPos = 0.5;
         robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
 
         if (gamepad1.dpad_right) {

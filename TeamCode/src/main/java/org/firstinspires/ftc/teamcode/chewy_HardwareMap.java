@@ -105,7 +105,7 @@ public class chewy_HardwareMap
         intakeRoller.setPosition(0.5);
         firstTransfer.setPosition(0.5);
         secondTransfer.setPosition(0.5);
-        wobbleGrabberUpDown.setPosition(0.5);
+        wobbleGrabberUpDown.setPosition(0.55);
         wobbleGrabberOpenClose.setPosition(0.4);
 
 
