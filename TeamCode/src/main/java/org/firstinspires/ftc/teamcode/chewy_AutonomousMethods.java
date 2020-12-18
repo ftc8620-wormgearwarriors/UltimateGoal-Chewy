@@ -688,8 +688,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
     //rapid fire all disks
     public void rapidFireDisks() {
-        robot.shooterRight.setPower(.5);
-        robot.shooterLeft.setPower(-0.5);
+
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
         robot.intake.setPower(1);
@@ -738,7 +737,8 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
     public void dropWobbleGoal(){
         robot.wobbleGrabberUpDown.setPosition(0.425);
         sleep(1500);
-        robot.wobbleGrabberOpenClose.setPosition(0.4);
+        robot.wobbleGrabberOpenClose.setPosition(0.6);
+        sleep(2000);
     }
 
     //pick up wobble goal

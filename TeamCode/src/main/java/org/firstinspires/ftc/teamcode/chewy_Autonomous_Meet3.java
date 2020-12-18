@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,8 +25,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-@Autonomous(name = "chewy_Autonomous")
-public class chewy_Autonomous extends chewy_AutonomousMethods {
+@Disabled
+@Autonomous(name = "chewy_Autonomous_Meet3")
+public class chewy_Autonomous_Meet3 extends chewy_AutonomousMethods {
 
     private VuforiaLocalizer vuforia = null;
     private TFObjectDetector tfod;
@@ -88,22 +90,45 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         //open hand and move elbow to drop wobble goal
         dropWobbleGoal();
 
-        // turn shooter first to rev up them
-        robot.shooterRight.setPower(0.6);
-        robot.shooterLeft.setPower(-0.6);
-
-        //move to intermediate pos
+        //move to intermedit pos
         if (numRings == 4 ) {
             goToPostion(36 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         } else if (numRings == 1) {
             goToPostion(60 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         }
 
+        // turn shooter first to rev up them
+        robot.shooterRight.setPower(.5);
+        robot.shooterLeft.setPower(-0.5);
+
         //Drive to lanch line
         goToPostion(38 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //shoot powershot targets
         rapidFireDisks();
+
+        //drive back to get wobble goal
+        if ((numRings == 4) || (numRings == 1)) {
+            //going to mid pos before other wobble to avoid knocking over rings
+            goToPostion(20 * robot.COUNTS_PER_INCH,62 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(20.5 * robot.COUNTS_PER_INCH,35 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        } else {
+            //skip past mid pos because of no rings
+            goToPostion(20.5 * robot.COUNTS_PER_INCH,35 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        }
+        pickUpWobbleGoal();
+
+        //drive back to wobble drop zone
+        if (numRings == 4 ) {
+            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else if (numRings == 1) {
+            goToPostion(44 * robot.COUNTS_PER_INCH,110 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else {
+            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        }
+
+        //open hand and move elbow to drop wobble goal
+        dropWobbleGoal();
 
         //park on launch line
         goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
