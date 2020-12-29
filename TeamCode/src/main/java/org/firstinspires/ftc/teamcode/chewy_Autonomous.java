@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.RingDetector;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,9 +37,12 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
     final String VUFORIA_KEY =
             " Ac/bw0P/////AAABmdRCZF/Kqk2MjbJIs87MKVlJg32ktQ2Tgl6871UmjRacrtxKJCUzDAeC2aA4tbiTjejLjl1W6e7VgBcQfpYx2WhqclKIEkguBRoL1udCrz4OWonoLn/GCA+GntFUZN0Az+dGGYtBqcuW3XkmVNSzgOgJbPDXOf+73P5qb4/mHry0xjx3hysyAzmM/snKvGv8ImhVOVpm00d6ozC8GzvOMRF/S5Z1NBsoFls2/ul+PcZ+veKwgyPFLEFP4DXSqTeOW1nJGH9yYXSH0kfNHgGutLM5om1hAlxdP8D4XMRD2bgWXj1Md2bz+uJmr1E2ZuI7p26ZRxOIKZE9Hwpai+MW6yaJD0otF6aL9QXYaULPpWKo ";
 
+    //number of rings
+    int m_numRings = 0;
+
     @Override
     public void runOpMode() {
-        //Initialize hardware map values.
+        //Initialize hardware map values
 
         //initializing odometry hardware
         Init();
@@ -67,19 +71,20 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         // wait for start of opmode
         waitForStart();
 
+        //trying new ring detector
+        captureFrameDetectRings();
+
         //use camera to identify # of rings
-        int numTries = 1;
-        int numRings = numberOfRings(numTries);
-        telemetry.addData("# Rings Detected", numRings);
+        telemetry.addData("# Rings Detected", m_numRings);
         telemetry.update();
 
         //driving to intermediate pos before first drop zone
         goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //drive and turn to drop wobble goal based on # of rings
-        if (numRings == 4 ) {
+        if (m_numRings == 4 ) {
             goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-        } else if (numRings == 1) {
+        } else if (m_numRings == 1) {
             goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         } else {
             goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
@@ -93,14 +98,14 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         robot.shooterLeft.setPower(-0.6);
 
         //move to intermediate pos
-        if (numRings == 4 ) {
+        if (m_numRings == 4 ) {
             goToPostion(36 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-        } else if (numRings == 1) {
+        } else if (m_numRings == 1) {
             goToPostion(60 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
         }
 
         //Drive to lanch line
-        goToPostion(38 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(39 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //shoot powershot targets
         rapidFireDisks();
@@ -208,8 +213,59 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         }));
     }
 
+    void captureFrameDetectRings() {
+        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
+        {
+            @Override public void accept(Frame frame)
+            {
+                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
+                saveBitmap(bitmap);
+                if (bitmap != null) {
+                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        try {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                        } finally {
+                            outputStream.close();
+                            telemetry.log().add("captured %s", file.getName());
+                        }
+                    } catch (IOException e) {
+                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
+                    }
+                }
+
+                // create RingDetector object and set bitmap based on the one grabbed
+                RingDetector ringDetector = new RingDetector(bitmap);
+
+                // create the cropped image and display it
+                Bitmap bitmapCroppedRingImage = ringDetector.createCroppedRingImage();
+                saveCroppedBitmap(bitmapCroppedRingImage);
+
+                int nPixelThreshold = 140;
+                double dRatioThreshold1 = 0.5;
+                double dRatioThreshold2 = 2.0;
+                m_numRings = ringDetector.getNumberOfRings(bitmapCroppedRingImage, nPixelThreshold,
+                        dRatioThreshold1, dRatioThreshold2);
+            }
+        }));
+    }
+
     private void saveBitmap(Bitmap bitmap) {
-        File file = new File(captureDirectory, String.format(Locale.getDefault(), "webcam-frame-%d.jpg", captureCounter++));
+        File file = new File(captureDirectory, String.format(Locale.getDefault(), "originalFrame.jpg", captureCounter++));
+        try {
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                telemetry.log().add("captured %s", file.getName());
+            }
+        } catch (IOException e) {
+            RobotLog.ee(TAG, e, "exception in saveBitmap()");
+            //error("exception saving %s", file.getName());
+        }
+    }
+
+    private void saveCroppedBitmap(Bitmap bitmap) {
+        File file = new File(captureDirectory, String.format(Locale.getDefault(), "croppedFrame.jpg", captureCounter++));
         try {
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
