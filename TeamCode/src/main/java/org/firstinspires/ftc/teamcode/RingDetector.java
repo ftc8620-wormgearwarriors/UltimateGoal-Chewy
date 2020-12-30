@@ -41,8 +41,8 @@ public class RingDetector {
 
         //creating varables to store pixels count
         int nAboveThresholdRed = 1;
-        int nAboveThresholdGreen = 1;
         int nAboveThresholdBlue = 1;
+        int nAboveThresholdGreen = 1;
         int nR = 0;
         int nG = 0;
         int nB = 0;
@@ -99,6 +99,97 @@ public class RingDetector {
         return nRings;
     }
 
+    // function to return the number of rings based on the bitmap
+    public double getRBRatio(Bitmap croppedRingImage, int nPixelThreshold,
+                                double dRatioThreshold1, double dRatioThreshold2) {
+
+        // Getting size of cropped bit map
+        int cropImageHeight = croppedRingImage.getHeight();
+        int cropImageWidth = croppedRingImage.getWidth();
+
+        //creating varables to store pixels count
+        int nAboveThresholdRed = 1;
+        int nAboveThresholdBlue = 1;
+        int nR = 0;
+        int nB = 0;
+
+        // creating variables to store ratios\
+        double dRBRatio = 0.0;
+        int nPixel = 0;
+
+        //looping through all pixels and counting the number of pixels with r, g, or, b above
+        // thresholds
+        for (int i = 0; i < cropImageHeight; i++) {
+            for (int j = 0; j < cropImageWidth; j++) {
+
+                //get pixel value
+                nPixel = croppedRingImage.getPixel(j, i);
+                nR = Color.red(nPixel);
+                nB = Color.blue(nPixel);
+
+                //check r, g, and b against thresholds
+                if (nR > nPixelThreshold) {
+                    nAboveThresholdRed++;
+                }
+                if (nB > nPixelThreshold) {
+                    nAboveThresholdBlue++;
+                }
+            }
+        }
+
+        //compute ratio r and g to b
+        dRBRatio = (double)nAboveThresholdRed / (double)nAboveThresholdBlue;
+
+        // default to return 0 rings
+        return dRBRatio;
+    }
+
+    // function to return the number of rings based on the bitmap
+    public double getGBRatio(Bitmap croppedRingImage, int nPixelThreshold,
+                                double dRatioThreshold1, double dRatioThreshold2) {
+
+        // Getting size of cropped bit map
+        int cropImageHeight = croppedRingImage.getHeight();
+        int cropImageWidth = croppedRingImage.getWidth();
+
+        //creating varables to store pixels count
+        int nAboveThresholdBlue = 1;
+        int nAboveThresholdGreen = 1;
+        int nG = 0;
+        int nB = 0;
+
+        // creating variables to store ratios\
+        double dGBRatio = 0.0;
+        int nPixel = 0;
+
+        //looping through all pixels and counting the number of pixels with r, g, or, b above
+        // thresholds
+        for (int i = 0; i < cropImageHeight; i++) {
+            for (int j = 0; j < cropImageWidth; j++) {
+
+                //get pixel value
+                nPixel = croppedRingImage.getPixel(j, i);
+                nG = Color.green(nPixel);
+                nB = Color.blue(nPixel);
+
+                //check r, g, and b against thresholds
+                if (nB > nPixelThreshold) {
+                    nAboveThresholdBlue++;
+                }
+                if (nG > nPixelThreshold) {
+                    nAboveThresholdGreen++;
+                }
+
+            }
+        }
+
+        //compute ratio r and g to b
+        dGBRatio = (double)nAboveThresholdGreen / (double)nAboveThresholdBlue;
+
+        // default to return 0 rings
+        return dGBRatio;
+    }
+
     public Bitmap createCroppedRingImage() {
         int cropImageHeight = m_cropBoxBottom - m_cropBoxTop;
         int cropImageWidth = m_cropBoxRight - m_cropBoxLeft;
@@ -117,3 +208,6 @@ public class RingDetector {
         }
     }
 }
+
+
+
