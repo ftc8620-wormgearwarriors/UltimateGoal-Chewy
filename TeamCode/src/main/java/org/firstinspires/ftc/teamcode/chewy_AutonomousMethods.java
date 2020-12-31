@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -52,14 +53,14 @@ import com.vuforia.Frame;
 
 public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
 
+    final String VUFORIA_KEY =
+            " Ac/bw0P/////AAABmdRCZF/Kqk2MjbJIs87MKVlJg32ktQ2Tgl6871UmjRacrtxKJCUzDAeC2aA4tbiTjejLjl1W6e7VgBcQfpYx2WhqclKIEkguBRoL1udCrz4OWonoLn/GCA+GntFUZN0Az+dGGYtBqcuW3XkmVNSzgOgJbPDXOf+73P5qb4/mHry0xjx3hysyAzmM/snKvGv8ImhVOVpm00d6ozC8GzvOMRF/S5Z1NBsoFls2/ul+PcZ+veKwgyPFLEFP4DXSqTeOW1nJGH9yYXSH0kfNHgGutLM5om1hAlxdP8D4XMRD2bgWXj1Md2bz+uJmr1E2ZuI7p26ZRxOIKZE9Hwpai+MW6yaJD0otF6aL9QXYaULPpWKo ";
 
     @Override
     // need this to extend LinearOpMode
     public void runOpMode() {
 
-
     }
-
 
     chewy_HardwareMap robot = new chewy_HardwareMap();
     private VuforiaLocalizer vuforia = null;
@@ -750,6 +751,104 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.wobbleGrabberOpenClose.setPosition(0.35);
         sleep(500);
         robot.wobbleGrabberUpDown.setPosition(0.5);
+    }
+
+    // clear the data directory
+    void clearDataDirectory() {
+        File[] files = captureDirectory.listFiles();
+        if(files!=null) { //some JVMs return null for empty dirs
+            for(File f: files) {
+                f.delete();
+            }
+        }
+    }
+
+    //initializes the vuforia camera detection
+    void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }
+
+    //use vuforia to capture an image that determines the number of donuts
+    void captureFrameToFile() {
+        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
+        {
+            @Override public void accept(Frame frame)
+            {
+                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
+                saveBitmap(bitmap);
+                if (bitmap != null) {
+                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        try {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                        } finally {
+                            outputStream.close();
+                            telemetry.log().add("captured %s", file.getName());
+                        }
+                    } catch (IOException e) {
+                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
+                    }
+                }
+            }
+        }));
+    }
+
+    // waits for the webcam capture to show up in the capture folder and then returns
+    // the bitmap object
+    public Bitmap readWebcamImage() {
+
+        Bitmap bMap = null;
+        String strCaptureDirectory = captureDirectory.getAbsolutePath();
+
+        // assume only captured 1 frame and filename will have 0 in it for capture counter
+        String strImagePath = strCaptureDirectory + "VuforiaFrame-0.png";
+
+        // wait for file to show up
+        while (bMap == null) {
+            // after file shows up, read it
+            bMap = BitmapFactory.decodeFile(strImagePath);
+        }
+
+        // return the bitmap read from disk
+        return bMap;
+    }
+
+    public void saveBitmap(Bitmap bitmap) {
+        File file = new File(captureDirectory, String.format(Locale.getDefault(), "originalFrame.jpg", captureCounter++));
+        try {
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                telemetry.log().add("captured %s", file.getName());
+            }
+        } catch (IOException e) {
+            RobotLog.ee(TAG, e, "exception in saveBitmap()");
+            //error("exception saving %s", file.getName());
+        }
+    }
+
+    public void saveCroppedBitmap(Bitmap bitmap) {
+        File file = new File(captureDirectory, String.format(Locale.getDefault(), "croppedFrame.jpg", captureCounter++));
+        try {
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                telemetry.log().add("captured %s", file.getName());
+            }
+        } catch (IOException e) {
+            RobotLog.ee(TAG, e, "exception in saveBitmap()");
+            //error("exception saving %s", file.getName());
+        }
     }
 
 }

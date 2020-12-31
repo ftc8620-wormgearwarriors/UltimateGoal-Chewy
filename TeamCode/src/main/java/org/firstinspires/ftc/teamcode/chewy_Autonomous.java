@@ -35,9 +35,6 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
 
-    final String VUFORIA_KEY =
-            " Ac/bw0P/////AAABmdRCZF/Kqk2MjbJIs87MKVlJg32ktQ2Tgl6871UmjRacrtxKJCUzDAeC2aA4tbiTjejLjl1W6e7VgBcQfpYx2WhqclKIEkguBRoL1udCrz4OWonoLn/GCA+GntFUZN0Az+dGGYtBqcuW3XkmVNSzgOgJbPDXOf+73P5qb4/mHry0xjx3hysyAzmM/snKvGv8ImhVOVpm00d6ozC8GzvOMRF/S5Z1NBsoFls2/ul+PcZ+veKwgyPFLEFP4DXSqTeOW1nJGH9yYXSH0kfNHgGutLM5om1hAlxdP8D4XMRD2bgWXj1Md2bz+uJmr1E2ZuI7p26ZRxOIKZE9Hwpai+MW6yaJD0otF6aL9QXYaULPpWKo ";
-
     @Override
     public void runOpMode() {
         //Initialize hardware map values
@@ -60,7 +57,11 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
             tfod.activate();
         }
 
+        // clear the data folder here so it's clean when waiting for webcam image to show up
+        clearDataDirectory();
+
         telemetry.addData("tfod", "activated");
+        telemetry.addData("capture directory", "cleared");
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
@@ -69,9 +70,15 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         // wait for start of opmode
         waitForStart();
 
+        // capture the image from the webcam
+        captureFrameToFile();
+
+        // now read the webcam image (this also waits for it to show up)
+
+
         //trying new ring detector
-        int nRings = captureFrameDetectRings();
-        //telemetry.addData("RunOpMode:NumRings", m_nRings);
+        int nRings = 0; // leave as zero until we fix
+        telemetry.addData("RunOpMode:NumRings", nRings);
         telemetry.update();
 
         //driving to intermediate pos before first drop zone
@@ -157,22 +164,6 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
     }
 
 
-    //initializes the vuforia camera detection
-    void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }
-
     //initializes object detector (tfod)
     void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -181,120 +172,6 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         tfodParameters.minResultConfidence = 0.8f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-    }
-
-    //use vuforia to capture an image that determines the number of donuts
-    void captureFrameToFile() {
-        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
-        {
-            @Override public void accept(Frame frame)
-            {
-                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
-                saveBitmap(bitmap);
-                if (bitmap != null) {
-                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        try {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        } finally {
-                            outputStream.close();
-                            telemetry.log().add("captured %s", file.getName());
-                        }
-                    } catch (IOException e) {
-                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
-                    }
-                }
-            }
-        }));
-    }
-
-    int captureFrameDetectRings() {
-        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
-        {
-            @Override public void accept(Frame frame)
-            {
-                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
-                saveBitmap(bitmap);
-                if (bitmap != null) {
-                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        try {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        } finally {
-                            outputStream.close();
-                            telemetry.log().add("captured %s", file.getName());
-                        }
-                    } catch (IOException e) {
-                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
-                    }
-                }
-
-                // create RingDetector object and set bitmap based on the one grabbed
-                RingDetector ringDetector = new RingDetector(bitmap);
-
-                // create the cropped image and display it
-                Bitmap bitmapCroppedRingImage = ringDetector.createCroppedRingImage();
-                saveCroppedBitmap(bitmapCroppedRingImage);
-
-                int nPixelThreshold = 140;
-                double dRatioThreshold1 = 0.5;
-                double dRatioThreshold2 = 1.6;
-                double dRBRatio = ringDetector.getRBRatio(bitmapCroppedRingImage, nPixelThreshold,
-                        dRatioThreshold1, dRatioThreshold2);
-                double dGBRatio = ringDetector.getGBRatio(bitmapCroppedRingImage, nPixelThreshold,
-                        dRatioThreshold1, dRatioThreshold2);
-
-                //check ratios vs thresholds to decide on number of rings
-                //if either ratio is above threshold 2, we will set to 4 rings
-                //if either ratio is below threshold 1, we will set to 0 rings
-                int nRings = 0;
-                if ((dGBRatio > dRatioThreshold2) || (dRBRatio > dRatioThreshold2)) {
-                    nRings = 4;
-                }
-                else if ((dGBRatio < dRatioThreshold1) || (dRBRatio < dRatioThreshold1)) {
-                    nRings = 0;
-                }
-                else {
-                    nRings = 1;
-                }
-
-                telemetry.addData("Red Blue Ratio", dRBRatio);
-                telemetry.addData("Green Blue Ratio", dGBRatio);
-                telemetry.addData("CaptureFunction:NumRings", nRings);
-                telemetry.update();
-
-                return nRings;
-
-            }
-        }));
-    }
-
-    private void saveBitmap(Bitmap bitmap) {
-        File file = new File(captureDirectory, String.format(Locale.getDefault(), "originalFrame.jpg", captureCounter++));
-        try {
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                telemetry.log().add("captured %s", file.getName());
-            }
-        } catch (IOException e) {
-            RobotLog.ee(TAG, e, "exception in saveBitmap()");
-            //error("exception saving %s", file.getName());
-        }
-    }
-
-    private void saveCroppedBitmap(Bitmap bitmap) {
-        File file = new File(captureDirectory, String.format(Locale.getDefault(), "croppedFrame.jpg", captureCounter++));
-        try {
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                telemetry.log().add("captured %s", file.getName());
-            }
-        } catch (IOException e) {
-            RobotLog.ee(TAG, e, "exception in saveBitmap()");
-            //error("exception saving %s", file.getName());
-        }
     }
 
 }

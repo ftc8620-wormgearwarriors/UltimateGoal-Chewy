@@ -180,23 +180,6 @@ public class chewy_Autonomous_Meet3 extends chewy_AutonomousMethods {
         return returnRings;
     }
 
-
-    //initializes the vuforia camera detection
-    void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }
-
     //initializes object detector (tfod)
     void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -206,44 +189,4 @@ public class chewy_Autonomous_Meet3 extends chewy_AutonomousMethods {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
-
-    //use vuforia to capture an image that determines the number of donuts
-    void captureFrameToFile() {
-        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
-        {
-            @Override public void accept(Frame frame)
-            {
-                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
-                saveBitmap(bitmap);
-                if (bitmap != null) {
-                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        try {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        } finally {
-                            outputStream.close();
-                            telemetry.log().add("captured %s", file.getName());
-                        }
-                    } catch (IOException e) {
-                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
-                    }
-                }
-            }
-        }));
-    }
-
-    private void saveBitmap(Bitmap bitmap) {
-        File file = new File(captureDirectory, String.format(Locale.getDefault(), "webcam-frame-%d.jpg", captureCounter++));
-        try {
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                telemetry.log().add("captured %s", file.getName());
-            }
-        } catch (IOException e) {
-            RobotLog.ee(TAG, e, "exception in saveBitmap()");
-            //error("exception saving %s", file.getName());
-        }
-    }
-
 }
