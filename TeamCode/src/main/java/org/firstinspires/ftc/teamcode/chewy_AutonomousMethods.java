@@ -763,62 +763,25 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         }
     }
 
-    //initializes the vuforia camera detection
-    void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }
-
-    //use vuforia to capture an image that determines the number of donuts
-    void captureFrameToFile() {
-        vuforia.getFrameOnce(Continuation.create(ThreadPool.getDefault(), new Consumer<Frame>()
-        {
-            @Override public void accept(Frame frame)
-            {
-                Bitmap bitmap = vuforia.convertFrameToBitmap(frame);
-                saveBitmap(bitmap);
-                if (bitmap != null) {
-                    File file = new File(captureDirectory, String.format(Locale.getDefault(), "VuforiaFrame-%d.png", captureCounter++));
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        try {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        } finally {
-                            outputStream.close();
-                            telemetry.log().add("captured %s", file.getName());
-                        }
-                    } catch (IOException e) {
-                        RobotLog.ee(TAG, e, "exception in captureFrameToFile()");
-                    }
-                }
-            }
-        }));
-    }
-
     // waits for the webcam capture to show up in the capture folder and then returns
     // the bitmap object
     public Bitmap readWebcamImage() {
 
         Bitmap bMap = null;
-        String strCaptureDirectory = captureDirectory.getAbsolutePath();
 
-        // assume only captured 1 frame and filename will have 0 in it for capture counter
-        String strImagePath = strCaptureDirectory + "VuforiaFrame-0.png";
+        // hard code image file path so it's read correctly after written in other thread
+        String strCaptureDirectory = captureDirectory.getAbsolutePath();
+        String strImagePath = strCaptureDirectory + "/VuforiaFrame-0.png";
 
         // wait for file to show up
+        int nNumReadAttempts = 1;
         while (bMap == null) {
             // after file shows up, read it
             bMap = BitmapFactory.decodeFile(strImagePath);
+            telemetry.addData("Bitmap read attempts:",nNumReadAttempts);
+            telemetry.update();
+            nNumReadAttempts++;
+            sleep(1000);
         }
 
         // return the bitmap read from disk
