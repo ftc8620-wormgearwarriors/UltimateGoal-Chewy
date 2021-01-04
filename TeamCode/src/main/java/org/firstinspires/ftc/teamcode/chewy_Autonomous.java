@@ -90,24 +90,25 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 //        int m_cropBoxBottom = 290;
 
         // reset cropbox for front room
-        ringDetector.setCropBox(285, 400, 235, 315);
+        //ringDetector.setCropBox(285, 400, 235, 315);
 
         // reset cropbox for shed
+        ringDetector.setCropBox(315, 417, 235, 315);
 
         // create the cropped image and display it
         Bitmap bitmapCroppedRingImage = ringDetector.createCroppedRingImage();
         saveCroppedBitmap(bitmapCroppedRingImage);
 
-        // find number of rings and set it in edit text
-        // parameters for klingensmith front room with phone light used
-        int nPixelThreshold = 120;
+//        // find number of rings and set it in edit text
+//        // parameters for klingensmith front room with phone light used
+//        int nPixelThreshold = 120;
+//        double dRatioThreshold2 = 2.0;
+//        double dRatioThreshold1 = 1.15;
+
+        // parameters for shed
+        int nPixelThreshold = 140;
         double dRatioThreshold2 = 2.0;
         double dRatioThreshold1 = 1.15;
-
-//        // parameters for shed
-//        int nPixelThreshold = 140;
-//        double dRatioThreshold2 = 2.0;
-//        double dRatioThreshold1 = 0.5;
 
         double dRBRatio = ringDetector.getRBRatio(bitmapCroppedRingImage, nPixelThreshold,
                 dRatioThreshold1, dRatioThreshold2);
@@ -130,42 +131,41 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         telemetry.addData("RunOpMode:RedBlueRatio", dRBRatio);
         telemetry.addData("RunOpMode:NumRings", nRings);
         telemetry.update();
-        sleep(8000);
 
-//        //driving to intermediate pos before first drop zone
-//        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
-//
-//        //drive and turn to drop wobble goal based on # of rings
-//        if (nRings == 4 ) {
-//            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-//        } else if (nRings == 1) {
-//            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-//        } else {
-//            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-//        }
-//
-//        //open hand and move elbow to drop wobble goal
-//        dropWobbleGoal();
-//
-//        // turn shooter first to rev up them
-//        robot.shooterRight.setPower(0.6);
-//        robot.shooterLeft.setPower(-0.6);
-//
-//        //move to intermediate pos
-//        if (nRings == 4 ) {
-//            goToPostion(36 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-//        } else if (nRings == 1) {
-//            goToPostion(60 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
-//        }
-//
-//        //Drive to lanch line
-//        goToPostion(39 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
-//
-//        //shoot powershot targets
-//        rapidFireDisks();
-//
-//        //park on launch line
-//        goToPostion(36 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        //driving to intermediate pos before first drop zone
+        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+
+        //drive and turn to drop wobble goal based on # of rings
+        if (nRings == 4 ) {
+            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else if (nRings == 1) {
+            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else {
+            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        }
+
+        //open hand and move elbow to drop wobble goal
+        dropWobbleGoal();
+
+        // turn shooter first to rev up them
+        robot.shooterRight.setPower(0.6);
+        robot.shooterLeft.setPower(-0.6);
+
+        //move to intermediate pos
+        if (nRings == 4 ) {
+            goToPostion(36 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        } else if (nRings == 1) {
+            goToPostion(60 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+        }
+
+        //Drive to lanch line
+        goToPostion(39 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+
+        //shoot powershot targets
+        rapidFireDisks();
+
+        //park on launch line
+        goToPostion(40 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
