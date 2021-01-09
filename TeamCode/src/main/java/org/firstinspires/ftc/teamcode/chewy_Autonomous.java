@@ -62,6 +62,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         // clear the data folder here so it's clean when waiting for webcam image to show up
         clearDataDirectory();
 
+        // messages for activation
         telemetry.addData("tfod", "activated");
         telemetry.addData("capture directory", "cleared");
 
