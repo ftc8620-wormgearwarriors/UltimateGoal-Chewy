@@ -190,6 +190,42 @@ public class RingDetector {
         return dGBRatio;
     }
 
+    // function to return the number of rings based on the bitmap
+    public int getMoreRedThanBlue(Bitmap croppedRingImage, double dPercent) {
+
+        // Getting size of cropped bit map
+        int cropImageHeight = croppedRingImage.getHeight();
+        int cropImageWidth = croppedRingImage.getWidth();
+
+        //creating variables to store pixels count
+        int nYellowPixels = 0;
+        int nR = 0;
+        int nB = 0;
+        int nPixel = 0;
+
+        //looping through all pixels and counting the number of pixels with r, g, or, b above
+        // thresholds
+        for (int i = 0; i < cropImageHeight; i++) {
+            for (int j = 0; j < cropImageWidth; j++) {
+
+                //get pixel values
+                nPixel = croppedRingImage.getPixel(j, i);
+                nR = Color.red(nPixel);
+                nB = Color.blue(nPixel);
+
+                //check b is less then the given percent below r
+                double dCompareRValue = (double)nR * dPercent;
+                if ((double)nB  < dCompareRValue ) {
+                    nYellowPixels++;
+                }
+            }
+        }
+
+        // default to return 0 rings
+        return nYellowPixels;
+    }
+
+
     public Bitmap createCroppedRingImage() {
         int cropImageHeight = m_cropBoxBottom - m_cropBoxTop;
         int cropImageWidth = m_cropBoxRight - m_cropBoxLeft;

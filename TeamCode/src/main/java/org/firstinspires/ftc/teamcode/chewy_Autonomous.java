@@ -105,22 +105,17 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 //        double dRatioThreshold2 = 2.0;
 //        double dRatioThreshold1 = 1.15;
 
-        // parameters for shed
-        int nPixelThreshold = 140;
-        double dRatioThreshold2 = 2.0;
-        double dRatioThreshold1 = 1.15;
-
-        double dRBRatio = ringDetector.getRBRatio(bitmapCroppedRingImage, nPixelThreshold,
-                dRatioThreshold1, dRatioThreshold2);
-
-        //check ratios vs thresholds to decide on number of rings
-        //if either ratio is above threshold 2, we will set to 4 rings
-        //if either ratio is below threshold 1, we will set to 0 rings
+        // do method based on counting "yellow pixels"
         int nRings = 0;
-        if (dRBRatio > dRatioThreshold2) {
+        int nYellowPixels = 0;
+        double dPercent = 0.8;
+        int nPixThresh1 = 1000;
+        int nPixThresh2 = 5000;
+        nYellowPixels = ringDetector.getMoreRedThanBlue(bitmapCroppedRingImage, dPercent);
+        if (nYellowPixels > nPixThresh2) {
             nRings = 4;
         }
-        else if (dRBRatio < dRatioThreshold1) {
+        else if (nPixThresh2 < nPixThresh1) {
             nRings = 0;
         }
         else {
@@ -128,7 +123,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         }
 
         //Displaying Ring Variables
-        telemetry.addData("RunOpMode:RedBlueRatio", dRBRatio);
+        telemetry.addData("RunOpMode:YellowPixels", nYellowPixels);
         telemetry.addData("RunOpMode:NumRings", nRings);
         telemetry.update();
 
