@@ -47,22 +47,12 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
         //initializing camera
         initVuforia();
-        initTfod();
         telemetry.addData("Initialized", "Camera" );
         telemetry.update();
-
-        /**
-         * Activate TensorFlow Object Detection before we wait for the start command.
-         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-         **/
-        if (tfod != null) {
-            tfod.activate();
-        }
 
         // clear the data folder here so it's clean when waiting for webcam image to show up
         clearDataDirectory();
 
-        telemetry.addData("tfod", "activated");
         telemetry.addData("capture directory", "cleared");
 
         /** Wait for the game to begin */
@@ -98,12 +88,6 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         // create the cropped image and display it
         Bitmap bitmapCroppedRingImage = ringDetector.createCroppedRingImage();
         saveCroppedBitmap(bitmapCroppedRingImage);
-
-//        // find number of rings and set it in edit text
-//        // parameters for klingensmith front room with phone light used
-//        int nPixelThreshold = 120;
-//        double dRatioThreshold2 = 2.0;
-//        double dRatioThreshold1 = 1.15;
 
         // do method based on counting "yellow pixels"
         int nRings = 0;
@@ -166,59 +150,6 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         robot.globalPositionUpdate.stop();
     }
 
-    int numberOfRings(int numTries){
-        int returnRings = 0;
-
-        // try writing image to file
-        captureFrameToFile();
-        telemetry.addData("folder",captureDirectory);
-        telemetry.update();
-        sleep(1000);
-
-        if (tfod != null) {
-            for (int i = 0; i < numTries; i++) {
-
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData(String.format("# objects detected (%d)", i), updatedRecognitions.size());
-                    telemetry.update();
-                    sleep(200);
-
-                    // step through the list of recognitions and display boundary info.
-                    int j = 0;
-                    for (Recognition recognition : updatedRecognitions) {
-
-                        //telemetry.addData(String.format("label (%d)", j), recognition.getLabel());
-                        //telemetry.update();
-
-                        if (recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) {
-                            returnRings = 1;
-                            return returnRings;
-                        }
-                        if (recognition.getLabel().equals(LABEL_FIRST_ELEMENT)) {
-                            returnRings = 4;
-                            return returnRings;
-                        }
-
-                    }
-                }
-            }
-        }
-        return returnRings;
-    }
-
-
-    //initializes object detector (tfod)
-    void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-    }
 
     //initializes the vuforia camera detection
     void initVuforia() {
