@@ -94,17 +94,11 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         //ringDetector.setCropBox(285, 400, 235, 315);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(315, 417, 235, 315);
+        ringDetector.setCropBox(285, 445, 190, 300);
 
         // create the cropped image and display it
         Bitmap bitmapCroppedRingImage = ringDetector.createCroppedRingImage();
         saveCroppedBitmap(bitmapCroppedRingImage);
-
-//        // find number of rings and set it in edit text
-//        // parameters for klingensmith front room with phone light used
-//        int nPixelThreshold = 120;
-//        double dRatioThreshold2 = 2.0;
-//        double dRatioThreshold1 = 1.15;
 
         // do method based on counting "yellow pixels"
         int nRings = 0;
