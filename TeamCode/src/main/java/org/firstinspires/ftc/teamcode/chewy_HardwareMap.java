@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -30,9 +31,16 @@ public class chewy_HardwareMap
     public DcMotor  shooterRight           = null;
     public DcMotor  intake                 = null;
 
+
     /* Public Servos */
-    //public CRServo firstTransfer           = null;
-    //public CRServo secondTransfer          = null;
+
+    public Servo intakeRoller              = null;
+    public Servo firstTransfer             = null;
+    public Servo secondTransfer            = null;
+    public Servo  wobbleGrabberUpDown      = null;
+    public Servo  wobbleGrabberOpenClose   = null;
+
+
 
     //public sensors
 
@@ -52,6 +60,7 @@ public class chewy_HardwareMap
 
         wgwIMU2018 = hwMap.get(BNO055IMU.class, "imu");
         imu = new WGWIMU2018(wgwIMU2018);
+        imu.resetHeading();
 
         // Define and Initialize Motors
 
@@ -63,15 +72,20 @@ public class chewy_HardwareMap
         shooterRight    = hwMap.get(DcMotor.class, "shooterRight");
         intake          = hwMap.get(DcMotor.class, "intake");
 
+
         // Define and Initialize Servos
-        //firstTransfer   = hwMap.get(CRServo.class, "firstTransfer");
-        //secondTransfer  = hwMap.get(CRServo.class, "secondTransfer");
 
+        intakeRoller   = hwMap.get(Servo.class, "intakeRoller");
+        firstTransfer   = hwMap.get(Servo.class, "firstTransfer");
+        secondTransfer  = hwMap.get(Servo.class, "secondTransfer");
+        wobbleGrabberUpDown = hwMap.get(Servo.class, "wobbleGrabberUpDown");
+        wobbleGrabberOpenClose  = hwMap.get(Servo.class, "wobbleGrabberOpenClose");
 
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);  // Set to FORWARD if using AndyMark motors
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);   // Set to FORWARD if using AndyMark motors
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);  // Set to FORWARD if using AndyMark motors
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -88,6 +102,12 @@ public class chewy_HardwareMap
         shooterLeft.setPower(0);
         shooterRight.setPower(0);
         intake.setPower(0);
+        intakeRoller.setPosition(0.5);
+        firstTransfer.setPosition(0.5);
+        secondTransfer.setPosition(0.5);
+        wobbleGrabberUpDown.setPosition(0.55);
+        wobbleGrabberOpenClose.setPosition(0.4);
+
 
 
 
@@ -95,12 +115,18 @@ public class chewy_HardwareMap
 
 
         // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
+        // May want to use RUN_USING_ENCODERS if encoders are installed./
 
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        verticalLeft = hwMap.dcMotor.get("backLeftDrive");
+        verticalRight = hwMap.dcMotor.get("backRightDrive");
+        horizontal = hwMap.dcMotor.get("frontLeftDrive");
 
 
 
@@ -109,7 +135,7 @@ public class chewy_HardwareMap
     public DcMotor verticalLeft     = null,
                    verticalRight    = null,
                    horizontal       = null;
-    final double COUNTS_PER_INCH = 1714;
+    final double COUNTS_PER_INCH = 1303.79729381;
 
     // String verticalLeftEncoderName = "vle", verticalRightEncoderName = "vre", horizontalEncoderName = "he";
     //String rfName = "frontRightDrive", rbName = "backRightDrive", lfName = "frontLeftDrive", lbName = "backLeftDrive";

@@ -60,10 +60,15 @@ public class chewy_Teleop extends OpMode {
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
+    double wobbleGrabberUpDownPos = 0.5;
+    double wobbleGrabberOpenClosePos = 0.5;
+    double wobbleGrabberUpDownMinPos = 0.35;
+    double wobbleGrabberUpDownMaxPos = 0.55;
+    double wobbleGrabberOpenCloseMinPos = 0.0;
+    double wobbleGrabberOpenCloseMaxPos = 1.0;
 
-        double maxVel = 0.5;
-        double dropServoPos = 1.1;
-        double openServoPos = 0.5;
+    double maxVel = 0.5;
+
     @Override
     public void loop() {
         double markerServoPos = .72;
@@ -71,7 +76,6 @@ public class chewy_Teleop extends OpMode {
         double backLeft;
         double frontRight;
         double backRight;
-        double intake;
         double max;
         double x_axis = -gamepad1.left_stick_x * maxVel;
         double y_axis = -gamepad1.left_stick_y * maxVel;
@@ -92,16 +96,19 @@ public class chewy_Teleop extends OpMode {
         telemetry.addData("x_prime", x_prime);
         telemetry.addData("y_prime", y_prime);
         telemetry.addData("Gyro Heading", gyroHeading);
+        telemetry.addData("wobbleGrabberUpDown", String.format ("%.05f", wobbleGrabberUpDownPos));
+        telemetry.addData("wobbleGrabberOpenClose", String.format ("%.05f", wobbleGrabberOpenClosePos));
+
 
 
         telemetry.update();
 
         // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
         // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-        frontRight = y_prime - (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
-        backRight = y_prime - (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
-        frontLeft = y_prime + (gamepad1.right_stick_x / 2 * maxVel) - x_prime;
-        backLeft = y_prime + (gamepad1.right_stick_x / 2 * maxVel) + x_prime;
+        frontRight = y_prime - (gamepad1.right_stick_x  * maxVel) + x_prime;
+        backRight = y_prime - (gamepad1.right_stick_x  * maxVel) - x_prime;
+        frontLeft = y_prime + (gamepad1.right_stick_x  * maxVel) - x_prime;
+        backLeft = y_prime + (gamepad1.right_stick_x  * maxVel) + x_prime;
 
         if (gamepad1.left_trigger > .05)
             maxVel = 0.5;
@@ -109,6 +116,36 @@ public class chewy_Teleop extends OpMode {
             maxVel = 1.0;
         else if (gamepad1.left_bumper)
             maxVel = 0.25;
+
+        if (gamepad1.y)  {
+            robot.imu.resetHeading();
+        }
+
+        if (gamepad1.dpad_down) {
+            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+                wobbleGrabberUpDownPos -= 0.001;
+
+            }
+        }
+        if (gamepad1.dpad_up) {
+            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+                wobbleGrabberUpDownPos += 0.001;
+            }
+        }
+        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+
+        if (gamepad1.dpad_right) {
+            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+                wobbleGrabberOpenClosePos -= 0.05;
+
+            }
+        }
+        if (gamepad1.dpad_left) {
+            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+                wobbleGrabberOpenClosePos += 0.05;
+            }
+        }
+        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
 
 
 
@@ -127,34 +164,75 @@ public class chewy_Teleop extends OpMode {
         robot.backLeftDrive.setPower(backLeft);
         robot.backRightDrive.setPower(backRight);
 
-        // stop intake
+        //gamepad 2
+
+        //start all
         if (gamepad2.x)
         {
-            robot.intake.setPower(0);
-            //robot.firstTransfer.setPower(1);
-            //robot.firstTransfer.setPower(1);
+            robot.intake.setPower(1);
+            robot.intakeRoller.setPosition(1);
+            robot.firstTransfer.setPosition(1);
+            robot.secondTransfer.setPosition(1);
         }
-        //intake full power
+
+        // stop all
         if (gamepad2.y)
         {
+            robot.intake.setPower(0);
+            robot.intakeRoller.setPosition(0.5);
+            robot.firstTransfer.setPosition(0.5);
+            robot.secondTransfer.setPosition(0.5);
+        }
+
+        // stop secondTransfer
+        if (gamepad2.a)
+        {
+            robot.secondTransfer.setPosition(0.5);
+            robot.firstTransfer.setPosition(1);
+            robot.intake.setPower(1);
+        }
+
+        // stop firstTransfer
+        if (gamepad2.b)
+            {
+            robot.secondTransfer.setPosition(0.5);
+            robot.firstTransfer.setPosition(0.5);
+            robot.intake.setPower(1);
+        }
+
+        //reverse second transfer
+        if (gamepad2.dpad_left)
+        {
+            robot.intake.setPower(-1);
+            robot.intakeRoller.setPosition(0);
+            robot.firstTransfer.setPosition(0);
+            robot.secondTransfer.setPosition(0);
+        }
+
+
+        // stop reverse all
+        if (gamepad2.dpad_up)
+        {
+            robot.secondTransfer.setPosition(0.5);
+            robot.firstTransfer.setPosition(0);
             robot.intake.setPower(-1);
         }
 
-
-        // intake half power
-        if (gamepad2.b)
+        // stop reverse firstTransfer
+        if (gamepad2.dpad_right)
         {
-            robot.intake.setPower(-.5);
-            //robot.firstTransfer.setPower(1);
-            //robot.firstTransfer.setPower(1);
+            robot.secondTransfer.setPosition(0.5);
+            robot.firstTransfer.setPosition(0.5);
+            robot.intake.setPower(-1);
         }
 
         // Button to start the shooter
         if (gamepad2.left_bumper)
         {
-            robot.shooterRight.setPower(1);
-            robot.shooterLeft.setPower(-0.7);
+            robot.shooterRight.setPower(.6);
+            robot.shooterLeft.setPower(-0.6);
         }
+
         // Button to stop the shooter.
         if (gamepad2.right_bumper) {
 
@@ -162,11 +240,15 @@ public class chewy_Teleop extends OpMode {
             robot.shooterLeft.setPower(0);
         }
 
+        //shooter slow speed
+        if (gamepad2.dpad_down) {
 
+            robot.shooterRight.setPower(0.5);
+            robot.shooterLeft.setPower(-0.55);
+        }
     }
 
     @Override
     public void stop() {
     }
-
 }

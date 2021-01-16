@@ -170,6 +170,7 @@ public class ConceptVuforiaNavigationWebcam extends LinearOpMode {
         AppUtil.getInstance().ensureDirectoryExists(captureDirectory);
 
 
+
         /**
          * Load the data sets that for the trackable objects we wish to track. These particular data
          * sets are stored in the 'assets' part of our application (you'll see them in the Android
