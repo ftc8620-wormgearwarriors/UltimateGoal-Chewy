@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
             //Initialize hardware map values.
             Init();
             initOdometryHardware(0, 111, 90);
-            VuforiaInit();
+            //VuforiaInit();
 
 
         }

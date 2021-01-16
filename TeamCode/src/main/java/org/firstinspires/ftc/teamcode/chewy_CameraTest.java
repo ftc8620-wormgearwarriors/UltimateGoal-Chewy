@@ -13,7 +13,7 @@ public class chewy_CameraTest extends OpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        int VuforiaInitOk = autoMethods.VuforiaInit();
+        //int VuforiaInitOk = autoMethods.VuforiaInit();
     }
 
     /*
