@@ -110,7 +110,7 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         if (nYellowPixels > nPixThresh2) {
             nRings = 4;
         }
-        else if (nPixThresh2 < nPixThresh1) {
+        else if (nYellowPixels < nPixThresh1) {
             nRings = 0;
         }
         else {
@@ -121,6 +121,9 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         telemetry.addData("RunOpMode:YellowPixels", nYellowPixels);
         telemetry.addData("RunOpMode:NumRings", nRings);
         telemetry.update();
+
+        // temp sleep so can see message above
+        sleep(5000);
 
         //driving to intermediate pos before first drop zone
         goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
