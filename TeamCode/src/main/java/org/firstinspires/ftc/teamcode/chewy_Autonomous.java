@@ -122,19 +122,19 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         telemetry.addData("RunOpMode:NumRings", nRings);
         telemetry.update();
 
-        // temp sleep so can see message above
-        sleep(5000);
+        // set robot speed
+        double dRobotPower = 0.9;
 
         //driving to intermediate pos before first drop zone
-        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(54 * robot.COUNTS_PER_INCH,56 * robot.COUNTS_PER_INCH, dRobotPower,0,3 * robot.COUNTS_PER_INCH,false);
 
         //drive and turn to drop wobble goal based on # of rings
         if (nRings == 4 ) {
-            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(24 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
         } else if (nRings == 1) {
-            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
         } else {
-            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(24 * robot.COUNTS_PER_INCH,95 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
         }
 
         //open hand and move elbow to drop wobble goal
@@ -146,19 +146,41 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
 
         //move to intermediate pos
         if (nRings == 4 ) {
-            goToPostion(36 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(36 * robot.COUNTS_PER_INCH,135 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
         } else if (nRings == 1) {
-            goToPostion(60 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH,0.8,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(60 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
         }
 
         //Drive to lanch line
-        goToPostion(39 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(45 * robot.COUNTS_PER_INCH,69 * robot.COUNTS_PER_INCH, dRobotPower,0,3 * robot.COUNTS_PER_INCH,false);
 
         //shoot powershot targets
         rapidFireDisks();
 
+        // comment this out if you dont want to do a second wobble
+        if (nRings == 0) {
+
+            //goes to pickup position and grabes goal
+            goToPostion(22 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            pickUpWobbleGoal();
+
+            //drive to targetzone for 0 rings
+            goToPostion(24 * robot.COUNTS_PER_INCH, 95 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+            dropWobbleGoal();
+        }
+//        } else if (nRings == 1){
+//
+//            //goes to pickup position and grabes goal
+//            goToPostion(22 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+//            pickUpWobbleGoal();
+//
+//            //drive to targetzone for 0 rings
+//            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
+//            dropWobbleGoal();
+//        }
+
         //park on launch line
-        goToPostion(40 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH,0.8,0,3 * robot.COUNTS_PER_INCH,false);
+        goToPostion(40 * robot.COUNTS_PER_INCH,84 * robot.COUNTS_PER_INCH, dRobotPower,0,3 * robot.COUNTS_PER_INCH,false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
