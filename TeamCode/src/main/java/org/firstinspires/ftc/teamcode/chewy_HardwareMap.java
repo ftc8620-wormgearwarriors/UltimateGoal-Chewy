@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -43,6 +45,10 @@ public class chewy_HardwareMap
 
 
     //public sensors
+    public ModernRoboticsI2cRangeSensor frontRange = null;
+    public ModernRoboticsI2cRangeSensor leftRange = null;
+    public NormalizedColorSensor topColor = null;
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -128,6 +134,9 @@ public class chewy_HardwareMap
         verticalRight = hwMap.dcMotor.get("backRightDrive");
         horizontal = hwMap.dcMotor.get("frontLeftDrive");
 
+        frontRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"frontRange");
+        leftRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"leftRange");
+        topColor = hwMap.get(NormalizedColorSensor.class, "topColor");
 
 
     }

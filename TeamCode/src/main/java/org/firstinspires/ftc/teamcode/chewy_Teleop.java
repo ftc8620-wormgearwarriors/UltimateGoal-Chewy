@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -68,7 +70,7 @@ public class chewy_Teleop extends OpMode {
     double wobbleGrabberOpenCloseMaxPos = 1.0;
 
     double maxVel = 0.5;
-
+    boolean autoCollect = false;
     @Override
     public void loop() {
         double markerServoPos = .72;
@@ -121,31 +123,31 @@ public class chewy_Teleop extends OpMode {
             robot.imu.resetHeading();
         }
 
-        if (gamepad1.dpad_down) {
-            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.001;
-
-            }
-        }
-        if (gamepad1.dpad_up) {
-            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.001;
-            }
-        }
-        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
-
-        if (gamepad1.dpad_right) {
-            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
-                wobbleGrabberOpenClosePos -= 0.05;
-
-            }
-        }
-        if (gamepad1.dpad_left) {
-            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
-                wobbleGrabberOpenClosePos += 0.05;
-            }
-        }
-        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
+//        if (gamepad1.dpad_down) {
+//            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+//                wobbleGrabberUpDownPos -= 0.001;
+//
+//            }
+//        }
+//        if (gamepad1.dpad_up) {
+//            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+//                wobbleGrabberUpDownPos += 0.001;
+//            }
+//        }
+//        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+//
+//        if (gamepad1.dpad_right) {
+//            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+//                wobbleGrabberOpenClosePos -= 0.05;
+//
+//            }
+//        }
+//        if (gamepad1.dpad_left) {
+//            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+//                wobbleGrabberOpenClosePos += 0.05;
+//            }
+//        }
+//        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
 
 
 
@@ -158,11 +160,14 @@ public class chewy_Teleop extends OpMode {
             backRight /= max;
         }
 
-
-        robot.frontLeftDrive.setPower(frontLeft);
-        robot.frontRightDrive.setPower(frontRight);
-        robot.backLeftDrive.setPower(backLeft);
-        robot.backRightDrive.setPower(backRight);
+        if (gamepad1.right_bumper) {
+            shootingSpot (183,0.5,61);
+        } else {
+            robot.frontLeftDrive.setPower(frontLeft);
+            robot.frontRightDrive.setPower(frontRight);
+            robot.backLeftDrive.setPower(backLeft);
+            robot.backRightDrive.setPower(backRight);
+        }
 
         //gamepad 2
 
@@ -246,9 +251,193 @@ public class chewy_Teleop extends OpMode {
             robot.shooterRight.setPower(0.5);
             robot.shooterLeft.setPower(-0.55);
         }
-    }
+
+        //wobble grabber controls
+        if (gamepad2.left_stick_y > 0.5) {
+            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+                wobbleGrabberUpDownPos -= 0.001;
+
+            }
+        }
+        if (gamepad2.left_stick_y < -0.5) {
+            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+                wobbleGrabberUpDownPos += 0.001;
+            }
+        }
+        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+
+        if (gamepad2.left_stick_x < -0.5) {
+            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+                wobbleGrabberOpenClosePos -= 0.05;
+
+            }
+        }
+        if (gamepad2.left_stick_x > 0.5) {
+            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+                wobbleGrabberOpenClosePos += 0.05;
+            }
+        }
+        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
+
+        //auto collect/auto shoot
+        if (gamepad2.left_trigger > 0.5) {
+            autoCollect = true;
+        }
+        if (gamepad2.right_trigger > 0.5 ) {
+            autoCollect = false;
+        }
+        if (autoCollect)
+            runAutoCollect();
+
+
+
+        }
 
     @Override
     public void stop() {
+    }
+
+
+    //line up to shoot
+    double  minVel              = 0.05;
+    double  vel                 = minVel;
+    double  oldVel              = minVel;
+    public double shootingSpot (double distance, double maxVel, double gapDistance) {
+        // double  diameter            = 10.16;
+        // double  circumference       = diameter * Math.PI;
+        // double  gearRatio           = 20.36;
+        //int     ticksPerRotation    = 28;
+        // double  targetTicks         = distance * (1 / circumference) * gearRatio * ticksPerRotation;
+        double  targetHeading       = 0;
+        double  kpTurn              = 0; //0.01;
+        double  kpDistance          = 0.01;
+        double  kpGap               = 0.01; //was 0.03
+
+        double  accel               = 0.03;
+
+
+
+
+        // Loop until average motor ticks reaches specified number of ticks
+        double distanceError = 1;
+        // while (opModeIsActive() &&  distanceError > 0)  {                                             //targetTicks > currentPositionAverage() ) {
+
+        distanceError = robot.frontRange.getDistance(DistanceUnit.CM) - distance;
+
+
+        vel = distanceError * kpDistance;
+
+
+
+        if (vel > (oldVel + accel))
+
+            vel = oldVel + accel;
+
+        if (vel > (Math.abs(maxVel))) {
+            vel = (Math.abs(maxVel));
+        }
+
+        if (vel < minVel) {
+            vel = minVel;
+
+        }
+        oldVel = vel;
+
+        if(maxVel < 0)
+            vel = -vel;
+
+        double error = angleErrorDrive(targetHeading, robot.imu.getHeading());
+
+        double sideErr;
+//            if (side == sensorSide.RIGHT)
+//                gap_err = robot.rightRangeSensor.cmUltrasonic() - gapDistance;
+//            else
+//                gap_err = - (robot.leftRangeSensor.cmUltrasonic() - gapDistance);
+        sideErr = - (robot.leftRange.cmUltrasonic() - gapDistance);
+
+        //tells us that when we sense another robot to change nothing
+//            if (Math.abs(sideErr)>30)
+//                sideErr = 0;
+
+
+        // Set motors to specified power
+        double  frontLeftPower      = vel - (error * kpTurn)  + (sideErr * kpGap);
+        double  frontRightPower     = vel + (error * kpTurn)  - (sideErr * kpGap);
+        double  backLeftPower       = vel - (error * kpTurn)  - (sideErr * kpGap);
+        double  backRightPower      = vel + (error * kpTurn)  + (sideErr * kpGap);
+
+        double max = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower)),
+                Math.max(Math.abs(frontRightPower), Math.abs(backRightPower)));
+        if (max > 1.0) {
+            frontLeftPower  /= max;
+            frontRightPower /= max;
+            backLeftPower   /= max;
+            backRightPower  /= max;
+        }
+
+        robot.frontLeftDrive.setPower (frontLeftPower);
+        robot.frontRightDrive.setPower(frontRightPower);
+        robot.backLeftDrive.setPower  (backLeftPower);
+        robot.backRightDrive.setPower (backRightPower);
+
+//        telemetry.addData("front right: ", robot.frontRightDrive.getCurrentPosition());
+//        telemetry.addData("front left:", robot.frontLeftDrive.getCurrentPosition());
+//        telemetry.addData("back right:", robot.backRightDrive.getCurrentPosition());
+//        telemetry.addData("back left:", robot.backLeftDrive.getCurrentPosition());
+//        telemetry.addData("FR Speed:", robot.frontRightDrive.getPower());
+//        telemetry.addData("FL Speed:", robot.frontLeftDrive.getPower());
+//        telemetry.addData("BR Speed", robot.backRightDrive.getPower());
+//        telemetry.addData("BL Speed:", robot.backLeftDrive.getPower());
+        telemetry.addData("Left Range", robot.leftRange.cmUltrasonic());
+        telemetry.addData("front range", String.format("%.01f cm", robot.frontRange.getDistance(DistanceUnit.CM)));
+        telemetry.addData("turn error", error);
+        telemetry.addData("gyro ", robot.imu.getHeading());
+        //telemetry.addData("left GAP", robot.leftRangeSensor.cmUltrasonic());
+        telemetry.update();
+        // }
+
+        // Turn off motors
+//        robot.frontLeftDrive    .setPower(0);
+//        robot.frontRightDrive   .setPower(0);
+//        robot.backLeftDrive     .setPower(0);
+//        robot.backRightDrive    .setPower(0);
+
+        // Return average total ticks traveled
+        return 0;
+    }   // gap()
+
+    /**
+     * Created by Worm Gear Warriors on 10/28/2018.
+     * returns an angle between -180 and +180
+     */
+    public double angleErrorDrive(double angleTarget, double angleInitial) {
+        double error = angleInitial - angleTarget;
+
+        while (error <= -180 || error > 180) {
+            if (error > 180) {
+                error = error - 360;
+            }
+            if (error <= -180) {
+                error = error + 360;
+            }
+        }
+        return error;
+    }
+
+    //Auto collect
+    double runAutoCollect(){
+
+        if (robot.topColor instanceof SwitchableLight) {
+            ((SwitchableLight)robot.topColor).enableLight(true);
+        }
+        if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0)
+            robot.secondTransfer.setPosition(1);
+        else
+            robot.secondTransfer.setPosition(0.5);
+        robot.firstTransfer.setPosition(1);
+        robot.intake.setPower(1);
+        robot.intakeRoller.setPosition(1);
+        return(0);
+
     }
 }
