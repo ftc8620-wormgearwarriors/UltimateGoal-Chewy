@@ -68,14 +68,8 @@ public class chewy_Autonomous extends chewy_AutonomousMethods {
         nRings = ringDetector.getNumberOfRings();
 
         //Displaying Ring Variables
-//        telemetry.addData("RunOpMode:NumRings", nRings);
-//        telemetry.update();
-
-        while(opModeIsActive()){   // loop here and display how many rings we see!
-            nRings = ringDetector.getNumberOfRings();
-            telemetry.addData("Rings Detected = ", nRings);
-            telemetry.update();
-        }
+        telemetry.addData("RunOpMode:NumRings", nRings);
+        telemetry.update();
 
 
         // set robot speed
