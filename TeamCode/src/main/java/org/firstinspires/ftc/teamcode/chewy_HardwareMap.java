@@ -48,6 +48,8 @@ public class chewy_HardwareMap
     public ModernRoboticsI2cRangeSensor frontRange = null;
     public ModernRoboticsI2cRangeSensor leftRange = null;
     public NormalizedColorSensor topColor = null;
+    public NormalizedColorSensor midColor = null;
+    public NormalizedColorSensor bottomColor = null;
 
 
     /* local OpMode members. */
@@ -138,6 +140,10 @@ public class chewy_HardwareMap
         frontRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"frontRange");
         leftRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"leftRange");
         topColor = hwMap.get(NormalizedColorSensor.class, "topColor");
+        midColor = hwMap.get(NormalizedColorSensor.class, "midColor");
+        bottomColor = hwMap.get(NormalizedColorSensor.class, "bottomColor");
+
+
 
 
     }

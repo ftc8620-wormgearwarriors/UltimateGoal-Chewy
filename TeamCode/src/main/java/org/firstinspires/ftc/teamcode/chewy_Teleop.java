@@ -161,7 +161,7 @@ public class chewy_Teleop extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            shootingSpot (183,0.5,61);
+            shootingSpot (183,1,61);
         } else {
             robot.frontLeftDrive.setPower(frontLeft);
             robot.frontRightDrive.setPower(frontRight);
@@ -299,33 +299,26 @@ public class chewy_Teleop extends OpMode {
 
 
     //line up to shoot
-    double  minVel              = 0.05;
+    double  minVel              = 0.1;
     double  vel                 = minVel;
     double  oldVel              = minVel;
     public double shootingSpot (double distance, double maxVel, double gapDistance) {
-        // double  diameter            = 10.16;
-        // double  circumference       = diameter * Math.PI;
-        // double  gearRatio           = 20.36;
-        //int     ticksPerRotation    = 28;
-        // double  targetTicks         = distance * (1 / circumference) * gearRatio * ticksPerRotation;
-        double  targetHeading       = 0;
-        double  kpTurn              = 0; //0.01;
+        double  targetHeading       = 90;
+        double  kpTurn              = 0.05;
         double  kpDistance          = 0.01;
         double  kpGap               = 0.01; //was 0.03
-
         double  accel               = 0.03;
 
 
 
 
-        // Loop until average motor ticks reaches specified number of ticks
-        double distanceError = 1;
-        // while (opModeIsActive() &&  distanceError > 0)  {                                             //targetTicks > currentPositionAverage() ) {
-
-        distanceError = robot.frontRange.getDistance(DistanceUnit.CM) - distance;
 
 
-        vel = distanceError * kpDistance;
+
+        double distanceError = robot.frontRange.getDistance(DistanceUnit.CM) - distance;
+
+
+        vel = Math.abs(distanceError * kpDistance);
 
 
 
@@ -343,10 +336,10 @@ public class chewy_Teleop extends OpMode {
         }
         oldVel = vel;
 
-        if(maxVel < 0)
+        if(distanceError < 0)
             vel = -vel;
 
-        double error = angleErrorDrive(targetHeading, robot.imu.getHeading());
+        double error = -angleErrorDrive(targetHeading, robot.imu.getHeading());
 
         double sideErr;
 //            if (side == sensorSide.RIGHT)
@@ -394,6 +387,13 @@ public class chewy_Teleop extends OpMode {
         telemetry.addData("gyro ", robot.imu.getHeading());
         //telemetry.addData("left GAP", robot.leftRangeSensor.cmUltrasonic());
         telemetry.update();
+        RobotLog.d("8620WGW shootingSpot " +
+                "gyro " + robot.imu.getHeading() + ", " +
+                "left error " + sideErr + ", " +
+                "front error " + distanceError + ", " +
+                "turn error " + error + ", ");
+
+
         // }
 
         // Turn off motors
@@ -430,13 +430,31 @@ public class chewy_Teleop extends OpMode {
         if (robot.topColor instanceof SwitchableLight) {
             ((SwitchableLight)robot.topColor).enableLight(true);
         }
-        if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0)
+        if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0) {
             robot.secondTransfer.setPosition(1);
-        else
+            robot.firstTransfer.setPosition(1);
+            robot.intake.setPower(1);
+        }else {
             robot.secondTransfer.setPosition(0.5);
-        robot.firstTransfer.setPosition(1);
-        robot.intake.setPower(1);
-        robot.intakeRoller.setPosition(1);
+            if (((DistanceSensor) robot.midColor).getDistance(DistanceUnit.CM) > 1.0) {
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(1);
+                robot.intake.setPower(1);
+            }
+            else {
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(1);
+                robot.secondTransfer.setPosition(0.5);
+                if (((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    robot.secondTransfer.setPosition(0.5);
+                    robot.firstTransfer.setPosition(0.5);
+                    robot.intake.setPower(0);
+                }
+                else {
+                    robot.intake.setPower(1);
+                }
+            }
+        }
         return(0);
 
     }
