@@ -34,86 +34,12 @@ public class RingDetector {
         m_ringBitmap = Bitmap.createBitmap(ringImage);
     }
 
-
-
-// #################################################################################################
-// Start Coach TEST 2021.01.27
-
-    //  this is a combination of the work Lucy & Lance did this season mixed with work from last season.
-    // for last season please see skystone file VuforiaStuff on github
-    //  https://github.com/ftc8620-wormgearwarriors/SkyStone/blob/TheForce/TeamCode/src/main/java/VuforiaStuff.java
-
-
     VuforiaLocalizer m_Vuforia = null;  // Should be moved up to member variable section, but keeping in the coach section for now.
 
     // constructor -  alternate version that is passed a handle to vuforia
     public RingDetector(VuforiaLocalizer vuforia ) {
         m_Vuforia = vuforia;
     }
-
-    public int getRingCount()
-    {
-        int nRings = 0;
-
-        // first we need to grab an image from Vuforia and store in our member variable in this class
-        // grabs image from the camera
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
-        VuforiaLocalizer.CloseableFrame closeableFrame = null;
-        m_Vuforia.setFrameQueueCapacity(1);
-        Image rgbImage = null;
-        while (rgbImage == null) {
-            try {
-                closeableFrame = m_Vuforia.getFrameQueue().take();
-                long numImages = closeableFrame.getNumImages();
-
-                for (int i = 0; i < numImages; i++) {
-                    if (closeableFrame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565) {
-                        rgbImage = closeableFrame.getImage(i);
-                        if (rgbImage != null) {
-                            break;
-                        }
-                    }
-                }
-            } catch (InterruptedException exc) {
-
-            } finally {
-                if (closeableFrame != null) closeableFrame.close();
-            }
-        }  // finishes grabbing image
-
-        // if we succesfully grabbed an image convert it from RGB to bmp format and store in our member bitmap
-        if (rgbImage != null) {
-            // copy the bitmap from the Vuforia frame to our own member variable
-            m_ringBitmap = Bitmap.createBitmap(rgbImage.getWidth(), rgbImage.getHeight(), Bitmap.Config.RGB_565);
-            m_ringBitmap.copyPixelsFromBuffer(rgbImage.getPixels());
-
-            // now crop the bitmap into a new bitmap
-            Bitmap m_cropBitmap = createCroppedRingImage();
-
-            // now look at the image
-            // Coach took this from chewy_autonomous
-            // do method based on counting "yellow pixels"
-            int nYellowPixels = 0;
-            double dPercent = 0.8;
-            int nPixThresh1 = 1000;
-            int nPixThresh2 = 5000;
-            nYellowPixels = getMoreRedThanBlue(m_cropBitmap, dPercent);
-            if (nYellowPixels > nPixThresh2) {
-                nRings = 4;
-            }
-            else if (nYellowPixels < nPixThresh1) {
-                nRings = 0;
-            }
-            else {
-                nRings = 1;
-            }
-
-        }
-        return nRings;
-    }
-
-// end Coach TEST 2021.01.27
-// #################################################################################################
 
 
     // setter for crop box if needs changed

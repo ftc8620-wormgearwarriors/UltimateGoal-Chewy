@@ -745,6 +745,12 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         sleep(2000);
     }
 
+    //drop the lower wobble goal
+    public void dropLowerWobbleGoal(){
+        robot.wobbleDropperServo.setPosition(0.2);
+
+    }
+
     //pick up wobble goal
     public void pickUpWobbleGoal(){
         robot.wobbleGrabberUpDown.setPosition(0.375);

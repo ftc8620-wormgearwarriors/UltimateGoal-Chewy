@@ -39,9 +39,9 @@ public class chewy_HardwareMap
     public Servo intakeRoller              = null;
     public Servo firstTransfer             = null;
     public Servo secondTransfer            = null;
-    public Servo  wobbleGrabberUpDown      = null;
-    public Servo  wobbleGrabberOpenClose   = null;
-
+    public Servo wobbleGrabberUpDown       = null;
+    public Servo wobbleGrabberOpenClose    = null;
+    public Servo wobbleDropperServo         = null;
 
 
     //public sensors
@@ -86,6 +86,7 @@ public class chewy_HardwareMap
         secondTransfer  = hwMap.get(Servo.class, "secondTransfer");
         wobbleGrabberUpDown = hwMap.get(Servo.class, "wobbleGrabberUpDown");
         wobbleGrabberOpenClose  = hwMap.get(Servo.class, "wobbleGrabberOpenClose");
+        wobbleDropperServo  = hwMap.get(Servo.class, "wobbleDropperServo");
 
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -113,7 +114,7 @@ public class chewy_HardwareMap
         secondTransfer.setPosition(0.5);
         wobbleGrabberUpDown.setPosition(0.55);
         wobbleGrabberOpenClose.setPosition(0.4);
-
+        wobbleDropperServo.setPosition(0);
 
 
 
