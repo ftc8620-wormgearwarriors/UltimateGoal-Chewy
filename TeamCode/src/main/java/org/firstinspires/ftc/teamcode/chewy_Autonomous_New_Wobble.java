@@ -39,7 +39,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         //initializing odometry hardware
         Init();
-        initOdometryHardware(40, 9, 0);
+        initOdometryHardware(55, 9, 0);
 
         //initializing camera
         initVuforia();
@@ -58,7 +58,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         RingDetector ringDetector = new RingDetector(vuforia);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(285, 445, 190, 300);
+        ringDetector.setCropBox(0, 160, 150, 310);
 
 
         // do method based on counting "yellow pixels"
@@ -67,16 +67,21 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         //use the ring detector to find the number of rings
         nRings = ringDetector.getNumberOfRings();
 
+//        while (opModeIsActive()) {
+//            nRings = ringDetector.getNumberOfRings();
+//            telemetry.addData("RunOpMode:NumRings", nRings);
+//            telemetry.update();
+//        }
+
         //Displaying Ring Variables
         telemetry.addData("RunOpMode:NumRings", nRings);
         telemetry.update();
-
 
         // set robot speed
         double dRobotPower = 0.9;
 
         //driving to intermediate pos before first drop zone
-        goToPostion(54 * robot.COUNTS_PER_INCH, 56 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(54 * robot.COUNTS_PER_INCH, 56 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
 
         //drive and turn to drop wobble goal based on # of rings
         if (nRings == 4) {
@@ -89,6 +94,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         //open hand and move elbow to drop wobble goal
         dropLowerWobbleGoal();
+        sleep(1000);
 
         // turn shooter first to rev up them
         robot.shooterRight.setPower(0.6);
@@ -96,16 +102,20 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         //move to intermediate pos
         if (nRings == 4) {
-            goToPostion(36 * robot.COUNTS_PER_INCH, 135 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(36 * robot.COUNTS_PER_INCH, 135 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
-            goToPostion(60 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(60 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         }
 
         //Drive to lanch line
-        goToPostion(45 * robot.COUNTS_PER_INCH, 69 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(35 * robot.COUNTS_PER_INCH, 69 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
         //shoot powershot targets
         rapidFireDisks();
+
+        // positioning to set up to grab second wobble
+        robot.wobbleGrabberOpenClose.setPosition(1.0);
+        robot.wobbleGrabberUpDown.setPosition(0.395);
 
         // comment this out if you dont want to do a second wobble
         if (nRings == 0) {
@@ -117,17 +127,16 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
             //drive to targetzone for 0 rings
             goToPostion(24 * robot.COUNTS_PER_INCH, 95 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
             dropWobbleGoal();
+        } else if (nRings == 1){
+
+            //goes to pickup position and grabes goal
+            goToPostion(20.5 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            pickUpWobbleGoal();
+
+            //drive to targetzone for 0 rings
+            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
+            dropWobbleGoal();
         }
-//        } else if (nRings == 1){
-//
-//            //goes to pickup position and grabes goal
-//            goToPostion(22 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
-//            pickUpWobbleGoal();
-//
-//            //drive to targetzone for 0 rings
-//            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
-//            dropWobbleGoal();
-//        }
 
         //park on launch line
         goToPostion(40 * robot.COUNTS_PER_INCH, 84 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
