@@ -458,4 +458,68 @@ public class chewy_Teleop extends OpMode {
         return(0);
 
     }
+
+    // Coach Example:
+    // This is a method to control auto collection.  It demonstrates STATE MACHINE design.
+    // state machines have define states and uses conditions to change between those states.
+    // Usage:
+    //      call this function from the main loop.  Pass to it 2 booleans to start and stop
+    //      the auto collection state machine.  Eample call:
+    //              runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5))
+
+    enum intakeStates {  // first define the possible states for the collection system
+        MANUAL,
+        EMPTY,
+        ONERING     //  MARGARET need to add all other possible states in here.  Comma after except last one.
+    }
+    intakeStates intakeState = intakeStates.EMPTY;     // class variable to store the current state.
+
+    void runAutoCollectState(boolean startAuto, boolean stopAuto){
+
+        // first handle the starting the state machine
+        // if we are currently in MANUAL mode and told to start then move to next state.
+        // only move from MANUAL to EMPTY!  Don't allow start button to move any other states.
+        if (intakeState == intakeStates.MANUAL && startAuto) {
+            intakeState = intakeStates.EMPTY;
+        }
+
+        // now see if driver wants to stop the auto collecting!
+        // they can go from any state direct to manual control!!!
+        // do we want to stop any of the motors if they go to manual?
+        if (stopAuto) {
+            intakeState = intakeStates.MANUAL;
+        }
+
+        // A switch statement will run one "case" until it reaches the line  "break;"
+        // this is the "core" of the statemachine work!
+        switch (intakeState) {
+            case MANUAL:    // drivers are controlling the intake so do NOTHING
+                // Common to have the if statemntes here to change states, but
+                // The main code will handle reading joystick and changing
+                // intakeState to EMPTY when joystick command is pressed.
+                break;  // Done so exit the SWITCH statement without doing other states!
+
+            case EMPTY:   // for EMTPY we need all motors & Servo's on!
+                robot.secondTransfer.setPosition(1);
+                robot.firstTransfer.setPosition(1);
+                robot.intake.setPower(1);
+                // now decide if we should change states
+                if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.ONERING;
+                }
+                break;
+
+            // Margaret need to add a "Case" for all condition (TWORING, THTEERING etc)
+            // copy above example from case EMPTY:  to   break; and adjust as needed.
+
+            default:        //this is a catch all just incase we did not have a case for a state.
+                // turn it all off and set state to manual
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(0);
+                intakeState = intakeStates.MANUAL;
+                break;
+        }
+    }
+
 }
