@@ -39,11 +39,12 @@ public class chewy_OdometryTest extends chewy_AutonomousMethods {
 
             //Display raw values
 //            telemetry.addData("IMU Angle", robot.imu.getHeading());
-            telemetry.addData("Vertical Left Position", robot.verticalLeft.getCurrentPosition());
-            telemetry.addData("Vertical Right Position", robot.verticalRight.getCurrentPosition());
-            telemetry.addData("Horizontal Position", robot.horizontal.getCurrentPosition());
+            telemetry.addData("Vertical Left Position", robot.globalPositionUpdate.returnVerticalLeftEncoderPosition());
+            telemetry.addData("Vertical Right Position", robot.globalPositionUpdate.returnVerticalRightEncoderPosition());
+            telemetry.addData("Horizontal Position", robot.globalPositionUpdate.returnNormalEncoderPosition());
 
-            telemetry.addData("X Position", robot.globalPositionUpdate.returnXCoordinate());
+
+        telemetry.addData("X Position", robot.globalPositionUpdate.returnXCoordinate());
             telemetry.addData("Y Position", robot.globalPositionUpdate.returnYCoordinate());
             telemetry.addData("Heading", robot.globalPositionUpdate.returnOrientation());
 
