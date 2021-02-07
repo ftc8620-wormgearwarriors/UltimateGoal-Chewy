@@ -448,7 +448,7 @@ public class chewy_Teleop extends OpMode {
                 if (((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
                     robot.secondTransfer.setPosition(0.5);
                     robot.firstTransfer.setPosition(0.5);
-                    robot.intake.setPower(0);
+                    robot.intake.setPower(1);  // Coach craig Feb 5, 2021. Lower sensor in wrong location.  Always leave intake on.
                 }
                 else {
                     robot.intake.setPower(1);
