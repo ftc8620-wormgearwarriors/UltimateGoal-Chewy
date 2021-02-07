@@ -15,15 +15,16 @@ import java.io.File;
  * The Global Positioning Algorithm will not function and will throw an error if this program is not run first
  */
 @TeleOp(name = "chewy Odometry Test", group = "Calibration")
-public class chewy_OdometryTest extends LinearOpMode {
+public class chewy_OdometryTest extends chewy_AutonomousMethods {
     chewy_HardwareMap robot = new chewy_HardwareMap();
 
 
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         robot.init(hardwareMap);
+        initOdometryHardware(0, 0, 0);
 
 
         //Odometry System Calibration Init Complete
@@ -41,6 +42,11 @@ public class chewy_OdometryTest extends LinearOpMode {
             telemetry.addData("Vertical Left Position", robot.verticalLeft.getCurrentPosition());
             telemetry.addData("Vertical Right Position", robot.verticalRight.getCurrentPosition());
             telemetry.addData("Horizontal Position", robot.horizontal.getCurrentPosition());
+
+            telemetry.addData("X Position", robot.globalPositionUpdate.returnXCoordinate());
+            telemetry.addData("Y Position", robot.globalPositionUpdate.returnYCoordinate());
+            telemetry.addData("Heading", robot.globalPositionUpdate.returnOrientation());
+
  //           telemetry.addData("Vertical Encoder Offset", verticalEncoderTickOffsetPerDegree);
 
             //Update values
