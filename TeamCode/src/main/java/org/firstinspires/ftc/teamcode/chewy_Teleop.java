@@ -286,9 +286,10 @@ public class chewy_Teleop extends OpMode {
         if (gamepad2.right_trigger > 0.5 ) {
             autoCollect = false;
         }
-        if (autoCollect)
-            runAutoCollect();
+//        if (autoCollect)
+//            runAutoCollect();
 
+        runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5));
 
 
         }
@@ -470,7 +471,9 @@ public class chewy_Teleop extends OpMode {
     enum intakeStates {  // first define the possible states for the collection system
         MANUAL,
         EMPTY,
-        ONERING     //  MARGARET need to add all other possible states in here.  Comma after except last one.
+        ONERING,
+        TWORING,
+        THREERING//  MARGARET need to add all other possible states in here.  Comma after except last one.
     }
     intakeStates intakeState = intakeStates.EMPTY;     // class variable to store the current state.
 
@@ -508,6 +511,39 @@ public class chewy_Teleop extends OpMode {
                     intakeState = intakeStates.ONERING;
                 }
                 break;
+
+            case ONERING:
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(1);
+                robot.intake.setPower(1);
+
+                if(((DistanceSensor) robot.midColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.TWORING;
+                }
+                break;
+
+            case TWORING:
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(1);
+
+                if(((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.THREERING;
+                }
+                break;
+
+            case THREERING:
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(0);
+
+                if(((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.THREERING;
+                }
+                break;
+
+
+
 
             // Margaret need to add a "Case" for all condition (TWORING, THTEERING etc)
             // copy above example from case EMPTY:  to   break; and adjust as needed.
