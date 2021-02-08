@@ -11,6 +11,7 @@ import java.io.IOException;
 
 // #################################################################################################
 // Start Coach TEST 2021.01.27
+import com.qualcomm.robotcore.util.RobotLog;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
@@ -81,6 +82,9 @@ public class RingDetector {
             }
         }  // finishes grabbing image
 
+        //used below for storage and logging of yellow pixels
+        int nYellowPixels = 0;
+
         // if we succesfully grabbed an image convert it from RGB to bmp format and store in our member bitmap
         if (rgbImage != null) {
             // copy the bitmap from the Vuforia frame to our own member variable
@@ -99,7 +103,7 @@ public class RingDetector {
             double dPercent = 0.8;
             int nPixThresh1 = 1000;
             int nPixThresh2 = 5000;
-            int nYellowPixels = getMoreRedThanBlue(bitmapCroppedRingImage, dPercent);
+            nYellowPixels = getMoreRedThanBlue(bitmapCroppedRingImage, dPercent);
             if (nYellowPixels > nPixThresh2) {
                 nRings = 4;
             } else if (nYellowPixels < nPixThresh1) {
@@ -108,6 +112,7 @@ public class RingDetector {
                 nRings = 1;
             }
         }
+        RobotLog.d("8620WGW nYellowPixels " + nYellowPixels);
         return nRings;
     }
 
