@@ -115,7 +115,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         // positioning to set up to grab second wobble
         robot.wobbleGrabberOpenClose.setPosition(1.0);
-        robot.wobbleGrabberUpDown.setPosition(0.395);
+        robot.wobbleGrabberUpDown.setPosition(0.425);
 
         //second wobble
 
@@ -142,8 +142,12 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
             dropWobbleGoal();
         }
 
+        //Wobble arm up
+        robot.wobbleGrabberUpDown.setPosition(0.55);
+        robot.wobbleGrabberOpenClose.setPosition(1.0);
+
         //park on launch line
-        goToPostion(72 * robot.COUNTS_PER_INCH, 84 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(48 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
