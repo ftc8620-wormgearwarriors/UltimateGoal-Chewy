@@ -742,7 +742,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.wobbleGrabberUpDown.setPosition(0.425);
         sleep(1000);
         robot.wobbleGrabberOpenClose.setPosition(0.6);
-        sleep(1500);
+        sleep(500);
     }
 
     //drop the lower wobble goal
@@ -753,8 +753,8 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
     //pick up wobble goal
     public void pickUpWobbleGoal(){
-        robot.wobbleGrabberUpDown.setPosition(0.35);
-        sleep(500);
+//        robot.wobbleGrabberUpDown.setPosition(0.35);
+//        sleep(500);
         robot.wobbleGrabberOpenClose.setPosition(0.2);
         sleep(500);
         robot.wobbleGrabberUpDown.setPosition(0.5);

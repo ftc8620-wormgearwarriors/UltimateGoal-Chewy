@@ -87,7 +87,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         if (nRings == 4) {
             goToPostion(24 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
-            goToPostion(48 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(51 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
             goToPostion(24 * robot.COUNTS_PER_INCH, 92 * robot.COUNTS_PER_INCH, dRobotPower,  0, 3 * robot.COUNTS_PER_INCH, false);
         }
@@ -107,16 +107,20 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
             goToPostion(60 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         }
 
-        //Drive to lanch line
-        goToPostion(39 * robot.COUNTS_PER_INCH, 65 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+        //Drive to lanch line-shooting pos
+        goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+
+        // positioning to set up to grab second wobble
+        robot.wobbleGrabberOpenClose.setPosition(1.0);
+        robot.wobbleGrabberUpDown.setPosition(0.35);
 
         //shoot powershot targets
         rapidFireDisks();
 
-        // positioning to set up to grab second wobble
-        robot.wobbleGrabberOpenClose.setPosition(1.0);
-        robot.wobbleGrabberUpDown.setPosition(0.425);
-
+        //for 4 rings avoid stack
+        if (nRings == 4) {
+            goToPostion(18 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
+        }
         //second wobble
 
         //goes to pickup position and grabs goal
@@ -126,19 +130,19 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         if (nRings == 0) {
 
             //drive to targetzone for 0 rings
-            goToPostion(24 * robot.COUNTS_PER_INCH, 88 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(24 * robot.COUNTS_PER_INCH, 92 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
             dropWobbleGoal();
 
         } else if (nRings == 1){
 
             //drive to targetzone for 1 rings
-            goToPostion(48 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(51 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
             dropWobbleGoal();
 
         } else if (nRings == 4) {
 
             //drive to targetzone for 4 rings
-            goToPostion(24 * robot.COUNTS_PER_INCH, 135 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(25 * robot.COUNTS_PER_INCH, 138 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
             dropWobbleGoal();
         }
 
@@ -147,7 +151,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         robot.wobbleGrabberOpenClose.setPosition(1.0);
 
         //park on launch line
-        goToPostion(48 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(50 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
