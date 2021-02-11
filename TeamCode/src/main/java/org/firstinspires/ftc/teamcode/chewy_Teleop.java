@@ -286,10 +286,10 @@ public class chewy_Teleop extends OpMode {
         if (gamepad2.right_trigger > 0.5 ) {
             autoCollect = false;
         }
-//        if (autoCollect)
-//            runAutoCollect();
+        if (autoCollect)
+            runAutoCollect();
 
-        runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5));
+//        runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5));
 
 
         }
