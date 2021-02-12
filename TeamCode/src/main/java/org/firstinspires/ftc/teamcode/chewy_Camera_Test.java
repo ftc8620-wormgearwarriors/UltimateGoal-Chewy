@@ -19,11 +19,15 @@ public class chewy_Camera_Test extends chewy_AutonomousMethods {
         Init();
         initOdometryHardware(55, 9, 0);
 
+        //letting cam init fully and telling driver not to start
+        telemetry.addData(">","DO NOT START YET");
+        telemetry.update();
+
         //initializing camera
         initVuforia();
         telemetry.addData("Initialized", "Camera");
+        telemetry.addData(">","camera ready");
         telemetry.update();
-
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
@@ -36,7 +40,7 @@ public class chewy_Camera_Test extends chewy_AutonomousMethods {
         RingDetector ringDetector = new RingDetector(vuforia);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(0, 160, 150, 310);
+        ringDetector.setCropBox(20, 180, 0, 140);
 
 
         // do method based on counting "yellow pixels"

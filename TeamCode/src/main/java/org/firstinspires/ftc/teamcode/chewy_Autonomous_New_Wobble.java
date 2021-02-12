@@ -41,9 +41,14 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         Init();
         initOdometryHardware(55, 9, 0);
 
+        //letting cam init fully and telling driver not to start
+        telemetry.addData(">","DO NOT START YET");
+        telemetry.update();
+
         //initializing camera
         initVuforia();
         telemetry.addData("Initialized", "Camera");
+        telemetry.addData(">","camera ready");
         telemetry.update();
 
 
@@ -58,7 +63,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         RingDetector ringDetector = new RingDetector(vuforia);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(0, 160, 150, 310);
+        ringDetector.setCropBox(20, 180, 0, 140);
 
 
         // do method based on counting "yellow pixels"
@@ -87,7 +92,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         if (nRings == 4) {
             goToPostion(24 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
-            goToPostion(51 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(51 * robot.COUNTS_PER_INCH, 117 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
             goToPostion(24 * robot.COUNTS_PER_INCH, 92 * robot.COUNTS_PER_INCH, dRobotPower,  0, 3 * robot.COUNTS_PER_INCH, false);
         }
@@ -117,13 +122,15 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         //shoot powershot targets
         rapidFireDisks();
 
-        //for 4 rings avoid stack
+        //for 4 and 1 rings avoid stack
         if (nRings == 4) {
+            goToPostion(18 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
+        }else if (nRings == 1) {
             goToPostion(18 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
         }
         //second wobble
 
-        //goes to pickup position and grabs goal
+        //goes to pickup position and grabs second goal
         goToPostion(21.5 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower, 0, 1 * robot.COUNTS_PER_INCH, false);
         pickUpWobbleGoal();
 
@@ -151,7 +158,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         robot.wobbleGrabberOpenClose.setPosition(1.0);
 
         //park on launch line
-        goToPostion(50 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(60 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
