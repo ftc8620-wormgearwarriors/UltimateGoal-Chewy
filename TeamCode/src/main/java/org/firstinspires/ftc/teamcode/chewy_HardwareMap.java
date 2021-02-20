@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -37,12 +39,18 @@ public class chewy_HardwareMap
     public Servo intakeRoller              = null;
     public Servo firstTransfer             = null;
     public Servo secondTransfer            = null;
-    public Servo  wobbleGrabberUpDown      = null;
-    public Servo  wobbleGrabberOpenClose   = null;
-
+    public Servo wobbleGrabberUpDown       = null;
+    public Servo wobbleGrabberOpenClose    = null;
+    public Servo wobbleDropperServo         = null;
 
 
     //public sensors
+    public ModernRoboticsI2cRangeSensor frontRange = null;
+    public ModernRoboticsI2cRangeSensor leftRange = null;
+    public NormalizedColorSensor topColor = null;
+    public NormalizedColorSensor midColor = null;
+    public NormalizedColorSensor bottomColor = null;
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -80,6 +88,7 @@ public class chewy_HardwareMap
         secondTransfer  = hwMap.get(Servo.class, "secondTransfer");
         wobbleGrabberUpDown = hwMap.get(Servo.class, "wobbleGrabberUpDown");
         wobbleGrabberOpenClose  = hwMap.get(Servo.class, "wobbleGrabberOpenClose");
+        wobbleDropperServo  = hwMap.get(Servo.class, "wobbleDropperServo");
 
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -106,8 +115,8 @@ public class chewy_HardwareMap
         firstTransfer.setPosition(0.5);
         secondTransfer.setPosition(0.5);
         wobbleGrabberUpDown.setPosition(0.55);
-        wobbleGrabberOpenClose.setPosition(0.4);
-
+        wobbleGrabberOpenClose.setPosition(1.0);
+        wobbleDropperServo.setPosition(0);
 
 
 
@@ -127,6 +136,13 @@ public class chewy_HardwareMap
         verticalLeft = hwMap.dcMotor.get("backLeftDrive");
         verticalRight = hwMap.dcMotor.get("backRightDrive");
         horizontal = hwMap.dcMotor.get("frontLeftDrive");
+
+        frontRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"frontRange");
+        leftRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"leftRange");
+        topColor = hwMap.get(NormalizedColorSensor.class, "topColor");
+        midColor = hwMap.get(NormalizedColorSensor.class, "midColor");
+        bottomColor = hwMap.get(NormalizedColorSensor.class, "bottomColor");
+
 
 
 

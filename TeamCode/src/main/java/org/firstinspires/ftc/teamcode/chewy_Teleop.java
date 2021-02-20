@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -68,7 +70,7 @@ public class chewy_Teleop extends OpMode {
     double wobbleGrabberOpenCloseMaxPos = 1.0;
 
     double maxVel = 0.5;
-
+    boolean autoCollect = false;
     @Override
     public void loop() {
         double markerServoPos = .72;
@@ -121,31 +123,31 @@ public class chewy_Teleop extends OpMode {
             robot.imu.resetHeading();
         }
 
-        if (gamepad1.dpad_down) {
-            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.001;
-
-            }
-        }
-        if (gamepad1.dpad_up) {
-            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.001;
-            }
-        }
-        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
-
-        if (gamepad1.dpad_right) {
-            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
-                wobbleGrabberOpenClosePos -= 0.05;
-
-            }
-        }
-        if (gamepad1.dpad_left) {
-            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
-                wobbleGrabberOpenClosePos += 0.05;
-            }
-        }
-        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
+//        if (gamepad1.dpad_down) {
+//            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+//                wobbleGrabberUpDownPos -= 0.001;
+//
+//            }
+//        }
+//        if (gamepad1.dpad_up) {
+//            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+//                wobbleGrabberUpDownPos += 0.001;
+//            }
+//        }
+//        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+//
+//        if (gamepad1.dpad_right) {
+//            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+//                wobbleGrabberOpenClosePos -= 0.05;
+//
+//            }
+//        }
+//        if (gamepad1.dpad_left) {
+//            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+//                wobbleGrabberOpenClosePos += 0.05;
+//            }
+//        }
+//        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
 
 
 
@@ -158,11 +160,14 @@ public class chewy_Teleop extends OpMode {
             backRight /= max;
         }
 
-
-        robot.frontLeftDrive.setPower(frontLeft);
-        robot.frontRightDrive.setPower(frontRight);
-        robot.backLeftDrive.setPower(backLeft);
-        robot.backRightDrive.setPower(backRight);
+        if (gamepad1.right_bumper) {
+            shootingSpot (183,1,61);
+        } else {
+            robot.frontLeftDrive.setPower(frontLeft);
+            robot.frontRightDrive.setPower(frontRight);
+            robot.backLeftDrive.setPower(backLeft);
+            robot.backRightDrive.setPower(backRight);
+        }
 
         //gamepad 2
 
@@ -246,9 +251,311 @@ public class chewy_Teleop extends OpMode {
             robot.shooterRight.setPower(0.5);
             robot.shooterLeft.setPower(-0.55);
         }
-    }
+
+        //wobble grabber controls
+        if (gamepad2.left_stick_y > 0.5) {
+            if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
+                wobbleGrabberUpDownPos -= 0.001;
+
+            }
+        }
+        if (gamepad2.left_stick_y < -0.5) {
+            if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
+                wobbleGrabberUpDownPos += 0.001;
+            }
+        }
+        robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
+
+        if (gamepad2.left_stick_x < -0.5) {
+            if (wobbleGrabberOpenClosePos > wobbleGrabberOpenCloseMinPos) {
+                wobbleGrabberOpenClosePos -= 0.05;
+
+            }
+        }
+        if (gamepad2.left_stick_x > 0.5) {
+            if (wobbleGrabberOpenClosePos < wobbleGrabberOpenCloseMaxPos) {
+                wobbleGrabberOpenClosePos += 0.05;
+            }
+        }
+        robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
+
+        //auto collect/auto shoot
+        if (gamepad2.left_trigger > 0.5) {
+            autoCollect = true;
+        }
+        if (gamepad2.right_trigger > 0.5 ) {
+            autoCollect = false;
+        }
+        if (autoCollect)
+            runAutoCollect();
+
+//        runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5));
+
+
+        }
 
     @Override
     public void stop() {
     }
+
+
+    //line up to shoot
+    double  minVel              = 0.1;
+    double  vel                 = minVel;
+    double  oldVel              = minVel;
+    public double shootingSpot (double distance, double maxVel, double gapDistance) {
+        double  targetHeading       = 90;
+        double  kpTurn              = 0.05;
+        double  kpDistance          = 0.01;
+        double  kpGap               = 0.01; //was 0.03
+        double  accel               = 0.03;
+
+
+
+
+
+
+
+        double distanceError = robot.frontRange.getDistance(DistanceUnit.CM) - distance;
+
+
+        vel = Math.abs(distanceError * kpDistance);
+
+
+
+        if (vel > (oldVel + accel))
+
+            vel = oldVel + accel;
+
+        if (vel > (Math.abs(maxVel))) {
+            vel = (Math.abs(maxVel));
+        }
+
+        if (vel < minVel) {
+            vel = minVel;
+
+        }
+        oldVel = vel;
+
+        if(distanceError < 0)
+            vel = -vel;
+
+        double error = -angleErrorDrive(targetHeading, robot.imu.getHeading());
+
+        double sideErr;
+//            if (side == sensorSide.RIGHT)
+//                gap_err = robot.rightRangeSensor.cmUltrasonic() - gapDistance;
+//            else
+//                gap_err = - (robot.leftRangeSensor.cmUltrasonic() - gapDistance);
+        sideErr = - (robot.leftRange.cmUltrasonic() - gapDistance);
+
+        //tells us that when we sense another robot to change nothing
+//            if (Math.abs(sideErr)>30)
+//                sideErr = 0;
+
+
+        // Set motors to specified power
+        double  frontLeftPower      = vel - (error * kpTurn)  + (sideErr * kpGap);
+        double  frontRightPower     = vel + (error * kpTurn)  - (sideErr * kpGap);
+        double  backLeftPower       = vel - (error * kpTurn)  - (sideErr * kpGap);
+        double  backRightPower      = vel + (error * kpTurn)  + (sideErr * kpGap);
+
+        double max = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower)),
+                Math.max(Math.abs(frontRightPower), Math.abs(backRightPower)));
+        if (max > 1.0) {
+            frontLeftPower  /= max;
+            frontRightPower /= max;
+            backLeftPower   /= max;
+            backRightPower  /= max;
+        }
+
+        robot.frontLeftDrive.setPower (frontLeftPower);
+        robot.frontRightDrive.setPower(frontRightPower);
+        robot.backLeftDrive.setPower  (backLeftPower);
+        robot.backRightDrive.setPower (backRightPower);
+
+//        telemetry.addData("front right: ", robot.frontRightDrive.getCurrentPosition());
+//        telemetry.addData("front left:", robot.frontLeftDrive.getCurrentPosition());
+//        telemetry.addData("back right:", robot.backRightDrive.getCurrentPosition());
+//        telemetry.addData("back left:", robot.backLeftDrive.getCurrentPosition());
+//        telemetry.addData("FR Speed:", robot.frontRightDrive.getPower());
+//        telemetry.addData("FL Speed:", robot.frontLeftDrive.getPower());
+//        telemetry.addData("BR Speed", robot.backRightDrive.getPower());
+//        telemetry.addData("BL Speed:", robot.backLeftDrive.getPower());
+        telemetry.addData("Left Range", robot.leftRange.cmUltrasonic());
+        telemetry.addData("front range", String.format("%.01f cm", robot.frontRange.getDistance(DistanceUnit.CM)));
+        telemetry.addData("turn error", error);
+        telemetry.addData("gyro ", robot.imu.getHeading());
+        //telemetry.addData("left GAP", robot.leftRangeSensor.cmUltrasonic());
+        telemetry.update();
+        RobotLog.d("8620WGW shootingSpot " +
+                "gyro " + robot.imu.getHeading() + ", " +
+                "left error " + sideErr + ", " +
+                "front error " + distanceError + ", " +
+                "turn error " + error + ", ");
+
+
+        // }
+
+        // Turn off motors
+//        robot.frontLeftDrive    .setPower(0);
+//        robot.frontRightDrive   .setPower(0);
+//        robot.backLeftDrive     .setPower(0);
+//        robot.backRightDrive    .setPower(0);
+
+        // Return average total ticks traveled
+        return 0;
+    }   // gap()
+
+    /**
+     * Created by Worm Gear Warriors on 10/28/2018.
+     * returns an angle between -180 and +180
+     */
+    public double angleErrorDrive(double angleTarget, double angleInitial) {
+        double error = angleInitial - angleTarget;
+
+        while (error <= -180 || error > 180) {
+            if (error > 180) {
+                error = error - 360;
+            }
+            if (error <= -180) {
+                error = error + 360;
+            }
+        }
+        return error;
+    }
+
+    //Auto collect
+    double runAutoCollect(){
+
+        if (robot.topColor instanceof SwitchableLight) {
+            ((SwitchableLight)robot.topColor).enableLight(true);
+        }
+        if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0) {
+            robot.secondTransfer.setPosition(1);
+            robot.firstTransfer.setPosition(1);
+            robot.intake.setPower(1);
+        }else {
+            robot.secondTransfer.setPosition(0.5);
+            if (((DistanceSensor) robot.midColor).getDistance(DistanceUnit.CM) > 1.0) {
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(1);
+                robot.intake.setPower(1);
+            }
+            else {
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(1);
+                robot.secondTransfer.setPosition(0.5);
+                if (((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    robot.secondTransfer.setPosition(0.5);
+                    robot.firstTransfer.setPosition(0.5);
+                    robot.intake.setPower(1);  // Coach craig Feb 5, 2021. Lower sensor in wrong location.  Always leave intake on.
+                }
+                else {
+                    robot.intake.setPower(1);
+                }
+            }
+        }
+        return(0);
+
+    }
+
+    // Coach Example:
+    // This is a method to control auto collection.  It demonstrates STATE MACHINE design.
+    // state machines have define states and uses conditions to change between those states.
+    // Usage:
+    //      call this function from the main loop.  Pass to it 2 booleans to start and stop
+    //      the auto collection state machine.  Eample call:
+    //              runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5))
+
+    enum intakeStates {  // first define the possible states for the collection system
+        MANUAL,
+        EMPTY,
+        ONERING,
+        TWORING,
+        THREERING//  MARGARET need to add all other possible states in here.  Comma after except last one.
+    }
+    intakeStates intakeState = intakeStates.EMPTY;     // class variable to store the current state.
+
+    void runAutoCollectState(boolean startAuto, boolean stopAuto){
+
+        // first handle the starting the state machine
+        // if we are currently in MANUAL mode and told to start then move to next state.
+        // only move from MANUAL to EMPTY!  Don't allow start button to move any other states.
+        if (intakeState == intakeStates.MANUAL && startAuto) {
+            intakeState = intakeStates.EMPTY;
+        }
+
+        // now see if driver wants to stop the auto collecting!
+        // they can go from any state direct to manual control!!!
+        // do we want to stop any of the motors if they go to manual?
+        if (stopAuto) {
+            intakeState = intakeStates.MANUAL;
+        }
+
+        // A switch statement will run one "case" until it reaches the line  "break;"
+        // this is the "core" of the statemachine work!
+        switch (intakeState) {
+            case MANUAL:    // drivers are controlling the intake so do NOTHING
+                // Common to have the if statemntes here to change states, but
+                // The main code will handle reading joystick and changing
+                // intakeState to EMPTY when joystick command is pressed.
+                break;  // Done so exit the SWITCH statement without doing other states!
+
+            case EMPTY:   // for EMTPY we need all motors & Servo's on!
+                robot.secondTransfer.setPosition(1);
+                robot.firstTransfer.setPosition(1);
+                robot.intake.setPower(1);
+                // now decide if we should change states
+                if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.ONERING;
+                }
+                break;
+
+            case ONERING:
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(1);
+                robot.intake.setPower(1);
+
+                if(((DistanceSensor) robot.midColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.TWORING;
+                }
+                break;
+
+            case TWORING:
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(1);
+
+                if(((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.THREERING;
+                }
+                break;
+
+            case THREERING:
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(0);
+
+                if(((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
+                    intakeState = intakeStates.THREERING;
+                }
+                break;
+
+
+
+
+            // Margaret need to add a "Case" for all condition (TWORING, THTEERING etc)
+            // copy above example from case EMPTY:  to   break; and adjust as needed.
+
+            default:        //this is a catch all just incase we did not have a case for a state.
+                // turn it all off and set state to manual
+                robot.secondTransfer.setPosition(0.5);
+                robot.firstTransfer.setPosition(0.5);
+                robot.intake.setPower(0);
+                intakeState = intakeStates.MANUAL;
+                break;
+        }
+    }
+
 }

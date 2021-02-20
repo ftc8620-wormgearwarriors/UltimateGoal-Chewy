@@ -479,6 +479,9 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
     }
 
 
+
+
+
     //Odometry Section
     public void initOdometryHardware(double x, double y, double heading) {
 
@@ -737,18 +740,22 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
     //drop wobble goal
     public void dropWobbleGoal(){
         robot.wobbleGrabberUpDown.setPosition(0.425);
-        sleep(1500);
+        sleep(1000);
         robot.wobbleGrabberOpenClose.setPosition(0.6);
-        sleep(2000);
+        sleep(500);
+    }
+
+    //drop the lower wobble goal
+    public void dropLowerWobbleGoal(){
+        robot.wobbleDropperServo.setPosition(0.4);
+
     }
 
     //pick up wobble goal
     public void pickUpWobbleGoal(){
-        robot.wobbleGrabberUpDown.setPosition(0.375);
-        sleep(500);
-        robot.wobbleGrabberOpenClose.setPosition(0.4);
-        sleep(500);
-        robot.wobbleGrabberOpenClose.setPosition(0.35);
+//        robot.wobbleGrabberUpDown.setPosition(0.35);
+//        sleep(500);
+        robot.wobbleGrabberOpenClose.setPosition(0.2);
         sleep(500);
         robot.wobbleGrabberUpDown.setPosition(0.5);
     }

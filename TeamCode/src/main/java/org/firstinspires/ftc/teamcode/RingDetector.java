@@ -3,9 +3,21 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+// #################################################################################################
+// Start Coach TEST 2021.01.27
+import com.qualcomm.robotcore.util.RobotLog;
+import com.vuforia.Image;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Vuforia;
+// end Coach TEST 2021.01.27
+// #################################################################################################
+
 
 public class RingDetector {
 
@@ -23,6 +35,14 @@ public class RingDetector {
         m_ringBitmap = Bitmap.createBitmap(ringImage);
     }
 
+    VuforiaLocalizer m_Vuforia = null;  // Should be moved up to member variable section, but keeping in the coach section for now.
+
+    // constructor -  alternate version that is passed a handle to vuforia
+    public RingDetector(VuforiaLocalizer vuforia ) {
+        m_Vuforia = vuforia;
+    }
+
+
     // setter for crop box if needs changed
     public void setCropBox(int left, int right, int top, int bottom) {
         m_cropBoxLeft = left;
@@ -32,70 +52,67 @@ public class RingDetector {
     }
 
     // function to return the number of rings based on the bitmap
-    public int getNumberOfRings(Bitmap croppedRingImage, int nPixelThreshold,
-                                double dRatioThreshold1, double dRatioThreshold2) {
+    public int getNumberOfRings() {
 
-        // Getting size of cropped bit map
-        int cropImageHeight = croppedRingImage.getHeight();
-        int cropImageWidth = croppedRingImage.getWidth();
-
-        //creating varables to store pixels count
-        int nAboveThresholdRed = 1;
-        int nAboveThresholdBlue = 1;
-        int nAboveThresholdGreen = 1;
-        int nR = 0;
-        int nG = 0;
-        int nB = 0;
-
-        // creating variables to store ratios\
-        double dRBRatio = 0.0;
-        double dGBRatio = 0.0;
-        int nPixel = 0;
         int nRings = 0;
 
-        //looping through all pixels and counting the number of pixels with r, g, or, b above
-        // thresholds
-        for (int i = 0; i < cropImageHeight; i++) {
-            for (int j = 0; j < cropImageWidth; j++) {
+        // first we need to grab an image from Vuforia and store in our member variable in this class
+        // grabs image from the camera
+        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        VuforiaLocalizer.CloseableFrame closeableFrame = null;
+        m_Vuforia.setFrameQueueCapacity(1);
+        Image rgbImage = null;
+        while (rgbImage == null) {
+            try {
+                closeableFrame = m_Vuforia.getFrameQueue().take();
+                long numImages = closeableFrame.getNumImages();
 
-                //get pixel value
-                nPixel = croppedRingImage.getPixel(j, i);
-                nR = Color.red(nPixel);
-                nG = Color.green(nPixel);
-                nB = Color.blue(nPixel);
+                for (int i = 0; i < numImages; i++) {
+                    if (closeableFrame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565) {
+                        rgbImage = closeableFrame.getImage(i);
+                        if (rgbImage != null) {
+                            break;
+                        }
+                    }
+                }
+            } catch (InterruptedException exc) {
 
-                //check r, g, and b against thresholds
-                if (nR > nPixelThreshold) {
-                    nAboveThresholdRed++;
-                }
-                if (nB > nPixelThreshold) {
-                    nAboveThresholdBlue++;
-                }
-                if (nG > nPixelThreshold) {
-                    nAboveThresholdGreen++;
-                }
+            } finally {
+                if (closeableFrame != null) closeableFrame.close();
+            }
+        }  // finishes grabbing image
 
+        //used below for storage and logging of yellow pixels
+        int nYellowPixels = 0;
+
+        // if we succesfully grabbed an image convert it from RGB to bmp format and store in our member bitmap
+        if (rgbImage != null) {
+            // copy the bitmap from the Vuforia frame to our own member variable
+            m_ringBitmap = Bitmap.createBitmap(rgbImage.getWidth(), rgbImage.getHeight(), Bitmap.Config.RGB_565);
+            m_ringBitmap.copyPixelsFromBuffer(rgbImage.getPixels());
+
+
+            // create the cropped image and display it
+            Bitmap bitmapCroppedRingImage = createCroppedRingImage();
+            //saveCroppedBitmap(bitmapCroppedRingImage);
+
+            // Getting size of cropped bit map
+            int cropImageHeight = bitmapCroppedRingImage.getHeight();
+            int cropImageWidth = bitmapCroppedRingImage.getWidth();
+
+            double dPercent = 0.8;
+            int nPixThresh1 = 1000;
+            int nPixThresh2 = 5000;
+            nYellowPixels = getMoreRedThanBlue(bitmapCroppedRingImage, dPercent);
+            if (nYellowPixels > nPixThresh2) {
+                nRings = 4;
+            } else if (nYellowPixels < nPixThresh1) {
+                nRings = 0;
+            } else {
+                nRings = 1;
             }
         }
-
-        //compute ratio r and g to b
-        dGBRatio = (double)nAboveThresholdGreen / (double)nAboveThresholdBlue;
-        dRBRatio = (double)nAboveThresholdRed / (double)nAboveThresholdBlue;
-
-        //check ratios vs thresholds to decide on number of rings
-        //if either ratio is above threshold 2, we will set to 4 rings
-        //if either ratio is below threshold 1, we will set to 0 rings
-        if ((dGBRatio > dRatioThreshold2) || (dRBRatio > dRatioThreshold2)) {
-            nRings = 4;
-        }
-        else if ((dGBRatio < dRatioThreshold1) || (dRBRatio < dRatioThreshold1)) {
-            nRings = 0;
-        }
-        else {
-            nRings = 1;
-        }
-
-        // default to return 0 rings
+        RobotLog.d("8620WGW nYellowPixels " + nYellowPixels);
         return nRings;
     }
 
