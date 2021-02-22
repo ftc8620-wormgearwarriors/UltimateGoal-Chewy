@@ -172,8 +172,7 @@ public class chewy_Teleop extends OpMode {
         if(gamepad1.a) {
             robot.pusher.setPosition(1);
         }
-
-        if(gamepad1.b) {
+        else{
             robot.pusher.setPosition(-1);
         }
 
