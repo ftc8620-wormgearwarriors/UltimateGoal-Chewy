@@ -169,6 +169,15 @@ public class chewy_Teleop extends OpMode {
             robot.backRightDrive.setPower(backRight);
         }
 
+        if(gamepad1.a) {
+            robot.pusher.setPosition(1);
+        }
+
+        if(gamepad1.b) {
+            robot.pusher.setPosition(-1);
+        }
+
+
         //gamepad 2
 
         //start all
