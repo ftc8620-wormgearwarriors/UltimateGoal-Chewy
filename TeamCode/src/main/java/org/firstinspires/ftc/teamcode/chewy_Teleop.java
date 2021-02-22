@@ -161,7 +161,7 @@ public class chewy_Teleop extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            shootingSpot (183,1,61);
+            shootingSpot (195,1,61);
         } else {
             robot.frontLeftDrive.setPower(frontLeft);
             robot.frontRightDrive.setPower(frontRight);
@@ -242,8 +242,8 @@ public class chewy_Teleop extends OpMode {
         // Button to start the shooter
         if (gamepad2.left_bumper)
         {
-            robot.shooterRight.setPower(.6);
-            robot.shooterLeft.setPower(-0.6);
+            robot.shooterRight.setPower(1.0);
+            robot.shooterLeft.setPower(-0.7);
         }
 
         // Button to stop the shooter.
@@ -256,8 +256,8 @@ public class chewy_Teleop extends OpMode {
         //shooter slow speed
         if (gamepad2.dpad_down) {
 
-            robot.shooterRight.setPower(0.5);
-            robot.shooterLeft.setPower(-0.55);
+            robot.shooterRight.setPower(1.0);
+            robot.shooterLeft.setPower(-0.4);
         }
 
         //wobble grabber controls
