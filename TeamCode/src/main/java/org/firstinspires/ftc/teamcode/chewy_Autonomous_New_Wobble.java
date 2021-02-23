@@ -92,7 +92,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         if (nRings == 4) {
             goToPostion(24 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
-            goToPostion(51 * robot.COUNTS_PER_INCH, 117 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(51 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
             goToPostion(24 * robot.COUNTS_PER_INCH, 92 * robot.COUNTS_PER_INCH, dRobotPower,  0, 3 * robot.COUNTS_PER_INCH, false);
         }

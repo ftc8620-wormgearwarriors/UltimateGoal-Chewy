@@ -119,7 +119,7 @@ public class chewy_HardwareMap
         secondTransfer.setPosition(0.5);
         wobbleGrabberUpDown.setPosition(0.55);
         wobbleGrabberOpenClose.setPosition(1.0);
-        wobbleDropperServo.setPosition(-0.2);
+        wobbleDropperServo.setPosition(-0.3);
         pusher.setPosition(0);
 
 
