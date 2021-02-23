@@ -693,26 +693,18 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
     //rapid fire all disks
     public void rapidFireDisks() {
 
-        robot.secondTransfer.setPosition(1);
-        robot.firstTransfer.setPosition(1);
-        robot.intake.setPower(1);
-
-        //waiting for all of the disks to shoot
-        sleep (5000);
-
-        //turn all off
-        robot.secondTransfer.setPosition(0.5);
-        robot.firstTransfer.setPosition(0.5);
-        robot.intake.setPower(0);
-        robot.shooterRight.setPower(0);
-        robot.shooterLeft.setPower(0);
-
+      for(int i = 0; i<3; i++) {
+          robot.pusher.setPosition(-1);
+          sleep(250);
+          robot.pusher.setPosition(1);
+          sleep(250);
+      }
     }
 
     //shoot first disk
     public void firstDiskAuto() {
-        robot.shooterRight.setPower(.5);
-        robot.shooterLeft.setPower(-0.5);
+        robot.shooterRight.setPower(1.0);
+        robot.shooterLeft.setPower(-0.7);
         sleep (3000);
         robot.secondTransfer.setPosition(1);
         sleep (1000);
@@ -720,8 +712,8 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
     //shoot second disk
     public void secondDiskAuto(){
-        robot.shooterRight.setPower(.5);
-        robot.shooterLeft.setPower(-0.5);
+        robot.shooterRight.setPower(1.0);
+        robot.shooterLeft.setPower(-0.7);
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
         sleep (2000);
@@ -729,8 +721,8 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
     //shoot third disk
     public void thirdDiskAuto(){
-        robot.shooterRight.setPower(0.5);
-        robot.shooterLeft.setPower(-0.5);
+        robot.shooterRight.setPower(1.0);
+        robot.shooterLeft.setPower(-0.7);
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
         robot.intake.setPower(1);
