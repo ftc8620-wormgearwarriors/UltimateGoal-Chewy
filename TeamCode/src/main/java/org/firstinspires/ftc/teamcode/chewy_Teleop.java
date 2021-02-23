@@ -160,29 +160,21 @@ public class chewy_Teleop extends OpMode {
             backRight /= max;
         }
 
-        if (gamepad1.right_bumper) {
+        if (gamepad1.right_bumper) {    //high goal
             shootingSpot (183,1,61);
-        } else {
+        } else if (gamepad1.x) {        //left power shot
+            shootingSpot(167.76,0.5,99.06);
+        } else if (gamepad1.a) {        //middle power shot
+            shootingSpot(167.76,0.5,127);
+        } else if (gamepad1.b){         //right power shot
+            shootingSpot(167.76,0.5,149.86);
+        } else {                       //manual
             robot.frontLeftDrive.setPower(frontLeft);
             robot.frontRightDrive.setPower(frontRight);
             robot.backLeftDrive.setPower(backLeft);
             robot.backRightDrive.setPower(backRight);
         }
-
-        //left power shot                //gap 99.06
-        if (gamepad1.x) {
-            shootingSpot(167.76,0.5,99.06);
-        }
-
-        //middle power shot               //gap 127
-        if (gamepad1.a) {
-            shootingSpot(167.76,0.5,127);
-        }
-
-        //right power shot                //gap 149.86
-        if (gamepad1.b){
-            shootingSpot(167.76,0.5,149.86);
-        }
+        
 
         //gamepad 2
 
@@ -271,18 +263,6 @@ public class chewy_Teleop extends OpMode {
             }
         }
         robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
-
-        //auto collect/auto shoot
-//        if (gamepad2.left_trigger > 0.5) {
-//            autoCollect = true;
-//        }
-//        if (gamepad2.right_trigger > 0.5 ) {
-//            autoCollect = false;
-//        }
-//        if (autoCollect)
-//            runAutoCollect();
-
-//        runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5));
 
 
         }
