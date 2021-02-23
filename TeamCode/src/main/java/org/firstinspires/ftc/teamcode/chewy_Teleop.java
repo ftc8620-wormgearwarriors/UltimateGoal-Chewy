@@ -100,8 +100,8 @@ public class chewy_Teleop extends OpMode {
         telemetry.addData("Gyro Heading", gyroHeading);
         telemetry.addData("wobbleGrabberUpDown", String.format ("%.05f", wobbleGrabberUpDownPos));
         telemetry.addData("wobbleGrabberOpenClose", String.format ("%.05f", wobbleGrabberOpenClosePos));
-
-
+        telemetry.addData("Left Range", robot.leftRange.cmUltrasonic());
+        telemetry.addData("front range", String.format("%.01f cm", robot.frontRange.getDistance(DistanceUnit.CM)));
 
         telemetry.update();
 
@@ -161,7 +161,7 @@ public class chewy_Teleop extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            shootingSpot (195,1,61);
+            shootingSpot (183,1,61);
         } else {
             robot.frontLeftDrive.setPower(frontLeft);
             robot.frontRightDrive.setPower(frontRight);
@@ -169,13 +169,20 @@ public class chewy_Teleop extends OpMode {
             robot.backRightDrive.setPower(backRight);
         }
 
-        if(gamepad1.a) {
-            robot.pusher.setPosition(1);
-        }
-        else{
-            robot.pusher.setPosition(-1);
+        //left power shot                //gap 99.06
+        if (gamepad1.x) {
+            shootingSpot(167.76,0.5,99.06);
         }
 
+        //middle power shot               //gap 127
+        if (gamepad1.a) {
+            shootingSpot(167.76,0.5,127);
+        }
+
+        //right power shot                //gap 149.86
+        if (gamepad1.b){
+            shootingSpot(167.76,0.5,149.86);
+        }
 
         //gamepad 2
 
@@ -197,30 +204,16 @@ public class chewy_Teleop extends OpMode {
             robot.secondTransfer.setPosition(0.5);
         }
 
-        // stop secondTransfer
-        if (gamepad2.a)
+        //pusher servo
+        if(gamepad2.right_trigger > 0.5)
         {
-            robot.secondTransfer.setPosition(0.5);
-            robot.firstTransfer.setPosition(1);
-            robot.intake.setPower(1);
+            robot.pusher.setPosition(1);
+        }
+        else{
+            robot.pusher.setPosition(-1);
         }
 
-        // stop firstTransfer
-        if (gamepad2.b)
-            {
-            robot.secondTransfer.setPosition(0.5);
-            robot.firstTransfer.setPosition(0.5);
-            robot.intake.setPower(1);
-        }
 
-        //reverse second transfer
-        if (gamepad2.dpad_left)
-        {
-            robot.intake.setPower(-1);
-            robot.intakeRoller.setPosition(0);
-            robot.firstTransfer.setPosition(0);
-            robot.secondTransfer.setPosition(0);
-        }
 
 
         // stop reverse all
@@ -231,19 +224,11 @@ public class chewy_Teleop extends OpMode {
             robot.intake.setPower(-1);
         }
 
-        // stop reverse firstTransfer
-        if (gamepad2.dpad_right)
-        {
-            robot.secondTransfer.setPosition(0.5);
-            robot.firstTransfer.setPosition(0.5);
-            robot.intake.setPower(-1);
-        }
-
         // Button to start the shooter
         if (gamepad2.left_bumper)
         {
-            robot.shooterRight.setPower(1.0);
-            robot.shooterLeft.setPower(-0.7);
+            robot.shooterRight.setPower(.6);
+            robot.shooterLeft.setPower(-0.6);
         }
 
         // Button to stop the shooter.
@@ -256,8 +241,8 @@ public class chewy_Teleop extends OpMode {
         //shooter slow speed
         if (gamepad2.dpad_down) {
 
-            robot.shooterRight.setPower(1.0);
-            robot.shooterLeft.setPower(-0.4);
+            robot.shooterRight.setPower(0.5);
+            robot.shooterLeft.setPower(-0.55);
         }
 
         //wobble grabber controls
@@ -288,14 +273,14 @@ public class chewy_Teleop extends OpMode {
         robot.wobbleGrabberOpenClose.setPosition(wobbleGrabberOpenClosePos);
 
         //auto collect/auto shoot
-        if (gamepad2.left_trigger > 0.5) {
-            autoCollect = true;
-        }
-        if (gamepad2.right_trigger > 0.5 ) {
-            autoCollect = false;
-        }
-        if (autoCollect)
-            runAutoCollect();
+//        if (gamepad2.left_trigger > 0.5) {
+//            autoCollect = true;
+//        }
+//        if (gamepad2.right_trigger > 0.5 ) {
+//            autoCollect = false;
+//        }
+//        if (autoCollect)
+//            runAutoCollect();
 
 //        runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5));
 
@@ -433,137 +418,8 @@ public class chewy_Teleop extends OpMode {
         return error;
     }
 
-    //Auto collect
-    double runAutoCollect(){
 
-        if (robot.topColor instanceof SwitchableLight) {
-            ((SwitchableLight)robot.topColor).enableLight(true);
-        }
-        if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0) {
-            robot.secondTransfer.setPosition(1);
-            robot.firstTransfer.setPosition(1);
-            robot.intake.setPower(1);
-        }else {
-            robot.secondTransfer.setPosition(0.5);
-            if (((DistanceSensor) robot.midColor).getDistance(DistanceUnit.CM) > 1.0) {
-                robot.secondTransfer.setPosition(0.5);
-                robot.firstTransfer.setPosition(1);
-                robot.intake.setPower(1);
-            }
-            else {
-                robot.firstTransfer.setPosition(0.5);
-                robot.intake.setPower(1);
-                robot.secondTransfer.setPosition(0.5);
-                if (((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
-                    robot.secondTransfer.setPosition(0.5);
-                    robot.firstTransfer.setPosition(0.5);
-                    robot.intake.setPower(1);  // Coach craig Feb 5, 2021. Lower sensor in wrong location.  Always leave intake on.
-                }
-                else {
-                    robot.intake.setPower(1);
-                }
-            }
-        }
-        return(0);
-
-    }
-
-    // Coach Example:
-    // This is a method to control auto collection.  It demonstrates STATE MACHINE design.
-    // state machines have define states and uses conditions to change between those states.
-    // Usage:
-    //      call this function from the main loop.  Pass to it 2 booleans to start and stop
-    //      the auto collection state machine.  Eample call:
-    //              runAutoCollectState( (gamepad2.left_trigger > 0.5) , (gamepad2.right_trigger > 0.5))
-
-    enum intakeStates {  // first define the possible states for the collection system
-        MANUAL,
-        EMPTY,
-        ONERING,
-        TWORING,
-        THREERING//  MARGARET need to add all other possible states in here.  Comma after except last one.
-    }
-    intakeStates intakeState = intakeStates.EMPTY;     // class variable to store the current state.
-
-    void runAutoCollectState(boolean startAuto, boolean stopAuto){
-
-        // first handle the starting the state machine
-        // if we are currently in MANUAL mode and told to start then move to next state.
-        // only move from MANUAL to EMPTY!  Don't allow start button to move any other states.
-        if (intakeState == intakeStates.MANUAL && startAuto) {
-            intakeState = intakeStates.EMPTY;
         }
 
-        // now see if driver wants to stop the auto collecting!
-        // they can go from any state direct to manual control!!!
-        // do we want to stop any of the motors if they go to manual?
-        if (stopAuto) {
-            intakeState = intakeStates.MANUAL;
-        }
-
-        // A switch statement will run one "case" until it reaches the line  "break;"
-        // this is the "core" of the statemachine work!
-        switch (intakeState) {
-            case MANUAL:    // drivers are controlling the intake so do NOTHING
-                // Common to have the if statemntes here to change states, but
-                // The main code will handle reading joystick and changing
-                // intakeState to EMPTY when joystick command is pressed.
-                break;  // Done so exit the SWITCH statement without doing other states!
-
-            case EMPTY:   // for EMTPY we need all motors & Servo's on!
-                robot.secondTransfer.setPosition(1);
-                robot.firstTransfer.setPosition(1);
-                robot.intake.setPower(1);
-                // now decide if we should change states
-                if (((DistanceSensor) robot.topColor).getDistance(DistanceUnit.CM) > 1.0) {
-                    intakeState = intakeStates.ONERING;
-                }
-                break;
-
-            case ONERING:
-                robot.secondTransfer.setPosition(0.5);
-                robot.firstTransfer.setPosition(1);
-                robot.intake.setPower(1);
-
-                if(((DistanceSensor) robot.midColor).getDistance(DistanceUnit.CM) > 1.0) {
-                    intakeState = intakeStates.TWORING;
-                }
-                break;
-
-            case TWORING:
-                robot.secondTransfer.setPosition(0.5);
-                robot.firstTransfer.setPosition(0.5);
-                robot.intake.setPower(1);
-
-                if(((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
-                    intakeState = intakeStates.THREERING;
-                }
-                break;
-
-            case THREERING:
-                robot.secondTransfer.setPosition(0.5);
-                robot.firstTransfer.setPosition(0.5);
-                robot.intake.setPower(0);
-
-                if(((DistanceSensor) robot.bottomColor).getDistance(DistanceUnit.CM) > 1.0) {
-                    intakeState = intakeStates.THREERING;
-                }
-                break;
 
 
-
-
-            // Margaret need to add a "Case" for all condition (TWORING, THTEERING etc)
-            // copy above example from case EMPTY:  to   break; and adjust as needed.
-
-            default:        //this is a catch all just incase we did not have a case for a state.
-                // turn it all off and set state to manual
-                robot.secondTransfer.setPosition(0.5);
-                robot.firstTransfer.setPosition(0.5);
-                robot.intake.setPower(0);
-                intakeState = intakeStates.MANUAL;
-                break;
-        }
-    }
-
-}
