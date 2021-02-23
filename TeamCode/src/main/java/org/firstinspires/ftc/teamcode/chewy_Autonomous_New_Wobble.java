@@ -102,7 +102,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         sleep(1000);
 
         // turn shooter first to rev up them
-        robot.shooterRight.setPower(1.0);
+        robot.shooterRight.setPower(1.0) ;
         robot.shooterLeft.setPower(-0.7);
 
         //move to intermediate pos
@@ -121,6 +121,27 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         //shoot powershot targets
         rapidFireDisks();
+
+        //pick up ring in one ring randomization
+        if (nRings == 1) {
+            //move to intermediate position before picking up ring up
+            goToPostion(37 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+
+            //pick up ring
+            goToPostion(42 * robot.COUNTS_PER_INCH, 48 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+
+            //intakes ring
+            intakeOneDisk();
+
+            //move to shooting spot
+            goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+
+            //wait to fully get thare
+            sleep(1000);
+
+            //shoot the disk
+            rapidFireOne();
+        }
 
         //for 4 and 1 rings avoid stack
         if (nRings == 4) {
@@ -158,7 +179,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         robot.wobbleGrabberOpenClose.setPosition(1.0);
 
         //park on launch line
-        goToPostion(60 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(58 * robot.COUNTS_PER_INCH, 90 * robot.COUNTS_PER_INCH, dRobotPower, 90, 3 * robot.COUNTS_PER_INCH, false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();

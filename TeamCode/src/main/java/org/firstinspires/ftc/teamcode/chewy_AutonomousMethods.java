@@ -698,7 +698,16 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
           sleep(250);
           robot.pusher.setPosition(1);
           sleep(250);
+          robot.pusher.setPosition(-1);
+
       }
+    }
+
+    public void  rapidFireOne()  {
+        robot.pusher.setPosition(-1);
+        sleep(250);
+        robot.pusher.setPosition(1);
+        sleep(250);
     }
 
     //shoot first disk
@@ -717,6 +726,13 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.secondTransfer.setPosition(1);
         robot.firstTransfer.setPosition(1);
         sleep (2000);
+    }
+
+    //intake one disk
+    public void intakeOneDisk(){
+      robot.intake.setPower(1);
+      robot.firstTransfer.setPosition(1);
+      robot.secondTransfer.setPosition(1);
     }
 
     //shoot third disk
