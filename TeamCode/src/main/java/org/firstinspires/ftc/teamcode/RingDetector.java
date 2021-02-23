@@ -112,7 +112,7 @@ public class RingDetector {
                 nRings = 1;
             }
         }
-        RobotLog.d("8620WGW nYellowPixels " + nYellowPixels);
+        RobotLog.d("8620WGW nYellowPixels " + nYellowPixels + "   rings= " + nRings);
         return nRings;
     }
 
