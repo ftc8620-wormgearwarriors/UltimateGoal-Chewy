@@ -211,7 +211,7 @@ public class chewy_Teleop extends OpMode {
         // stop reverse all
         if (gamepad2.dpad_up)
         {
-            robot.secondTransfer.setPosition(0.5);
+            robot.secondTransfer.setPosition(0);
             robot.firstTransfer.setPosition(0);
             robot.intake.setPower(-1);
         }
@@ -219,8 +219,8 @@ public class chewy_Teleop extends OpMode {
         // Button to start the shooter
         if (gamepad2.left_bumper)
         {
-            robot.shooterRight.setPower(.6);
-            robot.shooterLeft.setPower(-0.6);
+            robot.shooterRight.setPower(1);
+            robot.shooterLeft.setPower(-0.7);
         }
 
         // Button to stop the shooter.
