@@ -141,7 +141,13 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
             //shoot the disk
             rapidFireOne();
+
+            //turn off transports
+            robot.intake.setPower(0);
+            robot.firstTransfer.setPosition(0);
+            robot.secondTransfer.setPosition(0);
         }
+
 
         //for 4 and 1 rings avoid stack
         if (nRings == 4) {

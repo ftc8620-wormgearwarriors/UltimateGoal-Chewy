@@ -54,8 +54,37 @@ public class chewy_Autonomous_PowerShot extends chewy_AutonomousMethods{
         // set robot speed
         double dRobotPower = 0.9;
 
-        //drive to powershot location
-        goToPostion(60 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+        // turn shooter first to rev up them
+        robot.shooterRight.setPower(1.0) ;
+        robot.shooterLeft.setPower(-0.7);
+
+//        //drive to powershot location
+//        goToPostion(60 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+//        rapidFireDisks();
+
+
+//        // experiment with rotating to the correct spots
+//        //drive to power shot location with heading for left-most shot, then shoot and rotate to each new power shot
+//        goToPostion(60 * robot.COUNTS_PER_INCH, 66 * robot.COUNTS_PER_INCH, dRobotPower, -5, 1 * robot.COUNTS_PER_INCH, false);
+//        sleep(2000);
+//        rapidFireOne();
+//        goToPostion(60 * robot.COUNTS_PER_INCH, 66 * robot.COUNTS_PER_INCH, dRobotPower, 90, 1 * robot.COUNTS_PER_INCH, true);
+//        sleep(2000);
+//        rapidFireOne();
+//        goToPostion(60 * robot.COUNTS_PER_INCH, 66 * robot.COUNTS_PER_INCH, dRobotPower, 5, 1 * robot.COUNTS_PER_INCH, true);
+//        sleep(2000);
+//        rapidFireOne();
+
+
+        // experiment with driving to the correct spots
+        //drive to power shot location with heading for left-most shot, then shoot and rotate to each new power shot
+        goToPostion(52 * robot.COUNTS_PER_INCH, 66 * robot.COUNTS_PER_INCH, dRobotPower, 0, 1 * robot.COUNTS_PER_INCH, false);
+        rapidFireOne();
+        goToPostion(60 * robot.COUNTS_PER_INCH, 66 * robot.COUNTS_PER_INCH, dRobotPower, 0, 1 * robot.COUNTS_PER_INCH, false);
+        rapidFireOne();
+        goToPostion(68 * robot.COUNTS_PER_INCH, 66 * robot.COUNTS_PER_INCH, dRobotPower, 0, 1 * robot.COUNTS_PER_INCH, false);
+        rapidFireOne();
+
     }
 
 
