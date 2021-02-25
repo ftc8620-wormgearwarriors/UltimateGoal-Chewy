@@ -102,6 +102,10 @@ public class chewy_Teleop extends OpMode {
         telemetry.addData("wobbleGrabberOpenClose", String.format ("%.05f", wobbleGrabberOpenClosePos));
         telemetry.addData("Left Range", robot.leftRange.cmUltrasonic());
         telemetry.addData("front range", String.format("%.01f cm", robot.frontRange.getDistance(DistanceUnit.CM)));
+        telemetry.addData("FL motor speed", robot.frontLeftDrive.getPower());
+        telemetry.addData("FR motor speed", robot.frontRightDrive.getPower());
+        telemetry.addData("BL motor speed", robot.backLeftDrive.getPower());
+        telemetry.addData("BR motor speed", robot.backRightDrive.getPower());
 
         telemetry.update();
 
@@ -161,13 +165,21 @@ public class chewy_Teleop extends OpMode {
         }
 
         if (gamepad1.right_bumper) {    //high goal
-            shootingSpot (183,1,61);
+            shootingSpot (183,1,61, 90);
+            robot.shooterRight.setPower(1);
+            robot.shooterLeft.setPower(-0.75);
         } else if (gamepad1.x) {        //left power shot
-            shootingSpot(150,0.5,120);
+            shootingSpot(150,1,120, 95);               //distance: 150, gap: 111
+            robot.shooterRight.setPower(0.8);
+            robot.shooterLeft.setPower(-0.65);
         } else if (gamepad1.a) {        //middle power shot
-            shootingSpot(150,0.5,127);
+            shootingSpot(150,1,120, 90);            //distance: 150, gap: 120
+            robot.shooterRight.setPower(0.8);
+            robot.shooterLeft.setPower(-0.65);
         } else if (gamepad1.b){         //right power shot
-            shootingSpot(150,0.5,149.86);
+            shootingSpot(152,1,120, 84);           //distance: 150, gap: 129
+            robot.shooterRight.setPower(0.8);
+            robot.shooterLeft.setPower(-0.65);
         } else {                       //manual
             robot.frontLeftDrive.setPower(frontLeft);
             robot.frontRightDrive.setPower(frontRight);
@@ -233,8 +245,8 @@ public class chewy_Teleop extends OpMode {
         //shooter slow speed
         if (gamepad2.dpad_down) {
 
-            robot.shooterRight.setPower(0.5);
-            robot.shooterLeft.setPower(-0.55);
+            robot.shooterRight.setPower(0.8);
+            robot.shooterLeft.setPower(-0.65);
         }
 
         //wobble grabber controls
@@ -276,11 +288,10 @@ public class chewy_Teleop extends OpMode {
     double  minVel              = 0.1;
     double  vel                 = minVel;
     double  oldVel              = minVel;
-    public double shootingSpot (double distance, double maxVel, double gapDistance) {
-        double  targetHeading       = 90;
+    public double shootingSpot (double distance, double maxVel, double gapDistance,double targetHeading) {
         double  kpTurn              = 0.05;
-        double  kpDistance          = 0.01;
-        double  kpGap               = 0.01; //was 0.03
+        double  kpDistance          = 0.05;
+        double  kpGap               = 0.05; //was 0.03
         double  accel               = 0.03;
 
 
