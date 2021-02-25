@@ -163,18 +163,18 @@ public class chewy_Teleop extends OpMode {
         if (gamepad1.right_bumper) {    //high goal
             shootingSpot (183,1,61);
         } else if (gamepad1.x) {        //left power shot
-            shootingSpot(167.76,0.5,99.06);
+            shootingSpot(150,0.5,120);
         } else if (gamepad1.a) {        //middle power shot
-            shootingSpot(167.76,0.5,127);
+            shootingSpot(150,0.5,127);
         } else if (gamepad1.b){         //right power shot
-            shootingSpot(167.76,0.5,149.86);
+            shootingSpot(150,0.5,149.86);
         } else {                       //manual
             robot.frontLeftDrive.setPower(frontLeft);
             robot.frontRightDrive.setPower(frontRight);
             robot.backLeftDrive.setPower(backLeft);
             robot.backRightDrive.setPower(backRight);
         }
-        
+
 
         //gamepad 2
 
@@ -211,7 +211,7 @@ public class chewy_Teleop extends OpMode {
         // stop reverse all
         if (gamepad2.dpad_up)
         {
-            robot.secondTransfer.setPosition(0.5);
+            robot.secondTransfer.setPosition(0);
             robot.firstTransfer.setPosition(0);
             robot.intake.setPower(-1);
         }
@@ -219,8 +219,8 @@ public class chewy_Teleop extends OpMode {
         // Button to start the shooter
         if (gamepad2.left_bumper)
         {
-            robot.shooterRight.setPower(.6);
-            robot.shooterLeft.setPower(-0.6);
+            robot.shooterRight.setPower(1);
+            robot.shooterLeft.setPower(-0.7);
         }
 
         // Button to stop the shooter.
