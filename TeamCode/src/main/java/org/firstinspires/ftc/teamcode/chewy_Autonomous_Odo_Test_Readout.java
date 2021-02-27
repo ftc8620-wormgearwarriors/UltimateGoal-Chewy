@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+@Disabled
 
 @Autonomous(name = "chewy_Autonomous_Odo_Test_Readout")
 public class chewy_Autonomous_Odo_Test_Readout extends chewy_AutonomousMethods {

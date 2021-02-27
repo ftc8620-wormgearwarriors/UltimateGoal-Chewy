@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * Created by Sarthak on 10/4/2019.
  */
+@Disabled
+
 @Autonomous(name = "MeetOneChewyAuto")
 public class chewyAutoMeet1 extends chewy_AutonomousMethods {
 

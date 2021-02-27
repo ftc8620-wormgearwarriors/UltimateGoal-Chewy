@@ -63,7 +63,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         RingDetector ringDetector = new RingDetector(vuforia);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(220, 380, 100, 240);
+        ringDetector.setCropBox(220, 380, 95, 240);
 
 
         // do method based on counting "yellow pixels"
@@ -92,7 +92,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         if (nRings == 4) {
             goToPostion(24 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
-            goToPostion(51 * robot.COUNTS_PER_INCH, 115 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(51 * robot.COUNTS_PER_INCH, 116 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
             goToPostion(24 * robot.COUNTS_PER_INCH, 92 * robot.COUNTS_PER_INCH, dRobotPower,  0, 3 * robot.COUNTS_PER_INCH, false);
         }
@@ -123,15 +123,16 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         rapidFireDisks();
 
         //pick up ring in one ring randomization
-        if (nRings == 1) {
+        if ((nRings == 1) || (nRings == 4)  ) {
+
+            //turn intake on
+            intakeOneDisk();
+
             //move to intermediate position before picking up ring up
-            goToPostion(37 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(36 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
             //pick up ring
-            goToPostion(42 * robot.COUNTS_PER_INCH, 48 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
-
-            //intakes ring
-            intakeOneDisk();
+            goToPostion(37 * robot.COUNTS_PER_INCH, 42 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
             //move to shooting spot
             goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
@@ -140,13 +141,41 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
             sleep(1000);
 
             //shoot the disk
-            rapidFireOne();
+            rapidFireDisks();
 
             //turn off transports
             robot.intake.setPower(0);
             robot.firstTransfer.setPosition(0);
             robot.secondTransfer.setPosition(0);
         }
+
+
+//        if (nRings == 4) {
+//
+//            //turn intake on
+//            intakeOneDisk();
+//
+//            //move to intermediate position before picking up ring up
+//            goToPostion(36 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+//
+//            //pick up ring
+//            goToPostion(37 * robot.COUNTS_PER_INCH, 46 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+//            sleep(1000);
+//
+//            //move to shooting spot
+//            goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+//
+//            //wait to fully get thare
+//            sleep(1000);
+//
+//            //shoot the disk
+//            rapidFireOne();
+//
+//            //turn off transports
+//            robot.intake.setPower(0);
+//            robot.firstTransfer.setPosition(0);
+//            robot.secondTransfer.setPosition(0);
+//        }
 
 
         //for 4 and 1 rings avoid stack
@@ -170,7 +199,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         } else if (nRings == 1){
 
             //drive to targetzone for 1 rings
-            goToPostion(51 * robot.COUNTS_PER_INCH,115 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
+            goToPostion(51 * robot.COUNTS_PER_INCH,116 * robot.COUNTS_PER_INCH, dRobotPower,90,3 * robot.COUNTS_PER_INCH,false);
             dropWobbleGoal();
 
         } else if (nRings == 4) {

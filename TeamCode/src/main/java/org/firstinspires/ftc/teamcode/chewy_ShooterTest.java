@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * Created by Sarthak on 10/4/2019.
  */
+@Disabled
+
 @Autonomous(name = "Shooter Test")
 public class chewy_ShooterTest extends chewy_AutonomousMethods {
 

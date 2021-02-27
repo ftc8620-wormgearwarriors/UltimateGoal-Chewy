@@ -40,7 +40,7 @@ public class chewy_Camera_Test extends chewy_AutonomousMethods {
         RingDetector ringDetector = new RingDetector(vuforia);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(220, 380, 100, 240);
+        ringDetector.setCropBox(220, 380, 95, 240);
 
 
         // do method based on counting "yellow pixels"
