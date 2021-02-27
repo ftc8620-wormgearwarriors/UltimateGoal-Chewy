@@ -92,7 +92,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         if (nRings == 4) {
             goToPostion(24 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
-            goToPostion(51 * robot.COUNTS_PER_INCH, 116 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(51 * robot.COUNTS_PER_INCH, 114 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
             goToPostion(24 * robot.COUNTS_PER_INCH, 92 * robot.COUNTS_PER_INCH, dRobotPower,  0, 3 * robot.COUNTS_PER_INCH, false);
         }
@@ -180,9 +180,9 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         //for 4 and 1 rings avoid stack
         if (nRings == 4) {
-            goToPostion(18 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
+            goToPostion(17 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
         }else if (nRings == 1) {
-            goToPostion(18 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
+            goToPostion(17 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
         }
         //second wobble
 

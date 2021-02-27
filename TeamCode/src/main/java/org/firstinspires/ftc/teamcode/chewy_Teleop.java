@@ -252,13 +252,13 @@ public class chewy_Teleop extends OpMode {
         //wobble grabber controls
         if (gamepad2.left_stick_y > 0.5) {
             if (wobbleGrabberUpDownPos > wobbleGrabberUpDownMinPos) {
-                wobbleGrabberUpDownPos -= 0.001;
+                wobbleGrabberUpDownPos -= 0.005;
 
             }
         }
         if (gamepad2.left_stick_y < -0.5) {
             if (wobbleGrabberUpDownPos < wobbleGrabberUpDownMaxPos) {
-                wobbleGrabberUpDownPos += 0.001;
+                wobbleGrabberUpDownPos += 0.005;
             }
         }
         robot.wobbleGrabberUpDown.setPosition(wobbleGrabberUpDownPos);
