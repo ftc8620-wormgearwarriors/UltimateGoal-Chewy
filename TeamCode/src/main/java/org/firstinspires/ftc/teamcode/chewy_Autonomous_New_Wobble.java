@@ -129,10 +129,10 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
             intakeOneDisk();
 
             //move to intermediate position before picking up ring up
-            goToPostion(36 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(35 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
             //pick up ring
-            goToPostion(37 * robot.COUNTS_PER_INCH, 42 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(36 * robot.COUNTS_PER_INCH, 42 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
             //move to shooting spot
             goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
