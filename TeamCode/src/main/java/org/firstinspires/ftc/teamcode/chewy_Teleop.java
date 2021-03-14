@@ -290,7 +290,7 @@ public class chewy_Teleop extends OpMode {
     double  oldVel              = minVel;
     public double shootingSpot (double distance, double maxVel, double gapDistance,double targetHeading) {
         double  kpTurn              = 0.05;
-        double  kpDistance          = 0.05;
+        double  kpDistance          = 0.015;
         double  kpGap               = 0.05; //was 0.03
         double  accel               = 0.03;
 
