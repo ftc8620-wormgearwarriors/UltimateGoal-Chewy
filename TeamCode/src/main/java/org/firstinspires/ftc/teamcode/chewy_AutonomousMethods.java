@@ -546,7 +546,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
         PIDController pidDrive;
 
-        pidDrive = new PIDController(1 / (15 * robot.COUNTS_PER_INCH), 1 / (30000 * robot.COUNTS_PER_INCH), 0); //P was 1/60
+        pidDrive = new PIDController(1 / (25 * robot.COUNTS_PER_INCH), 1 / (30000 * robot.COUNTS_PER_INCH), 0); //P was 1/60
 
 
         pidDrive.reset();
@@ -559,7 +559,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
         PIDController pidStrafe;
 
-        pidStrafe = new PIDController(1 / (8 * robot.COUNTS_PER_INCH), 1 / (2000 * robot.COUNTS_PER_INCH), 0);
+        pidStrafe = new PIDController(1 / (12 * robot.COUNTS_PER_INCH), 1 / (2000 * robot.COUNTS_PER_INCH), 0);
 
 
         pidStrafe.reset();

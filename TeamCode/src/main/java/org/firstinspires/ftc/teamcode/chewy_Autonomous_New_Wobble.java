@@ -83,14 +83,14 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         telemetry.update();
 
         // set robot speed
-        double dRobotPower = 0.9;
+        double dRobotPower = 0.8;
 
         //driving to intermediate pos before first drop zone
-        goToPostion(54 * robot.COUNTS_PER_INCH, 60 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
+        goToPostion(55 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
 
         //drive and turn to drop wobble goal based on # of rings
         if (nRings == 4) {
-            goToPostion(24 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(25 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, 0.75, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
             goToPostion(51 * robot.COUNTS_PER_INCH, 114 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
@@ -113,7 +113,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         }
 
         //Drive to lanch line-shooting pos
-        goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+        goToPostion(42 * robot.COUNTS_PER_INCH, 61 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
         // positioning to set up to grab second wobble
         robot.wobbleGrabberOpenClose.setPosition(1.0);
@@ -122,31 +122,35 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         //shoot powershot targets
         rapidFireDisks();
 
-        //pick up ring in one ring randomization
+        //pick up ring in one ring/four rings randomization
         if ((nRings == 1) || (nRings == 4)  ) {
 
             //turn intake on
             intakeOneDisk();
 
-            //move to intermediate position before picking up ring up
-            goToPostion(35 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            //move to intermediate position before picking ring up
+            goToPostion(38 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
             //pick up ring
-            goToPostion(36 * robot.COUNTS_PER_INCH, 42 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(38 * robot.COUNTS_PER_INCH, 42 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
             //move to shooting spot
-            goToPostion(42 * robot.COUNTS_PER_INCH, 64 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(42 * robot.COUNTS_PER_INCH, 61 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
 
-            //wait to fully get thare
+            //wait to fully get there
             sleep(1000);
 
             //shoot the disk
             rapidFireDisks();
 
             //turn off transports
-            robot.intake.setPower(0);
-            robot.firstTransfer.setPosition(0);
-            robot.secondTransfer.setPosition(0);
+            robot.intake.setPower(0.5);
+            robot.firstTransfer.setPosition(0.5);
+            robot.secondTransfer.setPosition(0.5);
+
+            //turn shooter off
+            robot.shooterLeft.setPower(0);
+            robot.shooterRight.setPower(0);
         }
 
 
@@ -187,7 +191,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         //second wobble
 
         //goes to pickup position and grabs second goal
-        goToPostion(21.5 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower, 0, 1 * robot.COUNTS_PER_INCH, false);
+        goToPostion(21.5 * robot.COUNTS_PER_INCH, 37 * robot.COUNTS_PER_INCH, dRobotPower - 0.2, 0, 3 * robot.COUNTS_PER_INCH, false);
         pickUpWobbleGoal();
 
         if (nRings == 0) {
