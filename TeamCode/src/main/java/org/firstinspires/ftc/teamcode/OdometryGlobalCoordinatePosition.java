@@ -132,6 +132,16 @@ public class OdometryGlobalCoordinatePosition implements Runnable {
         return (horizontalEncoder.getCurrentPosition() * normalEncoderPositionMultiplier);
     }
 
+    public double returnEncoderWheelDistance() {
+        return robotEncoderWheelDistance;
+    }
+
+    public double returnHorizontalEncoderTickPerDegreeOffset() {
+        return horizontalEncoderTickPerDegreeOffset;
+    }
+
+
+
     /**
      * Stops the position update thread
      */

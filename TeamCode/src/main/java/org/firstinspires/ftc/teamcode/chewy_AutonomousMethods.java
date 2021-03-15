@@ -499,9 +499,6 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.horizontal.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        telemetry.addData("Status", "Odometry Init Complete");
-        telemetry.update();
-
         //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions
         robot.globalPositionUpdate = new OdometryGlobalCoordinatePosition(robot.verticalLeft, robot.verticalRight, robot.horizontal, robot.COUNTS_PER_INCH, x * robot.COUNTS_PER_INCH, y * robot.COUNTS_PER_INCH, heading, 75); //(135,111) orientation 90
         robot.positionThread = new Thread(robot.globalPositionUpdate);
@@ -510,11 +507,13 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         robot.globalPositionUpdate.reverseRightEncoder();
         //robot.globalPositionUpdate.reverseNormalEncoder();
 
+        telemetry.addData("Status", "Odometry Init Complete");
+        telemetry.update();
     }
 
 
     public void goToPostion(double targetXPostion, double targetYPosition, double robotPower, double desiredRobotOrientation, double allowableDistanceError, boolean pivot) {
-
+        RobotLog.d("8620WGW goToPosition Start ***  EncoderWheelDistance = " + robot.globalPositionUpdate.returnEncoderWheelDistance() + "  horizontalEncoderTickPerDegreeOffset = " + robot.globalPositionUpdate.returnHorizontalEncoderTickPerDegreeOffset());
         double distanceToXTarget = targetXPostion - robot.globalPositionUpdate.returnXCoordinate();
         double distanceToYTarget = targetYPosition - robot.globalPositionUpdate.returnYCoordinate();
 
@@ -574,7 +573,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
         double startTime = getRuntime();
 
-
+        RobotLog.d("8620WGW goToPosition,xTarg,yTarg,ATarg,x,y,A,X_err,Y_err,A_err,dist Error,outX,outY,outA" );  // colmun headings, make sure they match the output in the while loop
         while (opModeIsActive() && (distance > allowableDistanceError || !pidRotate.onTarget())) {
             if (!robot.globalPositionUpdate.getNewData())
                 continue;
@@ -614,10 +613,10 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
             pivotCorrection = pidRotate.performPID(robot.globalPositionUpdate.returnOrientation()); // power will be - on right turn.
 
-            double frontLeftPower = robot_movement_y_component + robot_movement_x_component + pivotCorrection;
+            double frontLeftPower  = robot_movement_y_component + robot_movement_x_component + pivotCorrection;
             double frontRightPower = robot_movement_y_component - robot_movement_x_component - pivotCorrection;
-            double backLeftPower = robot_movement_y_component - robot_movement_x_component + pivotCorrection;
-            double backRightPower = robot_movement_y_component + robot_movement_x_component - pivotCorrection;
+            double backLeftPower   = robot_movement_y_component - robot_movement_x_component + pivotCorrection;
+            double backRightPower  = robot_movement_y_component + robot_movement_x_component - pivotCorrection;
 
             double max = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower)),
                     Math.max(Math.abs(frontRightPower), Math.abs(backRightPower)));
@@ -632,21 +631,43 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
             robot.backRightDrive.setPower(backRightPower);
             robot.frontLeftDrive.setPower(frontLeftPower);
             robot.backLeftDrive.setPower(backLeftPower);
-            RobotLog.d("8620WGW goToPosition " +
-                    "  x = " + robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH +
-                    "  y = " + robot.globalPositionUpdate.returnYCoordinate() / robot.COUNTS_PER_INCH +
-                    "  angle =" + robot.globalPositionUpdate.returnOrientation() +
-                    "  angle_error =" + pidRotate.getError() +
-                    "  Y_error =" + distanceToYTarget / robot.COUNTS_PER_INCH +
-                    "  X_error =" + distanceToXTarget / robot.COUNTS_PER_INCH +
-                    "  distance Error =" + distance / robot.COUNTS_PER_INCH +
-                    "  cX =" + cX +
-                    "  cY =" + cY);
+//            RobotLog.d("8620WGW goToPosition " +
+//                    "  xTarg = " + targetXPostion  / robot.COUNTS_PER_INCH +
+//                    "  yTarg = " + targetYPosition / robot.COUNTS_PER_INCH +
+//                    "  ATarg = " + desiredRobotOrientation +
+//                    "  x = " + robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH +
+//                    "  y = " + robot.globalPositionUpdate.returnYCoordinate() / robot.COUNTS_PER_INCH +
+//                    "  angle = " + robot.globalPositionUpdate.returnOrientation() +
+//                    "  X_error = " + distanceToXTarget / robot.COUNTS_PER_INCH +
+//                    "  Y_error = " + distanceToYTarget / robot.COUNTS_PER_INCH +
+//                    "  angle_error = " + pidRotate.getError() +
+//                    "  distance Error = " + distance / robot.COUNTS_PER_INCH +
+//                    "  outX = " + robot_movement_x_component +
+//                    "  outY = " + robot_movement_y_component +
+//                    "  outT = " + pivotCorrection);
+
+            //  this robotlog is intended for importing to excel or other in CSV format.  Make sure these match the column names sent above the this WHILE loop.
+            RobotLog.d("8620WGW goToPosition," +
+                    targetXPostion  / robot.COUNTS_PER_INCH + "," +
+                    targetYPosition / robot.COUNTS_PER_INCH + "," +
+                    desiredRobotOrientation + "," +
+                    robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH + "," +
+                    robot.globalPositionUpdate.returnYCoordinate() / robot.COUNTS_PER_INCH + "," +
+                    robot.globalPositionUpdate.returnOrientation() + "," +
+                    distanceToXTarget / robot.COUNTS_PER_INCH + "," +
+                    distanceToYTarget / robot.COUNTS_PER_INCH + "," +
+                    pidRotate.getError() + "," +
+                    distance / robot.COUNTS_PER_INCH + "," +
+                    robot_movement_x_component + "," +
+                    robot_movement_y_component + "," +
+                    pivotCorrection + ","
+                    );
         }
         robot.frontRightDrive.setPower(0);
         robot.frontLeftDrive.setPower(0);
         robot.backRightDrive.setPower(0);
         robot.backLeftDrive.setPower(0);
+        RobotLog.d("8620WGW goToPosition end  **************");
     }
 
 
