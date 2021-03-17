@@ -53,6 +53,9 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
 
         /** Wait for the game to begin */
+        telemetry.addData("X Position", robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH);
+        telemetry.addData("Y Position", robot.globalPositionUpdate.returnYCoordinate() / robot.COUNTS_PER_INCH);
+        telemetry.addData("Heading", robot.globalPositionUpdate.returnOrientation());
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
@@ -86,11 +89,11 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         double dRobotPower = 0.8;
 
         //driving to intermediate pos before first drop zone
-        goToPostion(55 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
+        goToPostion(55 * robot.COUNTS_PER_INCH, 130 /*was130*/ * robot.COUNTS_PER_INCH, dRobotPower, 0, 9 * robot.COUNTS_PER_INCH, false);
 
         //drive and turn to drop wobble goal based on # of rings
         if (nRings == 4) {
-            goToPostion(25 * robot.COUNTS_PER_INCH, 134 * robot.COUNTS_PER_INCH, 0.75, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(25 * robot.COUNTS_PER_INCH, 130 * robot.COUNTS_PER_INCH, 0.75, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
             goToPostion(51 * robot.COUNTS_PER_INCH, 114 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {

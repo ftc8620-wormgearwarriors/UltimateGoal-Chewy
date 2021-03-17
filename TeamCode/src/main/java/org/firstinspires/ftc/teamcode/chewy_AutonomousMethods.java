@@ -483,6 +483,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
 
     //Odometry Section
+    int odometryThreadTime = 50; // How often should we run odomerty thread in mS milliseconds?  Changed from 75 to 50 on 3/16/2021
     public void initOdometryHardware(double x, double y, double heading) {
 
 //        robot.verticalLeft = hardwareMap.dcMotor.get("frontRightDrive");
@@ -500,7 +501,7 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
 
         //Create and start GlobalCoordinatePosition thread to constantly update the global coordinate positions
-        robot.globalPositionUpdate = new OdometryGlobalCoordinatePosition(robot.verticalLeft, robot.verticalRight, robot.horizontal, robot.COUNTS_PER_INCH, x * robot.COUNTS_PER_INCH, y * robot.COUNTS_PER_INCH, heading, 75); //(135,111) orientation 90
+        robot.globalPositionUpdate = new OdometryGlobalCoordinatePosition(robot.verticalLeft, robot.verticalRight, robot.horizontal, robot.COUNTS_PER_INCH, x * robot.COUNTS_PER_INCH, y * robot.COUNTS_PER_INCH, heading, odometryThreadTime); //(135,111) orientation 90
         robot.positionThread = new Thread(robot.globalPositionUpdate);
         robot.positionThread.start();
         robot.globalPositionUpdate.reverseLeftEncoder();
@@ -573,10 +574,31 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
         double startTime = getRuntime();
 
+        // added next items for debug Coach Craig
+        double loopTimer = getRuntime();
+        double loopCount = 0;
+        double notReadyCnt = 0;
+        double loopTook2LongCount = 0;
+        double thisTime;
+        double maxTime = 0;
+        // End items for debug  Coach Craig
+
+
         RobotLog.d("8620WGW goToPosition,xTarg,yTarg,ATarg,x,y,A,X_err,Y_err,A_err,dist Error,outX,outY,outA" );  // colmun headings, make sure they match the output in the while loop
         while (opModeIsActive() && (distance > allowableDistanceError || !pidRotate.onTarget())) {
-            if (!robot.globalPositionUpdate.getNewData())
+            if (!robot.globalPositionUpdate.getNewData()) {
+                notReadyCnt++;
                 continue;
+            }
+
+            // added next  items for debug Coach Craig
+            loopCount++;        // count how many times we go through loop
+            thisTime = getRuntime() - loopTimer;
+            if (thisTime > 0.100)       // did the loop take to long?
+                loopTook2LongCount++;
+            loopTimer = getRuntime();    // reset the counter
+            maxTime = Math.max(maxTime, thisTime);
+            // End items for debug  Coach Craig
 
             angleError = angleError180(robot.globalPositionUpdate.returnOrientation(), desiredRobotOrientation);
 
@@ -646,28 +668,29 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 //                    "  outY = " + robot_movement_y_component +
 //                    "  outT = " + pivotCorrection);
 
-            //  this robotlog is intended for importing to excel or other in CSV format.  Make sure these match the column names sent above the this WHILE loop.
-            RobotLog.d("8620WGW goToPosition," +
-                    targetXPostion  / robot.COUNTS_PER_INCH + "," +
-                    targetYPosition / robot.COUNTS_PER_INCH + "," +
-                    desiredRobotOrientation + "," +
-                    robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH + "," +
-                    robot.globalPositionUpdate.returnYCoordinate() / robot.COUNTS_PER_INCH + "," +
-                    robot.globalPositionUpdate.returnOrientation() + "," +
-                    distanceToXTarget / robot.COUNTS_PER_INCH + "," +
-                    distanceToYTarget / robot.COUNTS_PER_INCH + "," +
-                    pidRotate.getError() + "," +
-                    distance / robot.COUNTS_PER_INCH + "," +
-                    robot_movement_x_component + "," +
-                    robot_movement_y_component + "," +
-                    pivotCorrection + ","
-                    );
+//            //  this robotlog is intended for importing to excel or other in CSV format.  Make sure these match the column names sent above the this WHILE loop.
+//            RobotLog.d("8620WGW goToPosition," +
+//                    targetXPostion  / robot.COUNTS_PER_INCH + "," +
+//                    targetYPosition / robot.COUNTS_PER_INCH + "," +
+//                    desiredRobotOrientation + "," +
+//                    robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH + "," +
+//                    robot.globalPositionUpdate.returnYCoordinate() / robot.COUNTS_PER_INCH + "," +
+//                    robot.globalPositionUpdate.returnOrientation() + "," +
+//                    distanceToXTarget / robot.COUNTS_PER_INCH + "," +
+//                    distanceToYTarget / robot.COUNTS_PER_INCH + "," +
+//                    pidRotate.getError() + "," +
+//                    distance / robot.COUNTS_PER_INCH + "," +
+//                    robot_movement_x_component + "," +
+//                    robot_movement_y_component + "," +
+//                    pivotCorrection + ","
+//                    );
+                sleep(odometryThreadTime); // added by coach Craig on 3/16/2021
         }
         robot.frontRightDrive.setPower(0);
         robot.frontLeftDrive.setPower(0);
         robot.backRightDrive.setPower(0);
         robot.backLeftDrive.setPower(0);
-        RobotLog.d("8620WGW goToPosition end  **************");
+        RobotLog.d("8620WGW goToPosition end **  loopcnt="+loopCount+"  Long loops="+loopTook2LongCount +"  Not Ready=" + notReadyCnt +  "  maxtime =" + maxTime);
     }
 
 
