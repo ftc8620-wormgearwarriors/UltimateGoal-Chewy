@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -873,5 +873,28 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
         }
     }
 
+
+    public  void posReset() {
+        //defining var and converting to inches
+        double leftRange = robot.leftRange.cmUltrasonic() / 2.54;
+        telemetry.addData("old pos",robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH);
+
+        //updating x pos
+        robot.globalPositionUpdate.setRobotGlobalX(leftRange * robot.COUNTS_PER_INCH);
+
+        //show in telemetry
+        telemetry.addData("new pos",leftRange);
+        telemetry.update();
+
+        //waiting
+        sleep(3000);
+    }
+
+
+
+
+
+
 }
+
 

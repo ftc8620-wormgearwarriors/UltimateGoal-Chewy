@@ -93,7 +93,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
         //drive and turn to drop wobble goal based on # of rings
         if (nRings == 4) {
-            goToPostion(25 * robot.COUNTS_PER_INCH, 130 * robot.COUNTS_PER_INCH, 0.75, 0, 3 * robot.COUNTS_PER_INCH, false);
+            goToPostion(25 * robot.COUNTS_PER_INCH, 132 * robot.COUNTS_PER_INCH, 0.75, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else if (nRings == 1) {
             goToPostion(51 * robot.COUNTS_PER_INCH, 114 * robot.COUNTS_PER_INCH, dRobotPower, 0, 3 * robot.COUNTS_PER_INCH, false);
         } else {
@@ -122,8 +122,11 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         robot.wobbleGrabberOpenClose.setPosition(1.0);
         robot.wobbleGrabberUpDown.setPosition(0.35);
 
-        //shoot powershot targets
+        //shoot goal targets
         rapidFireDisks();
+
+        //resetting x position
+        posReset();
 
         //pick up ring in one ring/four rings randomization
         if ((nRings == 1) || (nRings == 4)  ) {

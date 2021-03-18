@@ -181,6 +181,10 @@ public class OdometryGlobalCoordinatePosition implements Runnable {
         robotOrientationRadians = Math.toRadians(theta);
     }
 
+    public void setRobotGlobalX(double x){
+        robotGlobalXCoordinatePosition = x;
+    }
+
     public boolean getNewData(){
         boolean returnValue = newData;
         newData = false;
