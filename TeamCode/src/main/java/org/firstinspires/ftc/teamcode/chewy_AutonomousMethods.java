@@ -874,22 +874,40 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
     }
 
 
-    public  void posReset() {
+    public  void posReset(double sensorOffset) {
         //defining var and converting to inches
         double leftRange = robot.leftRange.cmUltrasonic() / 2.54;
         telemetry.addData("old pos",robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH);
 
         //updating x pos
-        robot.globalPositionUpdate.setRobotGlobalX(leftRange * robot.COUNTS_PER_INCH);
+        robot.globalPositionUpdate.setRobotGlobalX((leftRange + sensorOffset) * robot.COUNTS_PER_INCH);
 
         //show in telemetry
         telemetry.addData("new pos",leftRange);
         telemetry.update();
 
         //waiting
-        sleep(3000);
+        //sleep(3000);
     }
 
+    public void robotPosInfo() {
+        //displaying range sensor distance from wall
+        double leftRange = robot.leftRange.cmUltrasonic() / 2.54;
+        telemetry.addData("Range Sensor Distance", leftRange);
+
+        //displaying current odometry x coordinate
+        telemetry.addData("Odometry X Coordinate",robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH);
+
+        //displaying current imu heading
+        double gyroHeadingIMU = robot.imu.getHeading();
+        telemetry.addData("IMU Heading", gyroHeadingIMU);
+
+        //displaying current odometry heading
+        double gyroHeadingOdometry = robot.globalPositionUpdate.returnOrientation();
+        telemetry.addData("Odometry Heading", gyroHeadingOdometry);
+
+        telemetry.update();
+    }
 
 
 
