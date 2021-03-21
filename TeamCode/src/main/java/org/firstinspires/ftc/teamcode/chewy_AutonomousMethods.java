@@ -876,15 +876,43 @@ public class chewy_AutonomousMethods extends LinearOpMode {    // IMPORTANT: If 
 
     public  void posReset(double sensorOffset) {
         //defining var and converting to inches
-        double leftRange = robot.leftRange.cmUltrasonic() / 2.54;
-        telemetry.addData("old pos",robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH);
+        double leftRange = (robot.leftRange.cmUltrasonic() / 2.54) + sensorOffset;
+        double xOdometry = robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH;
+        double dThreshold = 12;
+        double dDifference = Math.abs(leftRange - xOdometry);
+        int nCount = 0;
+        int maxCount = 10;
+        boolean goodMeasurement = false;
+
+        if (dDifference < dThreshold){
+            goodMeasurement = true;
+        }
+        else {
+            while (dDifference > dThreshold) {
+                leftRange = (robot.leftRange.cmUltrasonic() / 2.54) + sensorOffset;
+                dDifference = Math.abs(leftRange - xOdometry);
+                if (dDifference < dThreshold){
+                    goodMeasurement = true;
+                    break;
+                }
+                nCount++;
+                if (nCount > maxCount) {
+                    break;
+                }
+            }
+        }
+
+
+//        telemetry.addData("old pos",robot.globalPositionUpdate.returnXCoordinate() / robot.COUNTS_PER_INCH);
 
         //updating x pos
-        robot.globalPositionUpdate.setRobotGlobalX((leftRange + sensorOffset) * robot.COUNTS_PER_INCH);
+        if (goodMeasurement){
+            robot.globalPositionUpdate.setRobotGlobalX((leftRange) * robot.COUNTS_PER_INCH);
+        }
 
-        //show in telemetry
-        telemetry.addData("new pos",leftRange);
-        telemetry.update();
+//        //show in telemetry
+//        telemetry.addData("new pos",leftRange);
+//        telemetry.update();
 
         //waiting
         //sleep(3000);
