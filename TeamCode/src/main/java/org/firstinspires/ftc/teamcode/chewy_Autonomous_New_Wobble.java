@@ -161,7 +161,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
             rapidFireDisks();
 
             //turn off transports
-            robot.intake.setPower(0.5);
+            robot.intake.setPower(0);
             robot.firstTransfer.setPosition(0.5);
             robot.secondTransfer.setPosition(0.5);
 
