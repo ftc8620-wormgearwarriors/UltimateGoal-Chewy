@@ -35,18 +35,37 @@ public class openHouseChewy extends chewy_AutonomousMethods {
 
         //go forward to first turn
         goToPostion(36 * robot.COUNTS_PER_INCH,33 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
-        goToPostion(36 * robot.COUNTS_PER_INCH,33 * robot.COUNTS_PER_INCH,0.5,90,3 * robot.COUNTS_PER_INCH,true);
+      // goToPostion();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //turn and go to next turn
-        goToPostion(60 * robot.COUNTS_PER_INCH,33 * robot.COUNTS_PER_INCH,0.5,90,3 * robot.COUNTS_PER_INCH,false);
-        goToPostion(60 * robot.COUNTS_PER_INCH,33 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,true);
-        //turn and go to next
-        goToPostion(60 * robot.COUNTS_PER_INCH,81 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
-        goToPostion(60 * robot.COUNTS_PER_INCH,81 * robot.COUNTS_PER_INCH,0.5,-90,3 * robot.COUNTS_PER_INCH,false);
-        //turn and go to next turn
-        goToPostion(36 * robot.COUNTS_PER_INCH,81 * robot.COUNTS_PER_INCH,0.5,-90,3 * robot.COUNTS_PER_INCH,false);
-        goToPostion(36 * robot.COUNTS_PER_INCH,81 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,true);
-        //forward to end
-        goToPostion(36 * robot.COUNTS_PER_INCH,129 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+//        goToPostion(60 * robot.COUNTS_PER_INCH,33 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+//        //turn and go to next
+//        goToPostion(60 * robot.COUNTS_PER_INCH,81 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+//        //turn and go to next turn
+//        goToPostion(36 * robot.COUNTS_PER_INCH,81 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
+//        //forward to end
+//        goToPostion(36 * robot.COUNTS_PER_INCH,129 * robot.COUNTS_PER_INCH,0.5,0,3 * robot.COUNTS_PER_INCH,false);
 
         //Stop the thread
         robot.globalPositionUpdate.stop();
