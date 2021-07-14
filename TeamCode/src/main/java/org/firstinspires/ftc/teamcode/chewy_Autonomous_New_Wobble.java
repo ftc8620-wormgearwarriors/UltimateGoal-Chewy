@@ -67,7 +67,7 @@ public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
         RingDetector ringDetector = new RingDetector(vuforia);
 
         // reset cropbox for shed
-        ringDetector.setCropBox(220, 380, 95, 240);
+        ringDetector.setCropBox(370, 540, 5, 145);
 
 
         // do method based on counting "yellow pixels"
