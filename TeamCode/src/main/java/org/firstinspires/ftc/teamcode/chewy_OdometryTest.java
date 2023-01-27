@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,6 +16,7 @@ import java.io.File;
  * The Global Positioning Algorithm will not function and will throw an error if this program is not run first
  */
 @TeleOp(name = "chewy Odometry Test", group = "Calibration")
+@Disabled
 public class chewy_OdometryTest extends chewy_AutonomousMethods {
     chewy_HardwareMap robot = new chewy_HardwareMap();
 

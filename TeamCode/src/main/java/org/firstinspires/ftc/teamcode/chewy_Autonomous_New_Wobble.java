@@ -4,6 +4,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name = "chewy_Autonomous_New_Wobble")
+@Disabled
 public class chewy_Autonomous_New_Wobble extends chewy_AutonomousMethods {
 
     private VuforiaLocalizer vuforia = null;

@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 
 @Autonomous(name = "chewy_Autonomous_Odo_Test")
+@Disabled
 public class chewy_Autonomous_Odo_Test extends chewy_AutonomousMethods {
 
 

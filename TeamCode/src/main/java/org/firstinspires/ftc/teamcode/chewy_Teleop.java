@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,7 +28,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 
 @TeleOp(name="chewy_Teleop", group="Pushbot")
-
+@Disabled  // Coach Craig - dissabled, to dangerous for Demo!  And many sensors/servos removed.
 public class chewy_Teleop extends OpMode {
     chewy_HardwareMap robot = new chewy_HardwareMap();
 

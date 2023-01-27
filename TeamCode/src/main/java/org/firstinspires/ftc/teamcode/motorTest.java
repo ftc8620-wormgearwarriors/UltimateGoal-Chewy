@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name="motorTest", group="Pushbot")
+@Disabled
 public class motorTest extends OpMode {
     chewy_HardwareMap robot = new chewy_HardwareMap();
 

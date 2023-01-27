@@ -84,12 +84,12 @@ public class chewy_HardwareMap
 
         // Define and Initialize Servos
 
-        intakeRoller            = hwMap.get(Servo.class, "intakeRoller");
-        firstTransfer           = hwMap.get(Servo.class, "firstTransfer");
-        secondTransfer          = hwMap.get(Servo.class, "secondTransfer");
-        wobbleGrabberUpDown     = hwMap.get(Servo.class, "wobbleGrabberUpDown");
-        wobbleGrabberOpenClose  = hwMap.get(Servo.class, "wobbleGrabberOpenClose");
-        wobbleDropperServo      = hwMap.get(Servo.class, "wobbleDropperServo");
+//        intakeRoller            = hwMap.get(Servo.class, "intakeRoller");
+//        firstTransfer           = hwMap.get(Servo.class, "firstTransfer");
+//        secondTransfer          = hwMap.get(Servo.class, "secondTransfer");
+//        wobbleGrabberUpDown     = hwMap.get(Servo.class, "wobbleGrabberUpDown");
+//        wobbleGrabberOpenClose  = hwMap.get(Servo.class, "wobbleGrabberOpenClose");
+//        wobbleDropperServo      = hwMap.get(Servo.class, "wobbleDropperServo");
         pusher                  = hwMap.get(Servo.class, "pusher");
 
 
@@ -114,12 +114,12 @@ public class chewy_HardwareMap
         shooterLeft.setPower(0);
         shooterRight.setPower(0);
         intake.setPower(0);
-        intakeRoller.setPosition(0.5);
-        firstTransfer.setPosition(0.5);
-        secondTransfer.setPosition(0.5);
-        wobbleGrabberUpDown.setPosition(0.55);
-        wobbleGrabberOpenClose.setPosition(1.0);
-        wobbleDropperServo.setPosition(-0.3);
+//        intakeRoller.setPosition(0.5);
+//        firstTransfer.setPosition(0.5);
+//        secondTransfer.setPosition(0.5);
+//        wobbleGrabberUpDown.setPosition(0.55);
+//        wobbleGrabberOpenClose.setPosition(1.0);
+//        wobbleDropperServo.setPosition(-0.3);
         pusher.setPosition(0);
 
 
@@ -140,11 +140,8 @@ public class chewy_HardwareMap
         verticalRight = hwMap.dcMotor.get("backRightDrive");
         horizontal = hwMap.dcMotor.get("frontLeftDrive");
 
-        frontRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"frontRange");
-        leftRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"leftRange");
-//        topColor = hwMap.get(NormalizedColorSensor.class, "topColor");
-//        midColor = hwMap.get(NormalizedColorSensor.class, "midColor");
-//        bottomColor = hwMap.get(NormalizedColorSensor.class, "bottomColor");
+//        frontRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"frontRange");
+//        leftRange  = hwMap.get(ModernRoboticsI2cRangeSensor.class,"leftRange");
 
 
 
