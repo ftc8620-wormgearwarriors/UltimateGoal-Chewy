@@ -186,8 +186,11 @@ public class TrajectorySequenceRunner {
 
         packet.put("x", poseEstimate.getX());
         packet.put("y", poseEstimate.getY());
-        packet.put("heading (deg)", Math.toDegrees(poseEstimate.getHeading()));
-
+        double heading=Math.toDegrees(poseEstimate.getHeading());
+        packet.put("heading (deg)", heading);
+        if(heading > 180) heading -= 360;
+        packet.put("heading +/-(deg)", heading);
+        packet.put("Head Vel", poseVelocity.getHeading());
         packet.put("xError", getLastPoseError().getX());
         packet.put("yError", getLastPoseError().getY());
         packet.put("headingError (deg)", Math.toDegrees(getLastPoseError().getHeading()));
